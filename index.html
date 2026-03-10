@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { height: auto; }
+
+  body {
+    width: 100%;
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: #f4f6f9;
+    color: #1a1a2e;
+    overflow-x: hidden;
+    /* Sites iframe 높이 자동 확장을 위해 height: auto */
+    height: auto;
+    min-height: 100%;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: white;
+    padding: 16px;
+    width: 100%;
+  }
+
+  .header h1 { font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+  .live-badge { background: #00ff88; color: #000; font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 100px; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .last-update { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+  .mode-tabs { display: flex; background: #1a1660; border-top: 1px solid rgba(255,255,255,0.1); }
+  .mode-tab { flex: 1; padding: 8px; text-align: center; font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.5); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .mode-tab.active { color: #00ff88; border-bottom-color: #00ff88; }
+
+  .filter-wrap { background: #fff; border-bottom: 1px solid #e8eaf0; overflow-x: auto; scrollbar-width: none; width: 100%; }
+  .filter-wrap::-webkit-scrollbar { display: none; }
+  .filter-list { display: flex; gap: 4px; padding: 8px 12px; white-space: nowrap; }
+
+  .filter-btn { padding: 5px 12px; border-radius: 100px; border: 1.5px solid #e0e0e0; background: #fff; color: #666; font-size: 0.74rem; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .filter-btn.active { background: #302b63; color: #fff; border-color: #302b63; font-weight: 700; }
+  .filter-btn.mfr.active { background: #0c8599; border-color: #0c8599; }
+
+  .news-list {
+    padding: 10px;
+    display: flex; flex-direction: column; gap: 8px;
+    width: 100%;
+  }
+
+  .news-card { background: #fff; border-radius: 12px; padding: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent; width: 100%; }
+  .news-card:hover { border-color: #302b63; box-shadow: 0 4px 14px rgba(48,43,99,0.12); }
+
+  .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 8px; }
+  .card-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+  .cat-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
+  .mfr-badge { font-size: 0.62rem; font-weight: 600; padding: 2px 7px; border-radius: 100px; background: #e3fafc; color: #0c8599; white-space: nowrap; }
+  .card-time { font-size: 0.65rem; color: #aaa; white-space: nowrap; }
+  .card-title { font-size: 0.95rem; font-weight: 700; line-height: 1.5; margin-bottom: 7px; color: #1a1a2e; }
+  .card-summary { font-size: 0.8rem; color: #666; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-source { margin-top: 8px; font-size: 0.68rem; color: #999; }
+
+  .mfr-group-header { padding: 10px 10px 4px; font-size: 0.8rem; font-weight: 800; color: #0c8599; display: flex; align-items: center; gap: 6px; }
+  .mfr-count { background: #e3fafc; color: #0c8599; font-size: 0.65rem; padding: 1px 7px; border-radius: 100px; font-weight: 700; }
+
+  /* 모달 — position fixed라 Sites 높이에 무관 */
+  .modal-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+  .modal-bg.open { display: flex; align-items: flex-end; }
+  .modal { background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-height: 92vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  .modal-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 10px auto 0; }
+  .modal-body { padding: 18px; }
+  .modal-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+  .modal-title { font-size: 1.1rem; font-weight: 800; line-height: 1.5; margin-bottom: 5px; }
+  .modal-title-en { font-size: 0.76rem; color: #999; margin-bottom: 10px; line-height: 1.5; font-style: italic; }
+  .modal-mfr { font-size: 0.75rem; color: #0c8599; font-weight: 700; margin-bottom: 14px; }
+  .modal-divider { height: 1px; background: #f0f0f0; margin: 14px 0; }
+  .modal-content { font-size: 0.9rem; line-height: 1.9; color: #333; }
+  .modal-content p { margin-bottom: 12px; }
+
+  .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 14px 18px 28px; border-top: 1px solid #f0f0f0; background: #fafafa; }
+  .act-btn { padding: 11px 8px; border-radius: 10px; border: none; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px; transition: all 0.2s; text-decoration: none; }
+  .act-btn.pdf   { background: #ff6b35; color: #fff; }
+  .act-btn.kakao { background: #FEE500; color: #000; }
+  .act-btn.copy  { background: #f0f0f0; color: #333; }
+  .act-btn.orig  { background: #302b63; color: #fff; }
+  .act-btn:hover { opacity: 0.85; }
+
+  .c-로봇공학     { background:#fff0eb; color:#ff6b35; }
+  .c-자율주행     { background:#ebf0ff; color:#3b5bdb; }
+  .c-드론         { background:#ebfff4; color:#0ca678; }
+  .c-산업자동화   { background:#fffbe6; color:#e67700; }
+  .c-웨어러블     { background:#f5ebff; color:#9c36b5; }
+  .c-의료로봇     { background:#ffebee; color:#c92a2a; }
+  .c-스마트팩토리 { background:#e3fafc; color:#0c8599; }
+  .c-기타         { background:#f0f0f0; color:#666; }
+
+  .loading { text-align: center; padding: 50px 20px; color: #999; font-size: 0.88rem; }
+  .spinner { width: 32px; height: 32px; border: 3px solid #eee; border-top-color: #302b63; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .empty { text-align: center; padding: 50px 20px; color: #aaa; font-size: 0.88rem; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1a2e; color: #fff; padding: 10px 20px; border-radius: 100px; font-size: 0.8rem; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚡ 피지컬 AI 뉴스 <span class="live-badge">LIVE</span></h1>
+  <div class="last-update" id="last-update">불러오는 중...</div>
+  <div class="mode-tabs">
+    <div class="mode-tab active" id="tab-cat" onclick="switchMode('category')">📂 카테고리</div>
+    <div class="mode-tab" id="tab-mfr" onclick="switchMode('manufacturer')">🏭 제조사</div>
+  </div>
+</div>
+
+<div class="filter-wrap">
+  <div class="filter-list" id="filter-list">
+    <button class="filter-btn active" onclick="filterCat(this,'전체')">전체</button>
+    <button class="filter-btn" onclick="filterCat(this,'로봇공학')">🦾 로봇공학</button>
+    <button class="filter-btn" onclick="filterCat(this,'자율주행')">🚗 자율주행</button>
+    <button class="filter-btn" onclick="filterCat(this,'드론')">🚁 드론</button>
+    <button class="filter-btn" onclick="filterCat(this,'산업자동화')">⚙️ 산업자동화</button>
+    <button class="filter-btn" onclick="filterCat(this,'웨어러블')">🦿 웨어러블</button>
+    <button class="filter-btn" onclick="filterCat(this,'의료로봇')">🏥 의료로봇</button>
+    <button class="filter-btn" onclick="filterCat(this,'스마트팩토리')">🏭 스마트팩토리</button>
+  </div>
+</div>
+
+<div class="news-list" id="news-list">
+  <div class="loading"><div class="spinner"></div>뉴스를 불러오는 중...</div>
+</div>
+
+<div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-body">
+      <div class="modal-meta">
+        <span class="cat-badge" id="m-cat"></span>
+        <span style="font-size:0.7rem;color:#aaa" id="m-source"></span>
+        <span style="font-size:0.7rem;color:#ccc;margin-left:auto" id="m-time"></span>
+      </div>
+      <h2 class="modal-title" id="m-title"></h2>
+      <p class="modal-title-en" id="m-title-en"></p>
+      <div class="modal-mfr" id="m-mfr"></div>
+      <div class="modal-divider"></div>
+      <div class="modal-content" id="m-content"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="act-btn pdf"   onclick="printPDF()">📄 PDF 저장</button>
+      <button class="act-btn kakao" onclick="shareKakao()">💬 카카오 공유</button>
+      <button class="act-btn copy"  onclick="copyLink()">🔗 링크 복사</button>
+      <a      class="act-btn orig"  id="m-orig-link" href="#" target="_blank">🌐 원문 보기</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycby2NKb0YtTk2ArC0MQMsugKoBy-DZOCh2_RIQQpp5LJo6BhxRYPCrTLfiGRkmNt6pQGeA/exec";
+
+let allArticles    = [];
+let currentCat     = "전체";
+let currentMode    = "category";
+let currentMfr     = "전체";
+let currentArticle = null;
+
+const MFR_LIST = [
+  "ABB","FANUC","KUKA","Universal Robots","Yaskawa",
+  "Doosan Robotics","Boston Dynamics","Figure AI",
+  "현대로보틱스","한화로보틱스","레인보우로보틱스","로보스타",
+  "Cognex","Keyence","Basler",
+  "Daifuku","Dematic","Vanderlande","현대글로비스",
+  "Siemens","Rockwell","Mitsubishi Electric",
+  "Schunk","OnRobot","Robotiq",
+  "Omron","MiR","Geek+",
+  "Galaxis","Asetech"
+];
+
+// ── 높이를 부모(Sites)에게 전달 ──────────────────────────
+function reportHeight() {
+  var h = document.body.scrollHeight;
+  // Google Sites postMessage 방식
+  try {
+    window.parent.postMessage({ type: "setHeight", height: h }, "*");
+  } catch(e) {}
+  // 구형 방식
+  try {
+    if (window.frameElement) window.frameElement.style.height = h + "px";
+  } catch(e) {}
+}
+
+// ── 데이터 로드 ─────────────────────────────────────────
+function loadNews() {
+  var cbName = "_cb_" + Date.now();
+  window[cbName] = function(data) {
+    try { delete window[cbName]; } catch(e) {}
+    var el = document.getElementById(cbName);
+    if (el) el.remove();
+    if (!data || !data.articles) {
+      document.getElementById("news-list").innerHTML =
+        '<div class="empty">⚠️ 데이터를 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.</div>';
+      reportHeight();
+      return;
+    }
+    allArticles = data.articles.reverse();
+    document.getElementById("last-update").textContent =
+      "업데이트: " + new Date().toLocaleString("ko-KR");
+    render();
+  };
+  var script = document.createElement("script");
+  script.id  = cbName;
+  script.src = API_URL + "?callback=" + cbName;
+  script.onerror = function() {
+    document.getElementById("news-list").innerHTML = '<div class="empty">⚠️ 데이터를 불러오지 못했어요.</div>';
+    reportHeight();
+  };
+  document.head.appendChild(script);
+}
+
+// ── 모드 전환 ────────────────────────────────────────────
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById("tab-cat").classList.toggle("active", mode === "category");
+  document.getElementById("tab-mfr").classList.toggle("active", mode === "manufacturer");
+  if (mode === "category") buildCategoryFilters();
+  else buildManufacturerFilters();
+  render();
+}
+
+function buildCategoryFilters() {
+  var cats  = ["전체","로봇공학","자율주행","드론","산업자동화","웨어러블","의료로봇","스마트팩토리"];
+  var icons = {"전체":"","로봇공학":"🦾 ","자율주행":"🚗 ","드론":"🚁 ","산업자동화":"⚙️ ","웨어러블":"🦿 ","의료로봇":"🏥 ","스마트팩토리":"🏭 "};
+  document.getElementById("filter-list").innerHTML = cats.map(function(c) {
+    return '<button class="filter-btn' + (c === currentCat ? ' active' : '') + '" onclick="filterCat(this,\'' + c + '\')">' + (icons[c]||"") + c + '</button>';
+  }).join("");
+}
+
+function buildManufacturerFilters() {
+  var foundMfrs = new Set();
+  allArticles.forEach(function(a) {
+    if (a.manufacturers) a.manufacturers.split(",").forEach(function(m) { var t = m.trim(); if (t) foundMfrs.add(t); });
+  });
+  var list = ["전체"].concat(MFR_LIST.filter(function(m) { return foundMfrs.has(m); }));
+  document.getElementById("filter-list").innerHTML = list.map(function(m) {
+    return '<button class="filter-btn mfr' + (m === currentMfr ? ' active' : '') + '" onclick="filterMfr(this,\'' + m + '\')">' + m + '</button>';
+  }).join("");
+}
+
+function filterCat(btn, cat) {
+  currentCat = cat;
+  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+  render();
+}
+
+function filterMfr(btn, mfr) {
+  currentMfr = mfr;
+  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+  render();
+}
+
+// ── 렌더링 ──────────────────────────────────────────────
+function render() {
+  if (currentMode === "category") renderCategory();
+  else renderManufacturer();
+  // 렌더링 후 높이 보고 (이미지 로드 등 감안해 약간 지연)
+  setTimeout(reportHeight, 300);
+}
+
+function renderCategory() {
+  var list = currentCat === "전체"
+    ? allArticles
+    : allArticles.filter(function(a) { return a.category === currentCat; });
+
+  if (!list.length) {
+    document.getElementById("news-list").innerHTML = '<div class="empty">📭 해당 카테고리 뉴스가 없어요.</div>';
+    return;
+  }
+
+  document.getElementById("news-list").innerHTML = list.map(function(a, i) {
+    var mfrs = a.manufacturers ? a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean) : [];
+    var mfrBadges = mfrs.slice(0,2).map(function(m){ return '<span class="mfr-badge">' + m + '</span>'; }).join("");
+    return '<div class="news-card" onclick="openModal(' + i + ')">'
+      + '<div class="card-top">'
+      + '<div class="card-badges"><span class="cat-badge c-' + (a.category||'기타') + '">' + (a.category||'기타') + '</span>' + mfrBadges + '</div>'
+      + '<span class="card-time">' + formatTime(a.published_at) + '</span>'
+      + '</div>'
+      + '<div class="card-title">' + (a.title_ko || a.title_en || "") + '</div>'
+      + '<div class="card-summary">' + (a.summary_ko || "") + '</div>'
+      + '<div class="card-source">📰 ' + (a.source || "") + '</div>'
+      + '</div>';
+  }).join("");
+}
+
+function renderManufacturer() {
+  if (currentMfr === "전체") {
+    var groups = {};
+    allArticles.forEach(function(a) {
+      if (!a.manufacturers) return;
+      a.manufacturers.split(",").forEach(function(m) {
+        var t = m.trim(); if (!t) return;
+        if (!groups[t]) groups[t] = [];
+        groups[t].push(a);
+      });
+    });
+    var mfrsWithNews = MFR_LIST.filter(function(m) { return groups[m] && groups[m].length > 0; });
+
+    if (!mfrsWithNews.length) {
+      document.getElementById("news-list").innerHTML = '<div class="empty">🏭 제조사 관련 뉴스가 없어요.<br>내일 수집 후 확인해주세요.</div>';
+      return;
+    }
+
+    var html = "";
+    mfrsWithNews.forEach(function(mfr) {
+      var items = groups[mfr];
+      html += '<div class="mfr-group-header">🏭 ' + mfr + ' <span class="mfr-count">' + items.length + '건</span></div>';
+      items.slice(0, 3).forEach(function(a) {
+        html += '<div class="news-card" onclick="openArticleByUrl(\'' + encodeURIComponent(a.url) + '\')">'
+          + '<div class="card-top">'
+          + '<span class="cat-badge c-' + (a.category||'기타') + '">' + (a.category||'기타') + '</span>'
+          + '<span class="card-time">' + formatTime(a.published_at) + '</span>'
+          + '</div>'
+          + '<div class="card-title">' + (a.title_ko || a.title_en || "") + '</div>'
+          + '<div class="card-summary">' + (a.summary_ko || "") + '</div>'
+          + '<div class="card-source">📰 ' + (a.source || "") + '</div>'
+          + '</div>';
+      });
+    });
+    document.getElementById("news-list").innerHTML = html;
+
+  } else {
+    var list = allArticles.filter(function(a) {
+      if (!a.manufacturers) return false;
+      return a.manufacturers.split(",").map(function(m){return m.trim();}).indexOf(currentMfr) !== -1;
+    });
+    if (!list.length) {
+      document.getElementById("news-list").innerHTML = '<div class="empty">📭 ' + currentMfr + ' 관련 뉴스가 없어요.</div>';
+      return;
+    }
+    document.getElementById("news-list").innerHTML = list.map(function(a) {
+      return '<div class="news-card" onclick="openArticleByUrl(\'' + encodeURIComponent(a.url) + '\')">'
+        + '<div class="card-top">'
+        + '<span class="cat-badge c-' + (a.category||'기타') + '">' + (a.category||'기타') + '</span>'
+        + '<span class="card-time">' + formatTime(a.published_at) + '</span>'
+        + '</div>'
+        + '<div class="card-title">' + (a.title_ko || a.title_en || "") + '</div>'
+        + '<div class="card-summary">' + (a.summary_ko || "") + '</div>'
+        + '<div class="card-source">📰 ' + (a.source || "") + '</div>'
+        + '</div>';
+    }).join("");
+  }
+}
+
+// ── 모달 ─────────────────────────────────────────────────
+function openModal(idx) {
+  var list = currentCat === "전체" ? allArticles : allArticles.filter(function(a){ return a.category === currentCat; });
+  openArticle(list[idx]);
+}
+
+function openArticleByUrl(encodedUrl) {
+  var url = decodeURIComponent(encodedUrl);
+  var a = null;
+  for (var i = 0; i < allArticles.length; i++) {
+    if (allArticles[i].url === url) { a = allArticles[i]; break; }
+  }
+  if (a) openArticle(a);
+}
+
+function openArticle(a) {
+  if (!a) return;
+  currentArticle = a;
+  var mfrs = a.manufacturers ? a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean) : [];
+
+  document.getElementById("m-cat").textContent      = a.category || "기타";
+  document.getElementById("m-cat").className        = "cat-badge c-" + (a.category || "기타");
+  document.getElementById("m-source").textContent   = a.source || "";
+  document.getElementById("m-time").textContent     = formatTime(a.published_at);
+  document.getElementById("m-title").textContent    = a.title_ko || a.title_en || "";
+  document.getElementById("m-title-en").textContent = a.title_en ? "📌 원문: " + a.title_en : "";
+  document.getElementById("m-mfr").textContent      = mfrs.length ? "🏭 " + mfrs.join(", ") : "";
+  document.getElementById("m-orig-link").href       = a.url || "#";
+
+  var paras = (a.content_ko || a.summary_ko || "").split("\n").filter(function(p){ return p.trim(); });
+  document.getElementById("m-content").innerHTML = paras.map(function(p){ return "<p>" + p + "</p>"; }).join("");
+
+  document.getElementById("modal-bg").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById("modal-bg")) {
+    document.getElementById("modal-bg").classList.remove("open");
+    document.body.style.overflow = "";
+  }
+}
+
+function printPDF() {
+  if (!currentArticle) return;
+  var a = currentArticle;
+  var w = window.open("", "_blank");
+  w.document.write('<html><head><meta charset="UTF-8"><style>body{font-family:sans-serif;max-width:700px;margin:40px auto;padding:0 20px;line-height:1.8}h1{font-size:1.5rem;margin-bottom:8px}.meta{color:#888;font-size:0.85rem;margin-bottom:20px}p{margin-bottom:12px}.footer{margin-top:40px;padding-top:12px;border-top:1px solid #ddd;font-size:0.78rem;color:#aaa}</style></head><body>'
+    + '<div class="meta">' + (a.category||"") + ' · ' + (a.source||"") + ' · ' + formatTime(a.published_at) + '</div>'
+    + '<h1>' + (a.title_ko || a.title_en || "") + '</h1>'
+    + (a.title_en ? '<p style="color:#999;font-style:italic">원문: ' + a.title_en + '</p>' : "")
+    + '<hr style="margin:18px 0">'
+    + (a.content_ko||"").split("\n").filter(function(p){return p.trim();}).map(function(p){return "<p>"+p+"</p>";}).join("")
+    + '<div class="footer">원문: <a href="' + a.url + '">' + a.url + '</a><br>피지컬 AI 뉴스 · ' + new Date().toLocaleDateString("ko-KR") + '</div>'
+    + '</body></html>');
+  w.document.close();
+  setTimeout(function(){ w.focus(); w.print(); }, 400);
+  showToast("📄 PDF 저장 창이 열렸어요");
+}
+
+function shareKakao() {
+  if (!currentArticle) return;
+  var a = currentArticle;
+  if (navigator.share) {
+    navigator.share({ title: a.title_ko, text: a.summary_ko, url: a.url });
+  } else {
+    window.open("https://sharer.kakao.com/talk/friends/picker/link?app_key=DEMO&text=" + encodeURIComponent("[피지컬 AI 뉴스]\n" + a.title_ko + "\n\n" + a.summary_ko + "\n\n🔗 " + a.url), "_blank", "width=400,height=500");
+  }
+  showToast("💬 공유 창이 열렸어요");
+}
+
+function copyLink() {
+  if (!currentArticle) return;
+  navigator.clipboard.writeText("[피지컬 AI 뉴스] " + currentArticle.title_ko + "\n" + currentArticle.url)
+    .then(function(){ showToast("🔗 링크가 복사됐어요"); });
+}
+
+function showToast(msg) {
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 2500);
+}
+
+function formatTime(str) {
+  if (!str) return "";
+  try {
+    var diff = Math.floor((new Date() - new Date(str)) / 60000);
+    if (diff < 60)   return diff + "분 전";
+    if (diff < 1440) return Math.floor(diff/60) + "시간 전";
+    return Math.floor(diff/1440) + "일 전";
+  } catch(e) { return str; }
+}
+
+// Sites 삽입 높이 자동 감지 (MutationObserver)
+var observer = new MutationObserver(function() {
+  setTimeout(reportHeight, 100);
+});
+observer.observe(document.body, { childList: true, subtree: true });
+
+loadNews();
+</script>
+</body>
+</html>
