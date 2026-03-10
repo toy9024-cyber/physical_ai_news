@@ -1180,7 +1180,7 @@ function buildExpoOverview(d) {
     : '<span style="font-size:0.65rem;background:rgba(48,43,99,0.1);color:var(--sub);padding:2px 7px;border-radius:4px;margin-left:6px">📰 뉴스·홈페이지 기반</span>';
   var topBars = top.map(function(item) {
     var pct = Math.round(item.k.count/max*100);
-    return '<div class="expo-kw-row" onclick="openExpoTT(''+encodeKwData(item.k)+'')">'
+    return '<div class="expo-kw-row" onclick="openExpoTT(\''+encodeKwData(item.k)+'\')">'
       +'<div class="expo-kw-name">'+item.k.kw+'</div>'
       +'<div class="expo-kw-wrap"><div class="expo-kw-fill" style="background:'+item.c+';width:0%" data-w="'+pct+'">'
       +'<span class="expo-kw-count">'+item.k.count+'</span></div></div>'
@@ -1214,7 +1214,7 @@ function buildExpoKeywords(d) {
       +'<div class="expo-kw-bar-list">'
       +g.kws.map(function(k) {
         var pct = Math.round(k.count/gmax*100);
-        return '<div class="expo-kw-row" onclick="openExpoTT(''+encodeKwData(k)+'')">'
+        return '<div class="expo-kw-row" onclick="openExpoTT(\''+encodeKwData(k)+'\')">'
           +'<div class="expo-kw-name">'+k.kw+'</div>'
           +'<div class="expo-kw-wrap"><div class="expo-kw-fill" style="background:'+g.color+';width:0%" data-w="'+pct+'">'
           +'<span class="expo-kw-count">'+k.count+'</span></div></div>'
@@ -1230,7 +1230,7 @@ function buildExpoCompanies(d) {
   var filtered = currentExpoCoFilter==="전체" ? d.cos : d.cos.filter(function(c){ return c.tags.indexOf(currentExpoCoFilter)!==-1; });
   if (!d.cos.length) return '<div style="text-align:center;color:var(--sub);padding:40px;font-size:0.82rem">📥 PDF 탭에서 참가업체 파일을 업로드하세요</div>';
   var filters = cats.map(function(c) {
-    return '<button class="expo-pill'+(c===currentExpoCoFilter?" active":"")+'" style="margin-bottom:8px" onclick="setExpoCoFilter(''+c+'',this)">'+c+'</button>';
+    return '<button class="expo-pill'+(c===currentExpoCoFilter?" active":"")+'" style="margin-bottom:8px" onclick="setExpoCoFilter(this.dataset.f,this)" data-f="'+c+'">'+c+'</button>';
   }).join("");
   var cards = filtered.map(function(c) {
     return '<div class="expo-co-card">'
@@ -1250,7 +1250,7 @@ function setExpoCoFilter(f, el) {
 }
 
 function buildExpoUpload() {
-  return '<div class="expo-upload-area" onclick="document.getElementById('expo-file-input').click()">'
+  return '<div class="expo-upload-area" onclick="document.getElementById(\'expo-file-input\').click()">'
     +'<div class="expo-upload-icon">📂</div>'
     +'<div class="expo-upload-title">참가업체 리스트 업로드</div>'
     +'<div class="expo-upload-desc">'
@@ -1280,8 +1280,7 @@ function handleExpoUpload(input) {
 }
 
 function parseExpoUpload(text, filename) {
-  var lines = text.split(/[
-,]/).map(function(l){ return l.trim(); }).filter(function(l){ return l.length>1; });
+  var lines = text.split(/[\n,]/).map(function(l){ return l.trim(); }).filter(function(l){ return l.length>1; });
   // 용어집 기반 키워드 매핑
   var kwMap = [
     {kw:"AMR",color:"#ff6b6b",badge:"hot",patterns:["AMR","자율이동","오아시스","SLAM","autonomous mobile"]},
