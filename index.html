@@ -1199,7 +1199,7 @@ function buildExpoOverview(d) {
     : '<span style="font-size:0.65rem;background:rgba(48,43,99,0.1);color:var(--sub);padding:2px 7px;border-radius:4px;margin-left:6px">📰 뉴스·홈페이지 기반</span>';
   var topBars = top.map(function(item) {
     var pct = Math.round(item.k.count/max*100);
-    return '<div class="expo-kw-row" onclick="openExpoTT(\''+encodeKwData(item.k)+'\')">'
+    return '<div class="expo-kw-row" onclick="openExpoTT(\''+_expoKwId(item.k)+'\')">'
       +'<div class="expo-kw-name">'+item.k.kw+'</div>'
       +'<div class="expo-kw-wrap"><div class="expo-kw-fill" style="background:'+item.c+';width:0%" data-w="'+pct+'">'
       +'<span class="expo-kw-count">'+item.k.count+'</span></div></div>'
@@ -1233,7 +1233,7 @@ function buildExpoKeywords(d) {
       +'<div class="expo-kw-bar-list">'
       +g.kws.map(function(k) {
         var pct = Math.round(k.count/gmax*100);
-        return '<div class="expo-kw-row" onclick="openExpoTT(\''+encodeKwData(k)+'\')">'
+        return '<div class="expo-kw-row" onclick="openExpoTT(\''+_expoKwId(k)+'\')">'
           +'<div class="expo-kw-name">'+k.kw+'</div>'
           +'<div class="expo-kw-wrap"><div class="expo-kw-fill" style="background:'+g.color+';width:0%" data-w="'+pct+'">'
           +'<span class="expo-kw-count">'+k.count+'</span></div></div>'
