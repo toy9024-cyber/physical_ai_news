@@ -3,90 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>⚡ 피지컬 AI 뉴스</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; min-height:100vh; font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background:#f4f6f9; color:#1a1a2e; }
 
-  html { height: auto; }
-
-  body {
-    width: 100%;
-    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    background: #f4f6f9;
-    color: #1a1a2e;
-    overflow-x: hidden;
-    /* Sites iframe 높이 자동 확장을 위해 height: auto */
-    height: auto;
-    min-height: 100%;
-  }
-
-  .header {
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    color: white;
-    padding: 16px;
-    width: 100%;
-  }
-
-  .header h1 { font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-  .live-badge { background: #00ff88; color: #000; font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 100px; animation: blink 1.5s infinite; }
+  /* 헤더 */
+  .header { background:linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:white; padding:16px; position:sticky; top:0; z-index:100; }
+  .header h1 { font-size:1.2rem; font-weight:800; display:flex; align-items:center; gap:8px; }
+  .live-badge { background:#00ff88; color:#000; font-size:0.6rem; font-weight:700; padding:2px 7px; border-radius:100px; animation:blink 1.5s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .last-update { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
+  .header-bottom { display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
+  .last-update { font-size:0.7rem; color:rgba(255,255,255,0.5); }
+  .unread-count { font-size:0.7rem; color:#00ff88; font-weight:700; }
 
-  .mode-tabs { display: flex; background: #1a1660; border-top: 1px solid rgba(255,255,255,0.1); }
-  .mode-tab { flex: 1; padding: 8px; text-align: center; font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.5); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
-  .mode-tab.active { color: #00ff88; border-bottom-color: #00ff88; }
+  /* 모드 탭 */
+  .mode-tabs { display:flex; background:#1a1660; border-top:1px solid rgba(255,255,255,0.1); margin-top:8px; border-radius:6px; overflow:hidden; }
+  .mode-tab { flex:1; padding:8px; text-align:center; font-size:0.75rem; font-weight:700; color:rgba(255,255,255,0.5); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; }
+  .mode-tab.active { color:#00ff88; border-bottom-color:#00ff88; }
 
-  .filter-wrap { background: #fff; border-bottom: 1px solid #e8eaf0; overflow-x: auto; scrollbar-width: none; width: 100%; }
-  .filter-wrap::-webkit-scrollbar { display: none; }
-  .filter-list { display: flex; gap: 4px; padding: 8px 12px; white-space: nowrap; }
+  /* 필터 바 */
+  .filter-wrap { background:#fff; border-bottom:1px solid #e8eaf0; overflow-x:auto; scrollbar-width:none; position:sticky; top:104px; z-index:99; }
+  .filter-wrap::-webkit-scrollbar { display:none; }
+  .filter-list { display:flex; gap:4px; padding:8px 12px; white-space:nowrap; }
+  .filter-btn { padding:5px 12px; border-radius:100px; border:1.5px solid #e0e0e0; background:#fff; color:#666; font-size:0.74rem; font-weight:500; cursor:pointer; transition:all 0.2s; }
+  .filter-btn.active { background:#302b63; color:#fff; border-color:#302b63; font-weight:700; }
+  .filter-btn.mfr.active { background:#0c8599; border-color:#0c8599; }
 
-  .filter-btn { padding: 5px 12px; border-radius: 100px; border: 1.5px solid #e0e0e0; background: #fff; color: #666; font-size: 0.74rem; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-  .filter-btn.active { background: #302b63; color: #fff; border-color: #302b63; font-weight: 700; }
-  .filter-btn.mfr.active { background: #0c8599; border-color: #0c8599; }
+  /* 뉴스 목록 */
+  .news-list { padding:10px; display:flex; flex-direction:column; gap:8px; }
 
-  .news-list {
-    padding: 10px;
-    display: flex; flex-direction: column; gap: 8px;
-    width: 100%;
-  }
+  /* 뉴스 카드 */
+  .news-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.06); cursor:pointer; transition:all 0.2s; border:1.5px solid transparent; }
+  .news-card:hover { border-color:#302b63; box-shadow:0 4px 14px rgba(48,43,99,0.12); transform:translateY(-1px); }
+  .news-card.read { opacity:0.45; border-left:4px solid #ccc; }
+  .news-card.read .card-title { color:#999; }
 
-  .news-card { background: #fff; border-radius: 12px; padding: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent; width: 100%; }
-  .news-card:hover { border-color: #302b63; box-shadow: 0 4px 14px rgba(48,43,99,0.12); }
+  /* 카드 이미지 */
+  .card-img { width:100%; height:160px; object-fit:cover; display:block; background:#f0f0f0; }
 
-  .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; gap: 8px; }
-  .card-badges { display: flex; gap: 4px; flex-wrap: wrap; }
-  .cat-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
-  .mfr-badge { font-size: 0.62rem; font-weight: 600; padding: 2px 7px; border-radius: 100px; background: #e3fafc; color: #0c8599; white-space: nowrap; }
-  .card-time { font-size: 0.65rem; color: #aaa; white-space: nowrap; }
-  .card-title { font-size: 0.95rem; font-weight: 700; line-height: 1.5; margin-bottom: 7px; color: #1a1a2e; }
-  .card-summary { font-size: 0.8rem; color: #666; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .card-source { margin-top: 8px; font-size: 0.68rem; color: #999; }
+  .card-body { padding:12px 14px 14px; }
+  .card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:7px; gap:6px; }
+  .card-badges { display:flex; gap:4px; flex-wrap:wrap; }
+  .cat-badge { font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:100px; white-space:nowrap; }
+  .mfr-badge { font-size:0.62rem; font-weight:600; padding:2px 7px; border-radius:100px; background:#e3fafc; color:#0c8599; white-space:nowrap; }
+  .read-badge { font-size:0.62rem; color:#bbb; font-weight:600; }
+  .card-time { font-size:0.65rem; color:#aaa; white-space:nowrap; }
+  .card-title { font-size:0.95rem; font-weight:700; line-height:1.5; margin-bottom:6px; color:#1a1a2e; }
+  .card-summary { font-size:0.8rem; color:#666; line-height:1.6; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .card-source { margin-top:8px; font-size:0.68rem; color:#999; }
 
-  .mfr-group-header { padding: 10px 10px 4px; font-size: 0.8rem; font-weight: 800; color: #0c8599; display: flex; align-items: center; gap: 6px; }
-  .mfr-count { background: #e3fafc; color: #0c8599; font-size: 0.65rem; padding: 1px 7px; border-radius: 100px; font-weight: 700; }
+  /* 제조사 그룹 */
+  .mfr-group-header { padding:10px 10px 4px; font-size:0.8rem; font-weight:800; color:#0c8599; display:flex; align-items:center; gap:6px; }
+  .mfr-count { background:#e3fafc; color:#0c8599; font-size:0.65rem; padding:1px 7px; border-radius:100px; font-weight:700; }
 
-  /* 모달 — position fixed라 Sites 높이에 무관 */
-  .modal-bg { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
-  .modal-bg.open { display: flex; align-items: flex-end; }
-  .modal { background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-height: 92vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+  /* 모달 */
+  .modal-bg { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); }
+  .modal-bg.open { display:flex; align-items:flex-end; }
+  .modal { background:#fff; border-radius:20px 20px 0 0; width:100%; max-height:92vh; overflow-y:auto; animation:slideUp 0.3s ease; }
   @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-  .modal-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 10px auto 0; }
-  .modal-body { padding: 18px; }
-  .modal-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-  .modal-title { font-size: 1.1rem; font-weight: 800; line-height: 1.5; margin-bottom: 5px; }
-  .modal-title-en { font-size: 0.76rem; color: #999; margin-bottom: 10px; line-height: 1.5; font-style: italic; }
-  .modal-mfr { font-size: 0.75rem; color: #0c8599; font-weight: 700; margin-bottom: 14px; }
-  .modal-divider { height: 1px; background: #f0f0f0; margin: 14px 0; }
-  .modal-content { font-size: 0.9rem; line-height: 1.9; color: #333; }
-  .modal-content p { margin-bottom: 12px; }
+  .modal-handle { width:36px; height:4px; background:#ddd; border-radius:2px; margin:10px auto 0; }
 
-  .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 14px 18px 28px; border-top: 1px solid #f0f0f0; background: #fafafa; }
-  .act-btn { padding: 11px 8px; border-radius: 10px; border: none; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px; transition: all 0.2s; text-decoration: none; }
-  .act-btn.pdf   { background: #ff6b35; color: #fff; }
-  .act-btn.kakao { background: #FEE500; color: #000; }
-  .act-btn.copy  { background: #f0f0f0; color: #333; }
-  .act-btn.orig  { background: #302b63; color: #fff; }
-  .act-btn:hover { opacity: 0.85; }
+  /* 모달 이미지 */
+  .modal-img { width:100%; max-height:220px; object-fit:cover; display:block; }
 
+  .modal-body { padding:18px; }
+  .modal-meta { display:flex; align-items:center; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
+  .modal-title { font-size:1.1rem; font-weight:800; line-height:1.5; margin-bottom:5px; }
+  .modal-title-en { font-size:0.76rem; color:#999; margin-bottom:10px; line-height:1.5; font-style:italic; }
+  .modal-mfr { font-size:0.75rem; color:#0c8599; font-weight:700; margin-bottom:14px; }
+  .modal-divider { height:1px; background:#f0f0f0; margin:14px 0; }
+  .modal-content { font-size:0.9rem; line-height:1.9; color:#333; }
+  .modal-content p { margin-bottom:12px; }
+
+  .modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:14px 18px 32px; border-top:1px solid #f0f0f0; background:#fafafa; }
+  .act-btn { padding:11px 8px; border-radius:10px; border:none; cursor:pointer; font-size:0.8rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:5px; transition:all 0.2s; text-decoration:none; }
+  .act-btn.pdf   { background:#ff6b35; color:#fff; }
+  .act-btn.kakao { background:#FEE500; color:#000; }
+  .act-btn.copy  { background:#f0f0f0; color:#333; }
+  .act-btn.orig  { background:#302b63; color:#fff; }
+  .act-btn:hover { opacity:0.85; transform:translateY(-1px); }
+
+  /* 카테고리 색상 */
   .c-로봇공학     { background:#fff0eb; color:#ff6b35; }
   .c-자율주행     { background:#ebf0ff; color:#3b5bdb; }
   .c-드론         { background:#ebfff4; color:#0ca678; }
@@ -96,20 +94,23 @@
   .c-스마트팩토리 { background:#e3fafc; color:#0c8599; }
   .c-기타         { background:#f0f0f0; color:#666; }
 
-  .loading { text-align: center; padding: 50px 20px; color: #999; font-size: 0.88rem; }
-  .spinner { width: 32px; height: 32px; border: 3px solid #eee; border-top-color: #302b63; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+  .loading { text-align:center; padding:50px 20px; color:#999; font-size:0.88rem; }
+  .spinner { width:32px; height:32px; border:3px solid #eee; border-top-color:#302b63; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 10px; }
   @keyframes spin { to{transform:rotate(360deg)} }
-  .empty { text-align: center; padding: 50px 20px; color: #aaa; font-size: 0.88rem; }
+  .empty { text-align:center; padding:50px 20px; color:#aaa; font-size:0.88rem; }
 
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1a2e; color: #fff; padding: 10px 20px; border-radius: 100px; font-size: 0.8rem; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:#1a1a2e; color:#fff; padding:10px 20px; border-radius:100px; font-size:0.8rem; opacity:0; transition:all 0.3s; pointer-events:none; z-index:999; white-space:nowrap; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
 <div class="header">
   <h1>⚡ 피지컬 AI 뉴스 <span class="live-badge">LIVE</span></h1>
-  <div class="last-update" id="last-update">불러오는 중...</div>
+  <div class="header-bottom">
+    <div class="last-update" id="last-update">불러오는 중...</div>
+    <div class="unread-count" id="unread-count"></div>
+  </div>
   <div class="mode-tabs">
     <div class="mode-tab active" id="tab-cat" onclick="switchMode('category')">📂 카테고리</div>
     <div class="mode-tab" id="tab-mfr" onclick="switchMode('manufacturer')">🏭 제조사</div>
@@ -136,6 +137,7 @@
 <div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-handle"></div>
+    <img class="modal-img" id="m-img" src="" alt="" style="display:none">
     <div class="modal-body">
       <div class="modal-meta">
         <span class="cat-badge" id="m-cat"></span>
@@ -161,12 +163,14 @@
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby2NKb0YtTk2ArC0MQMsugKoBy-DZOCh2_RIQQpp5LJo6BhxRYPCrTLfiGRkmNt6pQGeA/exec";
+const STORAGE_KEY = "physicalai_read";
 
 let allArticles    = [];
 let currentCat     = "전체";
 let currentMode    = "category";
 let currentMfr     = "전체";
 let currentArticle = null;
+let readSet        = new Set();
 
 const MFR_LIST = [
   "ABB","FANUC","KUKA","Universal Robots","Yaskawa",
@@ -180,17 +184,29 @@ const MFR_LIST = [
   "Galaxis","Asetech"
 ];
 
-// ── 높이를 부모(Sites)에게 전달 ──────────────────────────
-function reportHeight() {
-  var h = document.body.scrollHeight;
-  // Google Sites postMessage 방식
+// ── localStorage 읽음 관리 ──────────────────────────────
+function loadReadSet() {
   try {
-    window.parent.postMessage({ type: "setHeight", height: h }, "*");
-  } catch(e) {}
-  // 구형 방식
-  try {
-    if (window.frameElement) window.frameElement.style.height = h + "px";
-  } catch(e) {}
+    var saved = localStorage.getItem(STORAGE_KEY);
+    readSet = saved ? new Set(JSON.parse(saved)) : new Set();
+  } catch(e) { readSet = new Set(); }
+}
+
+function saveReadSet() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(readSet))); } catch(e) {}
+}
+
+function markAsRead(id) {
+  if (readSet.has(String(id))) return;
+  readSet.add(String(id));
+  saveReadSet();
+}
+
+function isRead(id) { return readSet.has(String(id)); }
+
+function updateUnreadBadge() {
+  var unread = allArticles.filter(function(a) { return !isRead(a.id); }).length;
+  document.getElementById("unread-count").textContent = unread > 0 ? "안읽음 " + unread + "건" : "모두 읽음 ✓";
 }
 
 // ── 데이터 로드 ─────────────────────────────────────────
@@ -201,14 +217,11 @@ function loadNews() {
     var el = document.getElementById(cbName);
     if (el) el.remove();
     if (!data || !data.articles) {
-      document.getElementById("news-list").innerHTML =
-        '<div class="empty">⚠️ 데이터를 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.</div>';
-      reportHeight();
+      document.getElementById("news-list").innerHTML = '<div class="empty">⚠️ 데이터를 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.</div>';
       return;
     }
     allArticles = data.articles.reverse();
-    document.getElementById("last-update").textContent =
-      "업데이트: " + new Date().toLocaleString("ko-KR");
+    document.getElementById("last-update").textContent = "업데이트: " + new Date().toLocaleString("ko-KR");
     render();
   };
   var script = document.createElement("script");
@@ -216,7 +229,6 @@ function loadNews() {
   script.src = API_URL + "?callback=" + cbName;
   script.onerror = function() {
     document.getElementById("news-list").innerHTML = '<div class="empty">⚠️ 데이터를 불러오지 못했어요.</div>';
-    reportHeight();
   };
   document.head.appendChild(script);
 }
@@ -264,12 +276,33 @@ function filterMfr(btn, mfr) {
   render();
 }
 
+// ── 카드 HTML 생성 ───────────────────────────────────────
+function makeCard(a, onclickStr) {
+  var read     = isRead(a.id);
+  var mfrs     = a.manufacturers ? a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean) : [];
+  var mfrBadges = mfrs.slice(0,2).map(function(m){ return '<span class="mfr-badge">' + m + '</span>'; }).join("");
+  var imgHtml  = (a.image_url && String(a.image_url).trim())
+    ? '<img class="card-img" src="' + a.image_url + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+    : "";
+
+  return '<div class="news-card' + (read ? ' read' : '') + '" onclick="' + onclickStr + '">'
+    + imgHtml
+    + '<div class="card-body">'
+    + '<div class="card-top">'
+    + '<div class="card-badges"><span class="cat-badge c-' + (a.category||'기타') + '">' + (a.category||'기타') + '</span>' + mfrBadges + '</div>'
+    + '<span class="card-time">' + formatTime(a.published_at) + (read ? ' <span class="read-badge">✓읽음</span>' : '') + '</span>'
+    + '</div>'
+    + '<div class="card-title">' + (a.title_ko || a.title_en || "") + '</div>'
+    + '<div class="card-summary">' + (a.summary_ko || "") + '</div>'
+    + '<div class="card-source">📰 ' + (a.source || "") + '</div>'
+    + '</div></div>';
+}
+
 // ── 렌더링 ──────────────────────────────────────────────
 function render() {
   if (currentMode === "category") renderCategory();
   else renderManufacturer();
-  // 렌더링 후 높이 보고 (이미지 로드 등 감안해 약간 지연)
-  setTimeout(reportHeight, 300);
+  updateUnreadBadge();
 }
 
 function renderCategory() {
@@ -277,23 +310,10 @@ function renderCategory() {
     ? allArticles
     : allArticles.filter(function(a) { return a.category === currentCat; });
 
-  if (!list.length) {
-    document.getElementById("news-list").innerHTML = '<div class="empty">📭 해당 카테고리 뉴스가 없어요.</div>';
-    return;
-  }
+  if (!list.length) { document.getElementById("news-list").innerHTML = '<div class="empty">📭 해당 카테고리 뉴스가 없어요.</div>'; return; }
 
   document.getElementById("news-list").innerHTML = list.map(function(a, i) {
-    var mfrs = a.manufacturers ? a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean) : [];
-    var mfrBadges = mfrs.slice(0,2).map(function(m){ return '<span class="mfr-badge">' + m + '</span>'; }).join("");
-    return '<div class="news-card" onclick="openModal(' + i + ')">'
-      + '<div class="card-top">'
-      + '<div class="card-badges"><span class="cat-badge c-' + (a.category||'기타') + '">' + (a.category||'기타') + '</span>' + mfrBadges + '</div>'
-      + '<span class="card-time">' + formatTime(a.published_at) + '</span>'
-      + '</div>'
-      + '<div class="card-title">' + (a.title_ko || a.title_en || "") + '</div>'
-      + '<div class="card-summary">' + (a.summary_ko || "") + '</div>'
-      + '<div class="card-source">📰 ' + (a.source || "") + '</div>'
-      + '</div>';
+    return makeCard(a, 'openModal(' + i + ')');
   }).join("");
 }
 
@@ -309,49 +329,24 @@ function renderManufacturer() {
       });
     });
     var mfrsWithNews = MFR_LIST.filter(function(m) { return groups[m] && groups[m].length > 0; });
-
-    if (!mfrsWithNews.length) {
-      document.getElementById("news-list").innerHTML = '<div class="empty">🏭 제조사 관련 뉴스가 없어요.<br>내일 수집 후 확인해주세요.</div>';
-      return;
-    }
+    if (!mfrsWithNews.length) { document.getElementById("news-list").innerHTML = '<div class="empty">🏭 제조사 관련 뉴스가 없어요.</div>'; return; }
 
     var html = "";
     mfrsWithNews.forEach(function(mfr) {
-      var items = groups[mfr];
-      html += '<div class="mfr-group-header">🏭 ' + mfr + ' <span class="mfr-count">' + items.length + '건</span></div>';
-      items.slice(0, 3).forEach(function(a) {
-        html += '<div class="news-card" onclick="openArticleByUrl(\'' + encodeURIComponent(a.url) + '\')">'
-          + '<div class="card-top">'
-          + '<span class="cat-badge c-' + (a.category||'기타') + '">' + (a.category||'기타') + '</span>'
-          + '<span class="card-time">' + formatTime(a.published_at) + '</span>'
-          + '</div>'
-          + '<div class="card-title">' + (a.title_ko || a.title_en || "") + '</div>'
-          + '<div class="card-summary">' + (a.summary_ko || "") + '</div>'
-          + '<div class="card-source">📰 ' + (a.source || "") + '</div>'
-          + '</div>';
+      html += '<div class="mfr-group-header">🏭 ' + mfr + ' <span class="mfr-count">' + groups[mfr].length + '건</span></div>';
+      groups[mfr].slice(0, 3).forEach(function(a) {
+        html += makeCard(a, 'openArticleByUrl(\'' + encodeURIComponent(a.url) + '\')');
       });
     });
     document.getElementById("news-list").innerHTML = html;
-
   } else {
     var list = allArticles.filter(function(a) {
       if (!a.manufacturers) return false;
       return a.manufacturers.split(",").map(function(m){return m.trim();}).indexOf(currentMfr) !== -1;
     });
-    if (!list.length) {
-      document.getElementById("news-list").innerHTML = '<div class="empty">📭 ' + currentMfr + ' 관련 뉴스가 없어요.</div>';
-      return;
-    }
+    if (!list.length) { document.getElementById("news-list").innerHTML = '<div class="empty">📭 ' + currentMfr + ' 관련 뉴스가 없어요.</div>'; return; }
     document.getElementById("news-list").innerHTML = list.map(function(a) {
-      return '<div class="news-card" onclick="openArticleByUrl(\'' + encodeURIComponent(a.url) + '\')">'
-        + '<div class="card-top">'
-        + '<span class="cat-badge c-' + (a.category||'기타') + '">' + (a.category||'기타') + '</span>'
-        + '<span class="card-time">' + formatTime(a.published_at) + '</span>'
-        + '</div>'
-        + '<div class="card-title">' + (a.title_ko || a.title_en || "") + '</div>'
-        + '<div class="card-summary">' + (a.summary_ko || "") + '</div>'
-        + '<div class="card-source">📰 ' + (a.source || "") + '</div>'
-        + '</div>';
+      return makeCard(a, 'openArticleByUrl(\'' + encodeURIComponent(a.url) + '\')');
     }).join("");
   }
 }
@@ -364,17 +359,46 @@ function openModal(idx) {
 
 function openArticleByUrl(encodedUrl) {
   var url = decodeURIComponent(encodedUrl);
-  var a = null;
   for (var i = 0; i < allArticles.length; i++) {
-    if (allArticles[i].url === url) { a = allArticles[i]; break; }
+    if (allArticles[i].url === url) { openArticle(allArticles[i]); return; }
   }
-  if (a) openArticle(a);
 }
 
 function openArticle(a) {
   if (!a) return;
   currentArticle = a;
+
+  // 읽음 처리
+  markAsRead(a.id);
+
+  // 카드 즉시 업데이트
+  var cards = document.querySelectorAll(".news-card");
+  cards.forEach(function(card) {
+    var titleEl = card.querySelector(".card-title");
+    if (titleEl && titleEl.textContent === (a.title_ko || a.title_en || "")) {
+      card.classList.add("read");
+      var timeEl = card.querySelector(".card-time");
+      if (timeEl && !timeEl.querySelector(".read-badge")) {
+        var badge = document.createElement("span");
+        badge.className = "read-badge"; badge.textContent = " ✓읽음";
+        timeEl.appendChild(badge);
+      }
+    }
+  });
+  updateUnreadBadge();
+
   var mfrs = a.manufacturers ? a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean) : [];
+
+  // 모달 이미지
+  var imgEl = document.getElementById("m-img");
+  if (a.image_url && String(a.image_url).trim()) {
+    imgEl.src = a.image_url;
+    imgEl.style.display = "block";
+    imgEl.onerror = function() { imgEl.style.display = "none"; };
+  } else {
+    imgEl.style.display = "none";
+    imgEl.src = "";
+  }
 
   document.getElementById("m-cat").textContent      = a.category || "기타";
   document.getElementById("m-cat").className        = "cat-badge c-" + (a.category || "기타");
@@ -399,13 +423,14 @@ function closeModal(e) {
   }
 }
 
+// ── PDF / 공유 / 복사 ────────────────────────────────────
 function printPDF() {
   if (!currentArticle) return;
   var a = currentArticle;
   var w = window.open("", "_blank");
   w.document.write('<html><head><meta charset="UTF-8"><style>body{font-family:sans-serif;max-width:700px;margin:40px auto;padding:0 20px;line-height:1.8}h1{font-size:1.5rem;margin-bottom:8px}.meta{color:#888;font-size:0.85rem;margin-bottom:20px}p{margin-bottom:12px}.footer{margin-top:40px;padding-top:12px;border-top:1px solid #ddd;font-size:0.78rem;color:#aaa}</style></head><body>'
     + '<div class="meta">' + (a.category||"") + ' · ' + (a.source||"") + ' · ' + formatTime(a.published_at) + '</div>'
-    + '<h1>' + (a.title_ko || a.title_en || "") + '</h1>'
+    + '<h1>' + (a.title_ko||a.title_en||"") + '</h1>'
     + (a.title_en ? '<p style="color:#999;font-style:italic">원문: ' + a.title_en + '</p>' : "")
     + '<hr style="margin:18px 0">'
     + (a.content_ko||"").split("\n").filter(function(p){return p.trim();}).map(function(p){return "<p>"+p+"</p>";}).join("")
@@ -449,12 +474,7 @@ function formatTime(str) {
   } catch(e) { return str; }
 }
 
-// Sites 삽입 높이 자동 감지 (MutationObserver)
-var observer = new MutationObserver(function() {
-  setTimeout(reportHeight, 100);
-});
-observer.observe(document.body, { childList: true, subtree: true });
-
+loadReadSet();
 loadNews();
 </script>
 </body>
