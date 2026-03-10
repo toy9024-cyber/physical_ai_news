@@ -517,7 +517,11 @@ function loadStorage() {
     var s=localStorage.getItem(SETTINGS_KEY);
     if (s) {
       var saved=JSON.parse(s);
-      settings.features  = Object.assign({},settings.features,  saved.features||{});
+      // 저장된 features 적용하되, 모든 키는 기본값 true 보장 (새 기능 자동 활성화)
+      var sf = saved.features||{};
+      Object.keys(settings.features).forEach(function(k){
+        settings.features[k] = (sf[k]===false) ? false : true;
+      });
       settings.theme     = saved.theme || settings.theme;
       settings.feeds     = saved.feeds || settings.feeds;
       settings.urgentKeywords = saved.urgentKeywords || settings.urgentKeywords;
@@ -1053,76 +1057,91 @@ var expoUploadedData = null; // PDF 업로드 시 덮어쓰는 데이터
 
 var EXPO_DATA = {
   aw2026: {
-    name:"AW 2026", date:"2026.03.04~06", venue:"코엑스 전관", companies:500, booths:2300, visitors:"8만+", countries:24,
-    source:"news", // "news" | "pdf"
+    name:"AW 2026", date:"2026.03.04~06", venue:"코엑스 전관",
+    companies:500, booths:2300, visitors:"8만+", countries:24,
+    source:"news",
     summary:"<strong>AW 2026</strong>은 아시아 최대 제조 AX 전시회. 2026년 3월 4~6일 코엑스 전관 개최. 핵심 화두는 <strong>피지컬 AI</strong>·<strong>휴머노이드 로봇</strong>·<strong>자율제조(AX)</strong>. aimex·스마트팩토리엑스포·KVS·AI팩토리특별관으로 구성. 중국 휴머노이드 기업(Unitree·Agibot·레주·푸리에) 대거 참가로 글로벌 물류·제조 자동화 시장 격변이 예고됨.",
     kwGroups:[
       { cat:"🤖 로봇·자동화", color:"#ff6b6b", kws:[
-        {kw:"AMR",en:"Autonomous Mobile Robot",count:52,badge:"hot",desc:"센서+AI로 스스로 경로를 판단·이동하는 자율이동로봇. AW 2026에서 가장 많이 출품된 품목.",cos:"스탠다드로봇·마로로봇테크·원익로보틱스·Geek+·비전나비"},
-        {kw:"휴머노이드",en:"Humanoid Robot",count:48,badge:"hot",desc:"이번 전시 최대 화두. 중국 Unitree G1·Agibot X2·레주 쿠아보4세대·푸리에 참가, 국내 코라스·티로보틱스·에이딘로보틱스도 발표.",cos:"Unitree·Agibot·레주·푸리에·코라스로보틱스·티로보틱스·KETI"},
-        {kw:"협동로봇",en:"Collaborative Robot",count:41,badge:"hot",desc:"작업자와 동일 공간에서 협업하는 로봇. UR·한화·두산·원익 참가. AMR+코봇 결합 모바일 매니퓰레이터 수요 급증.",cos:"Universal Robots·한화로보틱스·두산로보틱스·원익로보틱스"},
-        {kw:"피지컬 AI",en:"Physical AI",count:38,badge:"hot",desc:"AW 2026 공식 테마. AI가 소프트웨어를 넘어 물리적 로봇·설비와 결합한 개념.",cos:"현대글로비스·현대차로보틱스랩·씨메스"},
-        {kw:"모바일 매니퓰레이터",en:"Mobile Manipulator",count:19,badge:"rising",desc:"AMR+협동로봇팔 결합형 이동식 조작 로봇. 물류·제조·검사 공정 자동화 수요로 급부상.",cos:"마로로봇테크·원익로보틱스·와이투솔루션"},
-        {kw:"팔레타이징",en:"Palletizing Robot",count:17,badge:"rising",desc:"박스를 팔레트에 자동 적재. AI비전 기반 Random Palletizer 트렌드. 씨메스 1SKU·Random Palletizer 주목.",cos:"씨메스·지비드·KETI"},
+        {kw:"AMR",            en:"Autonomous Mobile Robot",      count:52, badge:"hot",    desc:"센서+AI로 스스로 경로를 판단·이동하는 자율이동로봇. AW 2026에서 가장 많이 출품된 품목. AGV와 달리 인프라 없이 동적 환경 대응 가능.",       cos:"스탠다드로봇·마로로봇테크·원익로보틱스·Geek+·비전나비"},
+        {kw:"휴머노이드",     en:"Humanoid Robot",               count:48, badge:"hot",    desc:"이번 전시 최대 화두. 중국 Unitree G1·Agibot X2·레주 쿠아보4세대·푸리에 참가, 국내 코라스·티로보틱스·에이딘로보틱스도 발표.",               cos:"Unitree·Agibot·레주·푸리에·코라스로보틱스·티로보틱스·KETI"},
+        {kw:"협동로봇",       en:"Collaborative Robot (Cobot)",  count:41, badge:"hot",    desc:"작업자와 동일 공간에서 협업하는 로봇. UR·한화·두산·원익 참가. AMR+코봇 결합 모바일 매니퓰레이터 수요 급증.",                                cos:"Universal Robots·한화로보틱스·두산로보틱스·원익로보틱스"},
+        {kw:"피지컬 AI",      en:"Physical AI",                  count:38, badge:"hot",    desc:"AW 2026 공식 테마. AI가 소프트웨어를 넘어 물리적 로봇·설비와 결합한 개념. 현대·포스코DX·씨메스 등 주력 전시.",                               cos:"현대글로비스·현대차로보틱스랩·씨메스"},
+        {kw:"AGV",            en:"Automated Guided Vehicle",     count:26, badge:"hot",    desc:"레이저·자기테이프로 고정 경로 이동하는 무인반송차. AMR로 점차 대체되는 추세이나 반도체·자동차 라인에서 여전히 주력.",                          cos:"비전나비로보틱스·현대무벡스·Geek+"},
+        {kw:"ACR",            en:"Autonomous Case-handling Robot",count:18, badge:"rising", desc:"케이스 단위 화물을 자율 핸들링하는 로봇. 이커머스 풀필먼트 센터에서 주목받는 차세대 피킹 자동화 솔루션.",                                     cos:"Geek+·마로로봇테크"},
+        {kw:"모바일 매니퓰레이터",en:"Mobile Manipulator",       count:19, badge:"rising", desc:"AMR+협동로봇팔 결합형 이동식 조작 로봇. 물류·제조·검사 공정 자동화 수요로 급부상.",                                                           cos:"마로로봇테크·원익로보틱스·와이투솔루션"},
+        {kw:"팔레타이징",     en:"Palletizing Robot",            count:17, badge:"rising", desc:"박스를 팔레트에 자동 적재. AI비전 기반 Random Palletizer 트렌드. 씨메스 1SKU·Random Palletizer 주목.",                                         cos:"씨메스·지비드·KETI"},
+        {kw:"Pick-and-Place", en:"Pick-and-Place Automation",   count:15, badge:"rising", desc:"카메라+로봇팔로 불규칙 물품 인식·파지·이동 자동화. 빈피킹과 함께 물류 자동화 핵심.",                                                           cos:"씨메스·지비드·와이투솔루션·KETI"},
       ]},
       { cat:"👁 머신비전·센서", color:"#4f8cff", kws:[
-        {kw:"머신비전",en:"Machine Vision",count:35,badge:"hot",desc:"카메라+AI로 제품 외관·치수·결함을 자동 검사. KVS(한국머신비전산업전) 별도 구성.",cos:"Cognex·Keyence·노비텍·포스로직·알티엠·플리어시스템"},
-        {kw:"딥러닝 비전 AI",en:"Deep Learning Vision",count:28,badge:"hot",desc:"AI 모델로 불량 자동 검출. 오토 라벨링·데이터 증강 기능으로 도입 장벽 낮춤.",cos:"알티엠·포스로직·플리어시스템코리아"},
-        {kw:"3D 카메라",en:"3D Camera/Scanner",count:22,badge:"rising",desc:"포인트 클라우드로 물체 형상 인식. 빈피킹·디팔레타이징·품질검사에 필수.",cos:"지비드·노비텍·포스로직"},
-        {kw:"빈피킹",en:"Bin Picking",count:16,badge:"rising",desc:"무작위로 담긴 물체를 로봇팔이 인식·파지·이동. 3D비전+AI 조합. 물류센터 자동화 핵심 과제.",cos:"지비드·씨메스·와이투솔루션·KETI"},
-        {kw:"열화상 카메라",en:"Thermal Camera",count:9,badge:"core",desc:"적외선으로 온도 측정하는 산업용 카메라. 플리어 MWIR A858X 출품.",cos:"플리어시스템코리아(FLIR)"},
+        {kw:"머신비전",       en:"Machine Vision",               count:35, badge:"hot",    desc:"카메라+AI로 제품 외관·치수·결함을 자동 검사. KVS(한국머신비전산업전) 별도 구성.",                                                              cos:"Cognex·Keyence·노비텍·포스로직·알티엠·플리어시스템"},
+        {kw:"딥러닝 비전 AI", en:"Deep Learning Vision AI",      count:28, badge:"hot",    desc:"AI 모델로 불량 자동 검출. 오토 라벨링·데이터 증강 기능으로 도입 장벽 낮춤.",                                                                   cos:"알티엠·포스로직·플리어시스템코리아"},
+        {kw:"3D 카메라",      en:"3D Camera / Scanner",          count:22, badge:"rising", desc:"포인트 클라우드로 물체 형상 인식. 빈피킹·디팔레타이징·품질검사에 필수.",                                                                        cos:"지비드·노비텍·포스로직"},
+        {kw:"빈피킹",         en:"Bin Picking",                  count:16, badge:"rising", desc:"무작위로 담긴 물체를 로봇팔이 인식·파지·이동. 3D비전+AI 조합. 물류센터 자동화 핵심 과제.",                                                      cos:"지비드·씨메스·와이투솔루션·KETI"},
+        {kw:"RFID",           en:"Radio Frequency Identification",count:12, badge:"core",  desc:"전파로 태그를 비접촉 인식. 입출고 자동화·재고 실시간 추적의 기반 기술. IoT 센서와 결합해 Supply Chain Visibility 구현.",                        cos:"Cognex·Keyence"},
+        {kw:"열화상 카메라",  en:"Thermal Camera",               count:9,  badge:"core",   desc:"적외선으로 온도 측정하는 산업용 카메라. 플리어 MWIR A858X 출품. 전기 설비 이상감지·식품 품질검사에 활용.",                                    cos:"플리어시스템코리아(FLIR)"},
       ]},
       { cat:"📦 물류 자동화", color:"#0ca678", kws:[
-        {kw:"물류 자동화",en:"Logistics Automation",count:44,badge:"hot",desc:"전체 물류 프로세스 자동화. 스마트물류특별관 별도 구성. 입고~보관~피킹~출고 전 과정 자동화 전시.",cos:"현대글로비스·현대무벡스·Geek+·마로로봇테크·원익로보틱스"},
-        {kw:"AGV",en:"Automated Guided Vehicle",count:26,badge:"hot",desc:"레이저·자기테이프로 고정 경로 이동하는 무인반송차. AMR로 점차 대체되는 추세.",cos:"비전나비로보틱스·현대무벡스·Geek+"},
-        {kw:"스마트 창고",en:"Smart Warehouse",count:23,badge:"rising",desc:"WMS·WCS·AMR·컨베이어·소터 통합 지능형 물류센터. 현대글로비스 전 과정 연결 시연.",cos:"현대글로비스·현대무벡스"},
-        {kw:"WMS/WCS 통합",en:"WMS/WCS Integration",count:14,badge:"core",desc:"창고관리·제어시스템 통합 운영. AMR·컨베이어·소터를 단일 인터페이스로 제어.",cos:"스탠다드로봇·현대글로비스"},
-        {kw:"무인 지게차",en:"Autonomous Forklift",count:11,badge:"rising",desc:"5G·AI 기반 무인 산업용 지게차. 비전나비 VNP15(V) 대표적.",cos:"비전나비로보틱스"},
+        {kw:"물류 자동화",    en:"Logistics Automation",         count:44, badge:"hot",    desc:"전체 물류 프로세스 자동화. 스마트물류특별관 별도 구성. 입고~보관~피킹~출고 전 과정 자동화 전시.",                                               cos:"현대글로비스·현대무벡스·Geek+·마로로봇테크·원익로보틱스"},
+        {kw:"AS/RS",          en:"Automated Storage & Retrieval",count:30, badge:"hot",    desc:"스태커크레인·셔틀이 랙 지정위치에 화물을 자동 입출고. 공간 효율 극대화와 인력 절감의 핵심. 4방향 셔틀·AutoStore 등 신기술 출품.",              cos:"현대무벡스·Geek+"},
+        {kw:"스마트 창고",    en:"Smart Warehouse",              count:23, badge:"rising", desc:"WMS·WCS·AMR·컨베이어·소터 통합 지능형 물류센터. 현대글로비스 전 과정 연결 시연.",                                                              cos:"현대글로비스·현대무벡스"},
+        {kw:"WMS",            en:"Warehouse Management System",  count:16, badge:"core",   desc:"입출고·재고·작업 지시를 통합 관리하는 창고관리시스템. WCS·AMR·컨베이어와 연동해 완전 자동화 물류 구현.",                                       cos:"스탠다드로봇·현대글로비스"},
+        {kw:"WCS",            en:"Warehouse Control System",     count:14, badge:"core",   desc:"창고 내 물리 설비(컨베이어·소터·AMR 등)를 실시간 제어하는 시스템. WMS 지시를 현장 설비로 변환.",                                               cos:"스탠다드로봇·현대글로비스"},
+        {kw:"소터(분류기)",   en:"Sorter",                       count:11, badge:"core",   desc:"바코드·영상 인식으로 물품을 목적지별 자동 분류. 이커머스 물류센터 핵심 설비.",                                                                   cos:"현대무벡스·Geek+"},
+        {kw:"무인 지게차",    en:"Autonomous Forklift",          count:11, badge:"rising", desc:"5G·AI 기반 무인 산업용 지게차. 비전나비 VNP15(V) 대표적.",                                                                                      cos:"비전나비로보틱스"},
+        {kw:"Cross-Docking",  en:"Cross-Docking",                count:8,  badge:"rising", desc:"입고 즉시 재분류해 출고하는 환적 방식. 보관 없이 신속 배송. 식품·신선물류에서 수요 증가.",                                                      cos:"현대글로비스"},
+        {kw:"Last-Mile 배송", en:"Last-Mile Delivery",           count:7,  badge:"new",    desc:"최종 목적지까지의 배송. 자율주행 로봇·드론 활용 솔루션이 전시 화두로 부상.",                                                                    cos:"현대차로보틱스랩"},
       ]},
       { cat:"🏭 스마트팩토리·AI", color:"#e67700", kws:[
-        {kw:"스마트팩토리",en:"Smart Factory",count:49,badge:"hot",desc:"IoT·AI·빅데이터 결합 지능형 공장. AI팩토리특별관에서 자율제조 모델 시연.",cos:"포스코DX·CJ올리브네트웍스·두산디지털이노베이션"},
-        {kw:"자율제조(AX)",en:"Autonomous Manufacturing",count:33,badge:"hot",desc:"AI·로봇이 스스로 판단·운영하는 제조 패러다임. AW 2026 핵심 슬로건.",cos:"포스코DX·CJ올리브네트웍스·현대차로보틱스랩"},
-        {kw:"디지털 트윈",en:"Digital Twin",count:21,badge:"rising",desc:"물리적 공장을 가상 복제해 시뮬레이션. AI팩토리특별관에서 통합 구현 모델 전시.",cos:"포스코DX·두산디지털이노베이션"},
-        {kw:"PLC·모션 제어",en:"PLC / Motion Control",count:18,badge:"core",desc:"알에스오토메이션이 서보드라이브·컨트롤러·엔코더 국내 유일 풀스택 개발.",cos:"알에스오토메이션·파스텍"},
-        {kw:"Pick-and-Place",en:"Pick-and-Place Auto",count:15,badge:"rising",desc:"카메라+로봇팔로 불규칙 물품 인식·파지·이동 자동화. ACR과 함께 물류 자동화 핵심.",cos:"씨메스·지비드·와이투솔루션·KETI"},
+        {kw:"스마트팩토리",   en:"Smart Factory",                count:49, badge:"hot",    desc:"IoT·AI·빅데이터 결합 지능형 공장. AI팩토리특별관에서 자율제조 모델 시연.",                                                                     cos:"포스코DX·CJ올리브네트웍스·두산디지털이노베이션"},
+        {kw:"자율제조(AX)",   en:"Autonomous Manufacturing",     count:33, badge:"hot",    desc:"AI·로봇이 스스로 판단·운영하는 제조 패러다임. AW 2026 핵심 슬로건.",                                                                           cos:"포스코DX·CJ올리브네트웍스·현대차로보틱스랩"},
+        {kw:"디지털 트윈",    en:"Digital Twin",                 count:21, badge:"rising", desc:"물리적 공장을 가상 복제해 시뮬레이션. AI팩토리특별관에서 통합 구현 모델 전시.",                                                                  cos:"포스코DX·두산디지털이노베이션"},
+        {kw:"MFS",            en:"Material Flow System",         count:15, badge:"core",   desc:"공장 내 자재 흐름 전체를 제어하는 시스템. AGV·컨베이어·소터를 통합 운영.",                                                                      cos:"알에스오토메이션"},
+        {kw:"PLC·모션 제어",  en:"PLC / Motion Control",         count:18, badge:"core",   desc:"알에스오토메이션이 서보드라이브·컨트롤러·엔코더 국내 유일 풀스택 개발.",                                                                        cos:"알에스오토메이션·파스텍"},
+        {kw:"수요예측 AI",    en:"AI Demand Forecasting",        count:12, badge:"rising", desc:"AI로 수요를 예측해 재고·생산 계획 최적화. ERP·SCM 연동 솔루션 출품.",                                                                           cos:"포스코DX·두산디지털이노베이션"},
+        {kw:"IoT 센서",       en:"Industrial IoT",               count:10, badge:"core",   desc:"설비·환경 데이터를 실시간 수집해 예지보전·공정 최적화에 활용. RFID·비전 센서와 결합.",                                                          cos:"Cognex·Keyence·Omron"},
       ]},
-      { cat:"🔧 부품·그리퍼", color:"#9c36b5", kws:[
-        {kw:"로봇 그리퍼",en:"Robot Gripper",count:20,badge:"rising",desc:"코라스로보틱스 툴체인저·그리퍼 라인업. 유엔디 휠너트 그리퍼 자동차 생산라인 적용.",cos:"코라스로보틱스·유엔디·에이딘로보틱스"},
-        {kw:"힘·토크 센서",en:"Force/Torque Sensor",count:13,badge:"new",desc:"에이딘로보틱스 6축 힘토크센서 키트·인간형 로봇핸드 Gen2(16DoF) 발표.",cos:"에이딘로보틱스"},
-        {kw:"촉각 센서",en:"Tactile Sensor",count:10,badge:"new",desc:"로봇핸드 촉각 인식 센서. 에이딘로보틱스 AIDIN Hand Gen2 탑재. 휴머노이드 상용화 핵심.",cos:"에이딘로보틱스"},
+      { cat:"🔧 부품·그리퍼·컨베이어", color:"#9c36b5", kws:[
+        {kw:"로봇 그리퍼",    en:"Robot Gripper",                count:20, badge:"rising", desc:"코라스로보틱스 툴체인저·그리퍼 라인업. 유엔디 휠너트 그리퍼 자동차 생산라인 적용.",                                                            cos:"코라스로보틱스·유엔디·에이딘로보틱스"},
+        {kw:"힘·토크 센서",   en:"Force/Torque Sensor",          count:13, badge:"new",    desc:"에이딘로보틱스 6축 힘토크센서 키트·인간형 로봇핸드 Gen2(16DoF) 발표.",                                                                          cos:"에이딘로보틱스"},
+        {kw:"촉각 센서",      en:"Tactile Sensor",               count:10, badge:"new",    desc:"로봇핸드 촉각 인식 센서. 에이딘로보틱스 AIDIN Hand Gen2 탑재. 휴머노이드 상용화 핵심.",                                                         cos:"에이딘로보틱스"},
+        {kw:"컨베이어",       en:"Conveyor System",              count:16, badge:"core",   desc:"벨트·롤러·체인 등 다양한 방식으로 물품을 이송. 물류·제조라인 기본 설비. 소터·버퍼와 결합해 자동화 라인 구성.",                                 cos:"현대무벡스·Geek+"},
+        {kw:"슬로팅(Slotting)",en:"Slotting Optimization",       count:8,  badge:"rising", desc:"창고 내 상품 배치 최적화. AI로 피킹 동선을 최소화해 처리량 증가. WMS와 연동.",                                                                  cos:"현대글로비스·스탠다드로봇"},
+        {kw:"Put-to-Light",   en:"Put-to-Light / Pick-to-Light",  count:9,  badge:"core",   desc:"광 신호로 피킹·투입 위치 안내. 작업자 오류 감소·속도 향상. 소규모 풀필먼트에 적합.",                                                            cos:"현대무벡스"},
       ]}
     ],
     cos:[
-      {name:"씨메스",             tags:["로봇","AI"],     product:"AI비전 팔레타이저 (1SKU·Random)",        kws:["팔레타이징","비전AI"],    country:"🇰🇷"},
-      {name:"마로로봇테크",       tags:["로봇","물류"],   product:"AMR, 모바일 매니퓰레이터",              kws:["AMR","모바일매니퓰레이터"],country:"🇰🇷"},
-      {name:"코라스로보틱스",     tags:["로봇","부품"],   product:"툴체인저·그리퍼, 휴머노이드 프로젝트", kws:["그리퍼","휴머노이드"],     country:"🇰🇷"},
-      {name:"원익로보틱스",       tags:["로봇","물류"],   product:"AMR, 자율이동조작로봇(AMMR)",           kws:["AMR","협동로봇"],         country:"🇰🇷"},
-      {name:"알에스오토메이션",   tags:["제어"],          product:"모션 제어 풀스택",                      kws:["PLC","모션제어"],         country:"🇰🇷"},
-      {name:"에이딘로보틱스",     tags:["로봇","부품"],   product:"로봇핸드 Gen2, 6축 힘토크센서",         kws:["힘토크센서","촉각센서"],   country:"🇰🇷"},
-      {name:"유엔디",             tags:["로봇"],          product:"휠너트 그리퍼, 협동로봇 교육 플랫폼",   kws:["그리퍼","협동로봇"],      country:"🇰🇷"},
-      {name:"지비드 (Zivid)",     tags:["비전"],          product:"Zivid 3 산업용 3D 카메라",              kws:["3D카메라","빈피킹"],       country:"🇳🇴"},
-      {name:"노비텍",             tags:["비전"],          product:"Swing3D 고정밀 3D 스캐너",              kws:["3D스캐너","머신비전"],     country:"🇰🇷"},
-      {name:"알티엠 (RTM)",       tags:["비전","AI"],     product:"딥러닝 비전 AI 'Hubble'",              kws:["딥러닝비전","AI"],         country:"🇰🇷"},
-      {name:"포스로직",           tags:["비전","AI"],     product:"2D·3D·AI 통합 'FLImaging'",            kws:["머신비전","AI"],           country:"🇰🇷"},
-      {name:"플리어시스템코리아", tags:["비전"],          product:"FLIR A858X MWIR 열화상 카메라",         kws:["열화상카메라"],            country:"🇺🇸"},
-      {name:"스탠다드 로봇",      tags:["로봇","물류","글로벌"],product:"레이저 SLAM AMR 오아시스 시리즈",kws:["AMR","SLAM"],             country:"🇨🇳"},
-      {name:"비전나비 로보틱스",  tags:["물류","글로벌"], product:"5G·AI 기반 무인 지게차 VNP15(V)",       kws:["무인지게차","AGV"],        country:"🇨🇳"},
-      {name:"Geek+ (긱플러스)",   tags:["물류","글로벌"], product:"AMR 기반 물류 자동화 시스템",           kws:["AMR","물류자동화"],        country:"🇨🇳"},
-      {name:"FANUC",              tags:["로봇","글로벌"], product:"산업용 로봇, FA 시스템",               kws:["산업용로봇"],              country:"🇯🇵"},
-      {name:"Universal Robots",   tags:["로봇","글로벌"], product:"협동로봇 전 라인업",                   kws:["협동로봇"],                country:"🇩🇰"},
-      {name:"Unitree",            tags:["로봇","글로벌"], product:"G1 휴머노이드",                        kws:["휴머노이드","피지컬AI"],   country:"🇨🇳"},
-      {name:"Agibot",             tags:["로봇","글로벌"], product:"X2·G2 휴머노이드",                    kws:["휴머노이드","피지컬AI"],   country:"🇨🇳"},
-      {name:"현대글로비스",       tags:["물류","AI"],     product:"피지컬AI 기반 입고~출고 물류 자동화",   kws:["물류자동화","피지컬AI"],   country:"🇰🇷"},
-      {name:"현대차 로보틱스랩",  tags:["로봇","AI"],     product:"모베드(MobED) — CES 2026 최고혁신상",  kws:["피지컬AI","모바일로봇"],   country:"🇰🇷"},
-      {name:"티로보틱스",         tags:["로봇"],          product:"산업용 휴머노이드 (국내 최초 공개)",   kws:["휴머노이드"],              country:"🇰🇷"},
-      {name:"포스코DX",           tags:["AI","스마트"],   product:"제조 AI — AI팩토리특별관",             kws:["스마트팩토리","디지털트윈"],country:"🇰🇷"},
-      {name:"두산디지털이노베이션",tags:["AI","스마트"],  product:"제조 AI — AI팩토리특별관",             kws:["스마트팩토리","AX"],        country:"🇰🇷"},
-      {name:"파스텍",             tags:["제어"],          product:"ExServo+ 클로즈드 루프 스테핑 모터",   kws:["모션제어"],                country:"🇰🇷"},
-      {name:"KETI",               tags:["로봇","AI"],     product:"휴머노이드 양팔, 비정형 피킹 기술",    kws:["휴머노이드","피킹"],        country:"🇰🇷"},
+      {name:"씨메스",             tags:["로봇","AI"],           product:"AI비전 팔레타이저 (1SKU·Random)",        kws:["팔레타이징","빈피킹","피지컬 AI"],   country:"🇰🇷"},
+      {name:"마로로봇테크",       tags:["로봇","물류"],         product:"AMR, 모바일 매니퓰레이터",              kws:["AMR","모바일 매니퓰레이터"],         country:"🇰🇷"},
+      {name:"코라스로보틱스",     tags:["로봇","부품"],         product:"툴체인저·그리퍼, 휴머노이드 프로젝트", kws:["로봇 그리퍼","휴머노이드"],          country:"🇰🇷"},
+      {name:"원익로보틱스",       tags:["로봇","물류"],         product:"AMR, 자율이동조작로봇(AMMR)",           kws:["AMR","협동로봇"],                    country:"🇰🇷"},
+      {name:"알에스오토메이션",   tags:["제어"],                product:"모션 제어 풀스택",                      kws:["PLC·모션 제어","MFS"],               country:"🇰🇷"},
+      {name:"에이딘로보틱스",     tags:["로봇","부품"],         product:"로봇핸드 Gen2, 6축 힘토크센서",         kws:["힘·토크 센서","촉각 센서"],           country:"🇰🇷"},
+      {name:"유엔디",             tags:["로봇"],                product:"휠너트 그리퍼, 협동로봇 교육 플랫폼",   kws:["로봇 그리퍼","협동로봇"],            country:"🇰🇷"},
+      {name:"지비드(Zivid)",      tags:["비전"],                product:"Zivid 3 산업용 3D 카메라",              kws:["3D 카메라","빈피킹"],                country:"🇳🇴"},
+      {name:"노비텍",             tags:["비전"],                product:"Swing3D 고정밀 3D 스캐너",              kws:["3D 카메라","머신비전"],              country:"🇰🇷"},
+      {name:"알티엠(RTM)",        tags:["비전","AI"],           product:"딥러닝 비전 AI 'Hubble'",              kws:["딥러닝 비전 AI","머신비전"],          country:"🇰🇷"},
+      {name:"포스로직",           tags:["비전","AI"],           product:"2D·3D·AI 통합 'FLImaging'",            kws:["머신비전","딥러닝 비전 AI"],          country:"🇰🇷"},
+      {name:"플리어시스템코리아", tags:["비전"],                product:"FLIR A858X MWIR 열화상 카메라",         kws:["열화상 카메라"],                     country:"🇺🇸"},
+      {name:"스탠다드 로봇",      tags:["로봇","물류","글로벌"],product:"레이저 SLAM AMR 오아시스 시리즈",        kws:["AMR","WMS"],                        country:"🇨🇳"},
+      {name:"비전나비 로보틱스",  tags:["물류","글로벌"],       product:"5G·AI 기반 무인 지게차 VNP15(V)",       kws:["무인 지게차","AGV"],                 country:"🇨🇳"},
+      {name:"Geek+(긱플러스)",    tags:["물류","글로벌"],       product:"AMR 기반 물류 자동화 시스템",           kws:["AMR","AS/RS","소터(분류기)"],         country:"🇨🇳"},
+      {name:"FANUC",              tags:["로봇","글로벌"],       product:"산업용 로봇, FA 시스템",               kws:["협동로봇","Pick-and-Place"],          country:"🇯🇵"},
+      {name:"Universal Robots",   tags:["로봇","글로벌"],       product:"협동로봇 전 라인업",                   kws:["협동로봇"],                          country:"🇩🇰"},
+      {name:"Unitree",            tags:["로봇","글로벌"],       product:"G1 휴머노이드",                        kws:["휴머노이드","피지컬 AI"],             country:"🇨🇳"},
+      {name:"Agibot",             tags:["로봇","글로벌"],       product:"X2·G2 휴머노이드",                    kws:["휴머노이드","피지컬 AI"],             country:"🇨🇳"},
+      {name:"현대글로비스",       tags:["물류","AI"],           product:"피지컬AI 기반 입고~출고 물류 자동화",   kws:["물류 자동화","스마트 창고","WMS"],    country:"🇰🇷"},
+      {name:"현대차 로보틱스랩",  tags:["로봇","AI"],           product:"모베드(MobED) — CES 2026 최고혁신상",  kws:["피지컬 AI","Last-Mile 배송"],         country:"🇰🇷"},
+      {name:"티로보틱스",         tags:["로봇"],                product:"산업용 휴머노이드 (국내 최초 공개)",   kws:["휴머노이드"],                        country:"🇰🇷"},
+      {name:"포스코DX",           tags:["AI","스마트"],         product:"제조 AI — AI팩토리특별관",             kws:["스마트팩토리","디지털 트윈","수요예측 AI"],country:"🇰🇷"},
+      {name:"두산디지털이노베이션",tags:["AI","스마트"],         product:"제조 AI — AI팩토리특별관",             kws:["스마트팩토리","자율제조(AX)"],        country:"🇰🇷"},
+      {name:"파스텍",             tags:["제어"],                product:"ExServo+ 클로즈드 루프 스테핑 모터",   kws:["PLC·모션 제어"],                     country:"🇰🇷"},
+      {name:"KETI",               tags:["로봇","AI"],           product:"휴머노이드 양팔, 비정형 피킹 기술",    kws:["휴머노이드","빈피킹","Pick-and-Place"],country:"🇰🇷"},
     ]
   },
   mat2024: {
-    name:"MAT 2024", date:"2024", venue:"코엑스", companies:350, booths:1500, visitors:"4만+", countries:18,
+    name:"MAT 2024", date:"2024", venue:"코엑스",
+    companies:350, booths:1500, visitors:"4만+", countries:18,
     source:"news",
     summary:"<strong>MAT (Material Handling Automation Technologies)</strong> 물류·자동화 전시회. PDF를 업로드하면 실제 데이터로 업데이트됩니다.",
     kwGroups:[], cos:[]
@@ -1346,11 +1365,16 @@ function parseExpoUpload(text, filename) {
   }, 600);
 }
 
-function encodeKwData(k) {
-  return encodeURIComponent(JSON.stringify({kw:k.kw,en:k.en,count:k.count,desc:k.desc,cos:k.cos}));
+// 키워드 팝업: 전역 맵 방식 (인라인 onclick에서 데이터 직접 전달 대신 ID 사용)
+var _expoKwMap = {};
+function _expoKwId(k) {
+  var id = "kw_" + k.kw.replace(/[^a-zA-Z0-9가-힣]/g, "_");
+  _expoKwMap[id] = k;
+  return id;
 }
-function openExpoTT(enc) {
-  var k = JSON.parse(decodeURIComponent(enc));
+function openExpoTT(id) {
+  var k = _expoKwMap[id];
+  if (!k) return;
   document.getElementById("expo-tt-kw").textContent  = k.kw + "  ×"+k.count;
   document.getElementById("expo-tt-en").textContent  = k.en || "";
   document.getElementById("expo-tt-desc").textContent= k.desc || "";
