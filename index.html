@@ -14,40 +14,71 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { width:100%; min-height:100vh; font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background:#f4f6f9; color:#1a1a2e; }
 
-  /* 헤더 */
-  .header { background:linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:white; padding:16px; position:sticky; top:0; z-index:100; }
-  .header h1 { font-size:1.2rem; font-weight:800; display:flex; align-items:center; gap:8px; }
+  .header { background:linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:white; padding:14px 16px 0; position:sticky; top:0; z-index:100; }
+  .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .header h1 { font-size:1.15rem; font-weight:800; display:flex; align-items:center; gap:8px; }
   .live-badge { background:#00ff88; color:#000; font-size:0.6rem; font-weight:700; padding:2px 7px; border-radius:100px; animation:blink 1.5s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .header-bottom { display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
-  .last-update { font-size:0.7rem; color:rgba(255,255,255,0.5); }
-  .unread-count { font-size:0.7rem; color:#00ff88; font-weight:700; }
+  .header-meta { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .last-update { font-size:0.68rem; color:rgba(255,255,255,0.45); }
+  .unread-count { font-size:0.68rem; color:#00ff88; font-weight:700; }
 
-  /* 모드 탭 */
-  .mode-tabs { display:flex; background:#1a1660; border-top:1px solid rgba(255,255,255,0.1); margin-top:8px; border-radius:6px; overflow:hidden; }
-  .mode-tab { flex:1; padding:8px; text-align:center; font-size:0.75rem; font-weight:700; color:rgba(255,255,255,0.5); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; }
+  /* 검색 */
+  .search-wrap { position:relative; margin-bottom:8px; }
+  .search-input { width:100%; padding:8px 36px 8px 12px; border-radius:8px; border:none; background:rgba(255,255,255,0.12); color:#fff; font-size:0.82rem; outline:none; }
+  .search-input::placeholder { color:rgba(255,255,255,0.4); }
+  .search-clear { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:rgba(255,255,255,0.5); font-size:1rem; cursor:pointer; display:none; }
+  .search-clear.show { display:block; }
+
+  /* 탭 */
+  .mode-tabs { display:flex; background:#1a1660; border-top:1px solid rgba(255,255,255,0.1); }
+  .mode-tab { flex:1; padding:8px 2px; text-align:center; font-size:0.7rem; font-weight:700; color:rgba(255,255,255,0.45); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; white-space:nowrap; }
   .mode-tab.active { color:#00ff88; border-bottom-color:#00ff88; }
 
   /* 필터 바 */
-  .filter-wrap { background:#fff; border-bottom:1px solid #e8eaf0; overflow-x:auto; scrollbar-width:none; position:sticky; top:104px; z-index:99; }
+  .filter-wrap { background:#fff; border-bottom:1px solid #e8eaf0; overflow-x:auto; scrollbar-width:none; position:sticky; top:130px; z-index:99; }
   .filter-wrap::-webkit-scrollbar { display:none; }
   .filter-list { display:flex; gap:4px; padding:8px 12px; white-space:nowrap; }
   .filter-btn { padding:5px 12px; border-radius:100px; border:1.5px solid #e0e0e0; background:#fff; color:#666; font-size:0.74rem; font-weight:500; cursor:pointer; transition:all 0.2s; }
   .filter-btn.active { background:#302b63; color:#fff; border-color:#302b63; font-weight:700; }
   .filter-btn.mfr.active { background:#0c8599; border-color:#0c8599; }
 
+  /* 오늘 위젯 */
+  .today-widget { margin:10px 10px 0; background:linear-gradient(135deg,#302b63,#0c8599); border-radius:14px; padding:14px 16px; color:#fff; }
+  .today-widget-title { font-size:0.72rem; font-weight:700; opacity:0.75; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; }
+  .today-widget-title button { background:rgba(255,255,255,0.18); border:none; color:#fff; font-size:0.68rem; padding:3px 10px; border-radius:100px; cursor:pointer; }
+  .today-stats { display:flex; gap:8px; margin-bottom:10px; }
+  .today-stat { flex:1; background:rgba(255,255,255,0.12); border-radius:10px; padding:10px 6px; text-align:center; }
+  .today-stat-num { font-size:1.5rem; font-weight:900; color:#00ff88; line-height:1; }
+  .today-stat-label { font-size:0.62rem; opacity:0.7; margin-top:4px; }
+  .today-tags { display:flex; flex-wrap:wrap; gap:5px; }
+  .today-tag { background:rgba(255,255,255,0.15); border-radius:100px; padding:3px 10px; font-size:0.68rem; }
+
+  /* 트렌드 차트 */
+  .chart-wrap { margin:10px 10px 0; background:#fff; border-radius:14px; padding:16px; box-shadow:0 2px 6px rgba(0,0,0,0.06); }
+  .chart-title { font-size:0.82rem; font-weight:800; color:#302b63; margin-bottom:14px; }
+  .chart-bars { display:flex; flex-direction:column; gap:9px; }
+  .chart-row { display:flex; align-items:center; gap:8px; }
+  .chart-label { font-size:0.68rem; color:#555; width:76px; flex-shrink:0; text-align:right; line-height:1.3; }
+  .chart-bar-wrap { flex:1; background:#f0f0f0; border-radius:100px; height:20px; overflow:hidden; }
+  .chart-bar { height:100%; border-radius:100px; transition:width 0.7s ease; display:flex; align-items:center; justify-content:flex-end; padding-right:7px; min-width:24px; }
+  .chart-bar-val { font-size:0.65rem; font-weight:700; color:#fff; }
+
   /* 뉴스 목록 */
   .news-list { padding:10px; display:flex; flex-direction:column; gap:8px; }
+  .list-header { padding:6px 2px 2px; font-size:0.78rem; color:#302b63; font-weight:700; }
 
-  /* 뉴스 카드 */
-  .news-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.06); cursor:pointer; transition:all 0.2s; border:1.5px solid transparent; }
+  /* 카드 */
+  .news-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.06); cursor:pointer; transition:all 0.2s; border:1.5px solid transparent; position:relative; }
   .news-card:hover { border-color:#302b63; box-shadow:0 4px 14px rgba(48,43,99,0.12); transform:translateY(-1px); }
   .news-card.read { opacity:0.45; border-left:4px solid #ccc; }
   .news-card.read .card-title { color:#999; }
+  .news-card.bookmarked { border-color:#f59f00 !important; opacity:1 !important; }
 
-  /* 카드 이미지 */
-  .card-img { width:100%; height:160px; object-fit:cover; display:block; background:#f0f0f0; }
+  .bookmark-btn { position:absolute; top:8px; right:8px; z-index:10; background:rgba(255,255,255,0.92); border:none; border-radius:50%; width:30px; height:30px; font-size:0.9rem; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(0,0,0,0.12); transition:all 0.2s; }
+  .bookmark-btn:hover { transform:scale(1.15); }
 
+  .card-img { width:100%; height:150px; object-fit:cover; display:block; background:#f0f0f0; }
   .card-body { padding:12px 14px 14px; }
   .card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:7px; gap:6px; }
   .card-badges { display:flex; gap:4px; flex-wrap:wrap; }
@@ -59,7 +90,6 @@
   .card-summary { font-size:0.8rem; color:#666; line-height:1.6; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   .card-source { margin-top:8px; font-size:0.68rem; color:#999; }
 
-  /* 제조사 그룹 */
   .mfr-group-header { padding:10px 10px 4px; font-size:0.8rem; font-weight:800; color:#0c8599; display:flex; align-items:center; gap:6px; }
   .mfr-count { background:#e3fafc; color:#0c8599; font-size:0.65rem; padding:1px 7px; border-radius:100px; font-weight:700; }
 
@@ -69,10 +99,7 @@
   .modal { background:#fff; border-radius:20px 20px 0 0; width:100%; max-height:92vh; overflow-y:auto; animation:slideUp 0.3s ease; }
   @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
   .modal-handle { width:36px; height:4px; background:#ddd; border-radius:2px; margin:10px auto 0; }
-
-  /* 모달 이미지 */
   .modal-img { width:100%; max-height:220px; object-fit:cover; display:block; }
-
   .modal-body { padding:18px; }
   .modal-meta { display:flex; align-items:center; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
   .modal-title { font-size:1.1rem; font-weight:800; line-height:1.5; margin-bottom:5px; }
@@ -81,7 +108,6 @@
   .modal-divider { height:1px; background:#f0f0f0; margin:14px 0; }
   .modal-content { font-size:0.9rem; line-height:1.9; color:#333; }
   .modal-content p { margin-bottom:12px; }
-
   .modal-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:14px 18px 32px; border-top:1px solid #f0f0f0; background:#fafafa; }
   .act-btn { padding:11px 8px; border-radius:10px; border:none; cursor:pointer; font-size:0.8rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:5px; transition:all 0.2s; text-decoration:none; }
   .act-btn.pdf   { background:#ff6b35; color:#fff; }
@@ -90,7 +116,6 @@
   .act-btn.orig  { background:#302b63; color:#fff; }
   .act-btn:hover { opacity:0.85; transform:translateY(-1px); }
 
-  /* 카테고리 색상 */
   .c-로봇공학     { background:#fff0eb; color:#ff6b35; }
   .c-자율주행     { background:#ebf0ff; color:#3b5bdb; }
   .c-드론         { background:#ebfff4; color:#0ca678; }
@@ -103,27 +128,37 @@
   .loading { text-align:center; padding:50px 20px; color:#999; font-size:0.88rem; }
   .spinner { width:32px; height:32px; border:3px solid #eee; border-top-color:#302b63; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 10px; }
   @keyframes spin { to{transform:rotate(360deg)} }
-  .empty { text-align:center; padding:50px 20px; color:#aaa; font-size:0.88rem; }
+  .empty { text-align:center; padding:50px 20px; color:#aaa; font-size:0.88rem; line-height:1.8; }
 
   .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:#1a1a2e; color:#fff; padding:10px 20px; border-radius:100px; font-size:0.8rem; opacity:0; transition:all 0.3s; pointer-events:none; z-index:999; white-space:nowrap; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  mark { background:#fff176; color:#1a1a2e; border-radius:2px; padding:0 1px; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>⚡ 피지컬 AI 뉴스 <span class="live-badge">LIVE</span></h1>
-  <div class="header-bottom">
+  <div class="header-top">
+    <h1>⚡ 피지컬 AI 뉴스 <span class="live-badge">LIVE</span></h1>
+  </div>
+  <div class="header-meta">
     <div class="last-update" id="last-update">불러오는 중...</div>
     <div class="unread-count" id="unread-count"></div>
   </div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" type="text" placeholder="🔍 기사 검색 (제목·내용·제조사)" oninput="onSearch(this.value)">
+    <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+  </div>
   <div class="mode-tabs">
-    <div class="mode-tab active" id="tab-cat" onclick="switchMode('category')">📂 카테고리</div>
-    <div class="mode-tab" id="tab-mfr" onclick="switchMode('manufacturer')">🏭 제조사</div>
+    <div class="mode-tab active" id="tab-cat"   onclick="switchMode('category')">📂 카테고리</div>
+    <div class="mode-tab"        id="tab-mfr"   onclick="switchMode('manufacturer')">🏭 제조사</div>
+    <div class="mode-tab"        id="tab-book"  onclick="switchMode('bookmark')">🔖 북마크</div>
+    <div class="mode-tab"        id="tab-trend" onclick="switchMode('trend')">📊 트렌드</div>
   </div>
 </div>
 
-<div class="filter-wrap">
+<div class="filter-wrap" id="filter-wrap">
   <div class="filter-list" id="filter-list">
     <button class="filter-btn active" onclick="filterCat(this,'전체')">전체</button>
     <button class="filter-btn" onclick="filterCat(this,'로봇공학')">🦾 로봇공학</button>
@@ -168,15 +203,18 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycby2NKb0YtTk2ArC0MQMsugKoBy-DZOCh2_RIQQpp5LJo6BhxRYPCrTLfiGRkmNt6pQGeA/exec";
-const STORAGE_KEY = "physicalai_read";
+const API_URL      = "https://script.google.com/macros/s/AKfycby2NKb0YtTk2ArC0MQMsugKoBy-DZOCh2_RIQQpp5LJo6BhxRYPCrTLfiGRkmNt6pQGeA/exec";
+const STORAGE_KEY  = "physicalai_read";
+const BOOKMARK_KEY = "physicalai_bookmarks";
 
-let allArticles    = [];
-let currentCat     = "전체";
-let currentMode    = "category";
-let currentMfr     = "전체";
-let currentArticle = null;
-let readSet        = new Set();
+var allArticles    = [];
+var currentCat     = "전체";
+var currentMode    = "category";
+var currentMfr     = "전체";
+var currentArticle = null;
+var readSet        = new Set();
+var bookmarkSet    = new Set();
+var searchQuery    = "";
 
 const MFR_LIST = [
   "ABB","FANUC","KUKA","Universal Robots","Yaskawa",
@@ -187,378 +225,420 @@ const MFR_LIST = [
   "Siemens","Rockwell","Mitsubishi Electric",
   "Schunk","OnRobot","Robotiq",
   "Omron","MiR","Geek+",
-  "Galaxis","Asetech"
+  "Galaxis","Asetech",
+  "Unitree","SIASUN","Estun","UBTECH","Agibot"
 ];
 
-// ── localStorage 읽음 관리 ──────────────────────────────
-function loadReadSet() {
-  try {
-    var saved = localStorage.getItem(STORAGE_KEY);
-    readSet = saved ? new Set(JSON.parse(saved)) : new Set();
-  } catch(e) { readSet = new Set(); }
-}
+const CAT_COLORS = {
+  "로봇공학":"#ff6b35","자율주행":"#3b5bdb","드론":"#0ca678",
+  "산업자동화":"#e67700","웨어러블":"#9c36b5","의료로봇":"#c92a2a",
+  "스마트팩토리":"#0c8599","기타":"#aaa"
+};
 
-function saveReadSet() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(readSet))); } catch(e) {}
+// ── 스토리지 ──────────────────────────────────────────────
+function loadStorage() {
+  try {
+    var r = localStorage.getItem(STORAGE_KEY);
+    readSet = r ? new Set(JSON.parse(r)) : new Set();
+    var b = localStorage.getItem(BOOKMARK_KEY);
+    bookmarkSet = b ? new Set(JSON.parse(b)) : new Set();
+  } catch(e) { readSet = new Set(); bookmarkSet = new Set(); }
 }
+function saveReadSet()     { try { localStorage.setItem(STORAGE_KEY,  JSON.stringify(Array.from(readSet)));     } catch(e){} }
+function saveBookmarkSet() { try { localStorage.setItem(BOOKMARK_KEY, JSON.stringify(Array.from(bookmarkSet))); } catch(e){} }
+function isRead(id)        { return readSet.has(String(id)); }
+function isBookmarked(id)  { return bookmarkSet.has(String(id)); }
 
 function markAsRead(id) {
-  if (readSet.has(String(id))) return;
-  readSet.add(String(id));
-  saveReadSet();
+  if (!readSet.has(String(id))) { readSet.add(String(id)); saveReadSet(); }
 }
 
-function isRead(id) { return readSet.has(String(id)); }
+function toggleBookmark(id, e) {
+  if (e) e.stopPropagation();
+  var sid = String(id);
+  if (bookmarkSet.has(sid)) { bookmarkSet.delete(sid); showToast("북마크 해제"); }
+  else                       { bookmarkSet.add(sid);    showToast("🔖 북마크 저장!"); }
+  saveBookmarkSet();
+  render();
+  updateUnreadBadge();
+}
 
 function updateUnreadBadge() {
-  var unread = allArticles.filter(function(a) { return !isRead(a.id); }).length;
-  document.getElementById("unread-count").textContent = unread > 0 ? "안읽음 " + unread + "건" : "모두 읽음 ✓";
+  var unread = allArticles.filter(function(a){ return !isRead(a.id); }).length;
+  document.getElementById("unread-count").textContent =
+    (unread > 0 ? "안읽음 " + unread + "건" : "모두 읽음 ✓") +
+    (bookmarkSet.size > 0 ? "  🔖" + bookmarkSet.size : "");
 }
 
-// ── 데이터 로드 ─────────────────────────────────────────
+// ── 검색 ─────────────────────────────────────────────────
+function onSearch(val) {
+  searchQuery = val.trim();
+  document.getElementById("search-clear").classList.toggle("show", searchQuery.length > 0);
+  searchQuery ? renderSearch() : render();
+}
+function clearSearch() {
+  document.getElementById("search-input").value = "";
+  searchQuery = "";
+  document.getElementById("search-clear").classList.remove("show");
+  render();
+}
+function renderSearch() {
+  var q = searchQuery.toLowerCase();
+  var results = allArticles.filter(function(a) {
+    return (a.title_ko||"").toLowerCase().indexOf(q) !== -1
+        || (a.title_en||"").toLowerCase().indexOf(q) !== -1
+        || (a.summary_ko||"").toLowerCase().indexOf(q) !== -1
+        || (a.manufacturers||"").toLowerCase().indexOf(q) !== -1;
+  });
+  if (!results.length) {
+    document.getElementById("news-list").innerHTML = '<div class="empty">🔍 "'+searchQuery+'" 검색 결과가 없어요.</div>';
+    return;
+  }
+  document.getElementById("news-list").innerHTML =
+    '<div class="list-header">🔍 "'+searchQuery+'" · '+results.length+'건</div>'
+    + results.map(function(a){ return makeCard(a, 'openArticleByUrl(\''+encodeURIComponent(a.url)+'\')', searchQuery); }).join("");
+}
+function highlight(text, q) {
+  if (!q || !text) return text || "";
+  return text.replace(new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+")","gi"), "<mark>$1</mark>");
+}
+
+// ── 데이터 로드 ──────────────────────────────────────────
 function loadNews() {
   var cbName = "_cb_" + Date.now();
   window[cbName] = function(data) {
     try { delete window[cbName]; } catch(e) {}
-    var el = document.getElementById(cbName);
-    if (el) el.remove();
+    var el = document.getElementById(cbName); if (el) el.remove();
     if (!data || !data.articles) {
-      document.getElementById("news-list").innerHTML = '<div class="empty">⚠️ 데이터를 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.</div>';
+      document.getElementById("news-list").innerHTML = '<div class="empty">⚠️ 데이터를 불러오지 못했어요.</div>';
       return;
     }
-    allArticles = data.articles.sort(function(a, b) {
-  return new Date(b.published_at) - new Date(a.published_at);
-});
+    allArticles = data.articles.sort(function(a,b){ return new Date(b.published_at)-new Date(a.published_at); });
     document.getElementById("last-update").textContent = "업데이트: " + new Date().toLocaleString("ko-KR");
     render();
   };
   var script = document.createElement("script");
   script.id  = cbName;
   script.src = API_URL + "?callback=" + cbName;
-  script.onerror = function() {
-    document.getElementById("news-list").innerHTML = '<div class="empty">⚠️ 데이터를 불러오지 못했어요.</div>';
-  };
+  script.onerror = function(){ document.getElementById("news-list").innerHTML='<div class="empty">⚠️ 데이터를 불러오지 못했어요.</div>'; };
   document.head.appendChild(script);
 }
 
 // ── 모드 전환 ────────────────────────────────────────────
 function switchMode(mode) {
   currentMode = mode;
-  document.getElementById("tab-cat").classList.toggle("active", mode === "category");
-  document.getElementById("tab-mfr").classList.toggle("active", mode === "manufacturer");
-  if (mode === "category") buildCategoryFilters();
-  else buildManufacturerFilters();
+  var tabMap = {category:"cat", manufacturer:"mfr", bookmark:"book", trend:"trend"};
+  Object.keys(tabMap).forEach(function(k){ document.getElementById("tab-"+tabMap[k]).classList.remove("active"); });
+  document.getElementById("tab-"+tabMap[mode]).classList.add("active");
+  document.getElementById("filter-wrap").style.display = (mode==="category"||mode==="manufacturer") ? "" : "none";
+  clearSearch();
   render();
 }
 
 function buildCategoryFilters() {
   var cats  = ["전체","로봇공학","자율주행","드론","산업자동화","웨어러블","의료로봇","스마트팩토리"];
   var icons = {"전체":"","로봇공학":"🦾 ","자율주행":"🚗 ","드론":"🚁 ","산업자동화":"⚙️ ","웨어러블":"🦿 ","의료로봇":"🏥 ","스마트팩토리":"🏭 "};
-  document.getElementById("filter-list").innerHTML = cats.map(function(c) {
-    return '<button class="filter-btn' + (c === currentCat ? ' active' : '') + '" onclick="filterCat(this,\'' + c + '\')">' + (icons[c]||"") + c + '</button>';
-  }).join("");
-}
-
-function buildManufacturerFilters() {
-  var foundMfrs = new Set();
-  allArticles.forEach(function(a) {
-    if (a.manufacturers) a.manufacturers.split(",").forEach(function(m) { var t = m.trim(); if (t) foundMfrs.add(t); });
-  });
-  var list = ["전체"].concat(MFR_LIST.filter(function(m) { return foundMfrs.has(m); }));
-  document.getElementById("filter-list").innerHTML = list.map(function(m) {
-    return '<button class="filter-btn mfr' + (m === currentMfr ? ' active' : '') + '" onclick="filterMfr(this,\'' + m + '\')">' + m + '</button>';
+  document.getElementById("filter-list").innerHTML = cats.map(function(c){
+    return '<button class="filter-btn'+(c===currentCat?' active':'')+'" onclick="filterCat(this,\''+c+'\')">'+(icons[c]||"")+c+'</button>';
   }).join("");
 }
 
 function filterCat(btn, cat) {
   currentCat = cat;
-  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
-  btn.classList.add("active");
-  render();
+  document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
+  btn.classList.add("active"); render();
 }
-
 function filterMfr(btn, mfr) {
   currentMfr = mfr;
-  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
-  btn.classList.add("active");
-  render();
+  document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
+  btn.classList.add("active"); render();
 }
 
-// ── 카드 HTML 생성 ───────────────────────────────────────
-function makeCard(a, onclickStr) {
-  var read     = isRead(a.id);
-  var mfrs     = a.manufacturers ? a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean) : [];
-  var mfrBadges = mfrs.slice(0,2).map(function(m){ return '<span class="mfr-badge">' + m + '</span>'; }).join("");
-  var imgHtml  = (a.image_url && String(a.image_url).trim())
-    ? '<img class="card-img" src="' + a.image_url + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
-    : "";
+// ── 카드 생성 ────────────────────────────────────────────
+function makeCard(a, onclickStr, query) {
+  var read      = isRead(a.id);
+  var bookmarked= isBookmarked(a.id);
+  var mfrs      = a.manufacturers ? a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean) : [];
+  var mfrBadges = mfrs.slice(0,2).map(function(m){return '<span class="mfr-badge">'+m+'</span>';}).join("");
+  var imgHtml   = (a.image_url && String(a.image_url).trim())
+    ? '<img class="card-img" src="'+a.image_url+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : "";
+  var title   = query ? highlight(a.title_ko||a.title_en||"", query) : (a.title_ko||a.title_en||"");
+  var summary = query ? highlight(a.summary_ko||"", query) : (a.summary_ko||"");
 
-  return '<div class="news-card' + (read ? ' read' : '') + '" onclick="' + onclickStr + '">'
-    + imgHtml
-    + '<div class="card-body">'
-    + '<div class="card-top">'
-    + '<div class="card-badges"><span class="cat-badge c-' + (a.category||'기타') + '">' + (a.category||'기타') + '</span>' + mfrBadges + '</div>'
-    + '<span class="card-time">' + formatTime(a.published_at) + (read ? ' <span class="read-badge">✓읽음</span>' : '') + '</span>'
-    + '</div>'
-    + '<div class="card-title">' + (a.title_ko || a.title_en || "") + '</div>'
-    + '<div class="card-summary">' + (a.summary_ko || "") + '</div>'
-    + '<div class="card-source">📰 ' + (a.source || "") + '</div>'
-    + '</div></div>';
+  return '<div class="news-card'+(read?' read':'')+(bookmarked?' bookmarked':'')+'" onclick="'+onclickStr+'">'
+    +'<button class="bookmark-btn" onclick="toggleBookmark(\''+a.id+'\',event)">'+(bookmarked?'🔖':'🤍')+'</button>'
+    +imgHtml
+    +'<div class="card-body">'
+    +'<div class="card-top">'
+    +'<div class="card-badges"><span class="cat-badge c-'+(a.category||'기타')+'">'+(a.category||'기타')+'</span>'+mfrBadges+'</div>'
+    +'<span class="card-time">'+formatTime(a.published_at)+(read?' <span class="read-badge">✓읽음</span>':'')+'</span>'
+    +'</div>'
+    +'<div class="card-title">'+title+'</div>'
+    +'<div class="card-summary">'+summary+'</div>'
+    +'<div class="card-source">📰 '+(a.source||"")+'</div>'
+    +'</div></div>';
 }
 
-// ── 렌더링 ──────────────────────────────────────────────
+// ── 렌더 라우터 ──────────────────────────────────────────
 function render() {
-  if (currentMode === "category") renderCategory();
-  else renderManufacturer();
+  if (searchQuery) { renderSearch(); updateUnreadBadge(); return; }
+  if      (currentMode==="category")     renderCategory();
+  else if (currentMode==="manufacturer") renderManufacturer();
+  else if (currentMode==="bookmark")     renderBookmark();
+  else if (currentMode==="trend")        renderTrend();
   updateUnreadBadge();
 }
 
+// ── 카테고리 ─────────────────────────────────────────────
 function renderCategory() {
-  var list = currentCat === "전체"
-    ? allArticles
-    : allArticles.filter(function(a) { return a.category === currentCat; });
-
-  if (!list.length) { document.getElementById("news-list").innerHTML = '<div class="empty">📭 해당 카테고리 뉴스가 없어요.</div>'; return; }
-
-  document.getElementById("news-list").innerHTML = list.map(function(a, i) {
-    return makeCard(a, 'openModal(' + i + ')');
-  }).join("");
+  buildCategoryFilters();
+  var list = currentCat==="전체" ? allArticles : allArticles.filter(function(a){return a.category===currentCat;});
+  if (!list.length) { document.getElementById("news-list").innerHTML='<div class="empty">📭 해당 카테고리 뉴스가 없어요.</div>'; return; }
+  var widget = currentCat==="전체" ? buildTodayWidget() : "";
+  document.getElementById("news-list").innerHTML = widget + list.map(function(a,i){return makeCard(a,'openModal('+i+')');}).join("");
 }
 
-function renderManufacturer() {
-  if (currentMfr === "전체") {
-    var groups = {};
-    allArticles.forEach(function(a) {
-      if (!a.manufacturers) return;
-      a.manufacturers.split(",").forEach(function(m) {
-        var t = m.trim(); if (!t) return;
-        if (!groups[t]) groups[t] = [];
-        groups[t].push(a);
-      });
-    });
-    var mfrsWithNews = MFR_LIST.filter(function(m) { return groups[m] && groups[m].length > 0; });
-    if (!mfrsWithNews.length) { document.getElementById("news-list").innerHTML = '<div class="empty">🏭 제조사 관련 뉴스가 없어요.</div>'; return; }
+// ── 오늘 위젯 ────────────────────────────────────────────
+function buildTodayWidget() {
+  var today = new Date(); today.setHours(0,0,0,0);
+  var todayList = allArticles.filter(function(a){ return new Date(a.published_at)>=today; });
+  if (!todayList.length) return "";
+  var unread = todayList.filter(function(a){return !isRead(a.id);}).length;
+  var catCount = {};
+  todayList.forEach(function(a){ var c=a.category||"기타"; catCount[c]=(catCount[c]||0)+1; });
+  var topCats = Object.keys(catCount).sort(function(x,y){return catCount[y]-catCount[x];}).slice(0,4);
+  return '<div class="today-widget">'
+    +'<div class="today-widget-title">📅 오늘의 뉴스 요약 <button onclick="switchMode(\'trend\')">📊 트렌드 보기</button></div>'
+    +'<div class="today-stats">'
+    +'<div class="today-stat"><div class="today-stat-num">'+todayList.length+'</div><div class="today-stat-label">오늘 수집</div></div>'
+    +'<div class="today-stat"><div class="today-stat-num">'+unread+'</div><div class="today-stat-label">안읽음</div></div>'
+    +'<div class="today-stat"><div class="today-stat-num">'+bookmarkSet.size+'</div><div class="today-stat-label">북마크</div></div>'
+    +'</div>'
+    +'<div class="today-tags">🔥 '+topCats.map(function(c){return '<span class="today-tag">'+c+' '+catCount[c]+'건</span>';}).join("")+'</div>'
+    +'</div>';
+}
 
-    var html = "";
-    mfrsWithNews.forEach(function(mfr) {
-      html += '<div class="mfr-group-header">🏭 ' + mfr + ' <span class="mfr-count">' + groups[mfr].length + '건</span></div>';
-      groups[mfr].slice(0, 3).forEach(function(a) {
-        html += makeCard(a, 'openArticleByUrl(\'' + encodeURIComponent(a.url) + '\')');
-      });
+// ── 트렌드 차트 ──────────────────────────────────────────
+function renderTrend() {
+  var catCount={}, srcCount={};
+  allArticles.forEach(function(a){
+    var d=new Date(a.published_at);
+    if ((new Date()-d)/86400000>7) return;
+    var c=a.category||"기타"; catCount[c]=(catCount[c]||0)+1;
+    var s=a.source||"기타";   srcCount[s]=(srcCount[s]||0)+1;
+  });
+  var maxC=Math.max.apply(null,Object.values(catCount).concat([1]));
+  var maxS=Math.max.apply(null,Object.values(srcCount).concat([1]));
+  var total=Object.values(catCount).reduce(function(s,v){return s+v;},0);
+
+  var catRows=Object.keys(catCount).sort(function(x,y){return catCount[y]-catCount[x];}).map(function(cat){
+    var pct=Math.round(catCount[cat]/maxC*100);
+    var color=CAT_COLORS[cat]||"#aaa";
+    return '<div class="chart-row"><div class="chart-label">'+cat+'</div>'
+      +'<div class="chart-bar-wrap"><div class="chart-bar" style="width:'+pct+'%;background:'+color+'"><span class="chart-bar-val">'+catCount[cat]+'</span></div></div></div>';
+  }).join("");
+
+  var srcRows=Object.keys(srcCount).sort(function(x,y){return srcCount[y]-srcCount[x];}).slice(0,10).map(function(src){
+    var pct=Math.round(srcCount[src]/maxS*100);
+    return '<div class="chart-row"><div class="chart-label" style="font-size:0.62rem">'+src+'</div>'
+      +'<div class="chart-bar-wrap"><div class="chart-bar" style="width:'+pct+'%;background:#302b63"><span class="chart-bar-val">'+srcCount[src]+'</span></div></div></div>';
+  }).join("");
+
+  document.getElementById("news-list").innerHTML =
+    '<div class="chart-wrap"><div class="chart-title">📊 최근 7일 분야별 트렌드 · 총 '+total+'건</div><div class="chart-bars">'+catRows+'</div></div>'
+   +'<div class="chart-wrap" style="margin-top:0"><div class="chart-title">📰 매체별 수집 현황</div><div class="chart-bars">'+srcRows+'</div></div>';
+}
+
+// ── 북마크 ───────────────────────────────────────────────
+function renderBookmark() {
+  var list=allArticles.filter(function(a){return isBookmarked(a.id);});
+  if (!list.length) {
+    document.getElementById("news-list").innerHTML='<div class="empty">🔖 북마크한 기사가 없어요.<br><br>카드 오른쪽 상단의 🤍 버튼을 눌러 저장하세요.</div>';
+    return;
+  }
+  document.getElementById("news-list").innerHTML=
+    '<div class="list-header">🔖 북마크 '+list.length+'건</div>'
+    +list.map(function(a){return makeCard(a,'openArticleByUrl(\''+encodeURIComponent(a.url)+'\')');}).join("");
+}
+
+// ── 제조사 ───────────────────────────────────────────────
+function renderManufacturer() {
+  var foundMfrs=new Set();
+  allArticles.forEach(function(a){
+    if(a.manufacturers) a.manufacturers.split(",").forEach(function(m){var t=m.trim();if(t)foundMfrs.add(t);});
+  });
+  var mfrList=["전체"].concat(MFR_LIST.filter(function(m){return foundMfrs.has(m);}));
+  document.getElementById("filter-list").innerHTML=mfrList.map(function(m){
+    return '<button class="filter-btn mfr'+(m===currentMfr?' active':'')+'" onclick="filterMfr(this,\''+m+'\')">'+m+'</button>';
+  }).join("");
+
+  if (currentMfr==="전체") {
+    var groups={};
+    allArticles.forEach(function(a){
+      if(!a.manufacturers) return;
+      a.manufacturers.split(",").forEach(function(m){var t=m.trim();if(!t)return;if(!groups[t])groups[t]=[];groups[t].push(a);});
     });
-    document.getElementById("news-list").innerHTML = html;
+    var mfrsWithNews=MFR_LIST.filter(function(m){return groups[m]&&groups[m].length>0;});
+    if(!mfrsWithNews.length){document.getElementById("news-list").innerHTML='<div class="empty">🏭 제조사 관련 뉴스가 없어요.</div>';return;}
+    var html="";
+    mfrsWithNews.forEach(function(mfr){
+      html+='<div class="mfr-group-header">🏭 '+mfr+' <span class="mfr-count">'+groups[mfr].length+'건</span></div>';
+      groups[mfr].slice(0,3).forEach(function(a){html+=makeCard(a,'openArticleByUrl(\''+encodeURIComponent(a.url)+'\')'  );});
+    });
+    document.getElementById("news-list").innerHTML=html;
   } else {
-    var list = allArticles.filter(function(a) {
-      if (!a.manufacturers) return false;
-      return a.manufacturers.split(",").map(function(m){return m.trim();}).indexOf(currentMfr) !== -1;
+    var list=allArticles.filter(function(a){
+      if(!a.manufacturers) return false;
+      return a.manufacturers.split(",").map(function(m){return m.trim();}).indexOf(currentMfr)!==-1;
     });
-    if (!list.length) { document.getElementById("news-list").innerHTML = '<div class="empty">📭 ' + currentMfr + ' 관련 뉴스가 없어요.</div>'; return; }
-    document.getElementById("news-list").innerHTML = list.map(function(a) {
-      return makeCard(a, 'openArticleByUrl(\'' + encodeURIComponent(a.url) + '\')');
-    }).join("");
+    if(!list.length){document.getElementById("news-list").innerHTML='<div class="empty">📭 '+currentMfr+' 관련 뉴스가 없어요.</div>';return;}
+    document.getElementById("news-list").innerHTML=list.map(function(a){return makeCard(a,'openArticleByUrl(\''+encodeURIComponent(a.url)+'\')');}).join("");
   }
 }
 
 // ── 모달 ─────────────────────────────────────────────────
 function openModal(idx) {
-  var list = currentCat === "전체" ? allArticles : allArticles.filter(function(a){ return a.category === currentCat; });
+  var list=currentCat==="전체"?allArticles:allArticles.filter(function(a){return a.category===currentCat;});
   openArticle(list[idx]);
 }
-
-function openArticleByUrl(encodedUrl) {
-  var url = decodeURIComponent(encodedUrl);
-  for (var i = 0; i < allArticles.length; i++) {
-    if (allArticles[i].url === url) { openArticle(allArticles[i]); return; }
-  }
+function openArticleByUrl(enc) {
+  var url=decodeURIComponent(enc);
+  for(var i=0;i<allArticles.length;i++){if(allArticles[i].url===url){openArticle(allArticles[i]);return;}}
 }
-
 function openArticle(a) {
-  if (!a) return;
-  currentArticle = a;
-
-  // 읽음 처리
-  markAsRead(a.id);
-
-  // 카드 즉시 업데이트
-  var cards = document.querySelectorAll(".news-card");
-  cards.forEach(function(card) {
-    var titleEl = card.querySelector(".card-title");
-    if (titleEl && titleEl.textContent === (a.title_ko || a.title_en || "")) {
+  if(!a) return;
+  currentArticle=a; markAsRead(a.id);
+  document.querySelectorAll(".news-card").forEach(function(card){
+    var t=card.querySelector(".card-title");
+    if(t&&t.textContent===(a.title_ko||a.title_en||"")){
       card.classList.add("read");
-      var timeEl = card.querySelector(".card-time");
-      if (timeEl && !timeEl.querySelector(".read-badge")) {
-        var badge = document.createElement("span");
-        badge.className = "read-badge"; badge.textContent = " ✓읽음";
-        timeEl.appendChild(badge);
-      }
+      var te=card.querySelector(".card-time");
+      if(te&&!te.querySelector(".read-badge")){var b=document.createElement("span");b.className="read-badge";b.textContent=" ✓읽음";te.appendChild(b);}
     }
   });
   updateUnreadBadge();
-
-  var mfrs = a.manufacturers ? a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean) : [];
-
-  // 모달 이미지
-  var imgEl = document.getElementById("m-img");
-  if (a.image_url && String(a.image_url).trim()) {
-    imgEl.src = a.image_url;
-    imgEl.style.display = "block";
-    imgEl.onerror = function() { imgEl.style.display = "none"; };
-  } else {
-    imgEl.style.display = "none";
-    imgEl.src = "";
-  }
-
-  document.getElementById("m-cat").textContent      = a.category || "기타";
-  document.getElementById("m-cat").className        = "cat-badge c-" + (a.category || "기타");
-  document.getElementById("m-source").textContent   = a.source || "";
-  document.getElementById("m-time").textContent     = formatTime(a.published_at);
-  document.getElementById("m-title").textContent    = a.title_ko || a.title_en || "";
-  document.getElementById("m-title-en").textContent = a.title_en ? "📌 원문: " + a.title_en : "";
-  document.getElementById("m-mfr").textContent      = mfrs.length ? "🏭 " + mfrs.join(", ") : "";
-  document.getElementById("m-orig-link").href       = a.url || "#";
-
-  var paras = (a.content_ko || a.summary_ko || "").split("\n").filter(function(p){ return p.trim(); });
-  document.getElementById("m-content").innerHTML = paras.map(function(p){ return "<p>" + p + "</p>"; }).join("");
-
+  var mfrs=a.manufacturers?a.manufacturers.split(",").map(function(m){return m.trim();}).filter(Boolean):[];
+  var imgEl=document.getElementById("m-img");
+  if(a.image_url&&String(a.image_url).trim()){imgEl.src=a.image_url;imgEl.style.display="block";imgEl.onerror=function(){imgEl.style.display="none";};}
+  else{imgEl.style.display="none";imgEl.src="";}
+  document.getElementById("m-cat").textContent      =a.category||"기타";
+  document.getElementById("m-cat").className        ="cat-badge c-"+(a.category||"기타");
+  document.getElementById("m-source").textContent   =a.source||"";
+  document.getElementById("m-time").textContent     =formatTime(a.published_at);
+  document.getElementById("m-title").textContent    =a.title_ko||a.title_en||"";
+  document.getElementById("m-title-en").textContent =a.title_en?"📌 원문: "+a.title_en:"";
+  document.getElementById("m-mfr").textContent      =mfrs.length?"🏭 "+mfrs.join(", "):"";
+  document.getElementById("m-orig-link").href       =a.url||"#";
+  var paras=(a.content_ko||a.summary_ko||"").split("\n").filter(function(p){return p.trim();});
+  document.getElementById("m-content").innerHTML=paras.map(function(p){return "<p>"+p+"</p>";}).join("");
   document.getElementById("modal-bg").classList.add("open");
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow="hidden";
 }
-
-function closeModal(e) {
-  if (e.target === document.getElementById("modal-bg")) {
+function closeModal(e){
+  if(e.target===document.getElementById("modal-bg")){
     document.getElementById("modal-bg").classList.remove("open");
-    document.body.style.overflow = "";
+    document.body.style.overflow="";
   }
 }
 
-// ── PDF / 공유 / 복사 ────────────────────────────────────
-function printPDF() {
-  if (!currentArticle) return;
-  var a = currentArticle;
-  var w = window.open("", "_blank");
+// ── 액션 버튼 ────────────────────────────────────────────
+function printPDF(){
+  if(!currentArticle)return;
+  var a=currentArticle;
+  var w=window.open("","_blank");
   w.document.write('<html><head><meta charset="UTF-8"><style>body{font-family:sans-serif;max-width:700px;margin:40px auto;padding:0 20px;line-height:1.8}h1{font-size:1.5rem;margin-bottom:8px}.meta{color:#888;font-size:0.85rem;margin-bottom:20px}p{margin-bottom:12px}.footer{margin-top:40px;padding-top:12px;border-top:1px solid #ddd;font-size:0.78rem;color:#aaa}</style></head><body>'
-    + '<div class="meta">' + (a.category||"") + ' · ' + (a.source||"") + ' · ' + formatTime(a.published_at) + '</div>'
-    + '<h1>' + (a.title_ko||a.title_en||"") + '</h1>'
-    + (a.title_en ? '<p style="color:#999;font-style:italic">원문: ' + a.title_en + '</p>' : "")
-    + '<hr style="margin:18px 0">'
-    + (a.content_ko||"").split("\n").filter(function(p){return p.trim();}).map(function(p){return "<p>"+p+"</p>";}).join("")
-    + '<div class="footer">원문: <a href="' + a.url + '">' + a.url + '</a><br>피지컬 AI 뉴스 · ' + new Date().toLocaleDateString("ko-KR") + '</div>'
-    + '</body></html>');
-  w.document.close();
-  setTimeout(function(){ w.focus(); w.print(); }, 400);
+    +'<div class="meta">'+(a.category||"")+' · '+(a.source||"")+' · '+formatTime(a.published_at)+'</div>'
+    +'<h1>'+(a.title_ko||a.title_en||"")+'</h1>'
+    +(a.title_en?'<p style="color:#999;font-style:italic">원문: '+a.title_en+'</p>':"")
+    +'<hr style="margin:18px 0">'
+    +(a.content_ko||"").split("\n").filter(function(p){return p.trim();}).map(function(p){return"<p>"+p+"</p>";}).join("")
+    +'<div class="footer">원문: <a href="'+a.url+'">'+a.url+'</a><br>피지컬 AI 뉴스 · '+new Date().toLocaleDateString("ko-KR")+'</div>'
+    +'</body></html>');
+  w.document.close();setTimeout(function(){w.focus();w.print();},400);
   showToast("📄 PDF 저장 창이 열렸어요");
 }
-
-function shareKakao() {
-  if (!currentArticle) return;
-  var a = currentArticle;
-  if (navigator.share) {
-    navigator.share({ title: a.title_ko, text: a.summary_ko, url: a.url });
-  } else {
-    window.open("https://sharer.kakao.com/talk/friends/picker/link?app_key=DEMO&text=" + encodeURIComponent("[피지컬 AI 뉴스]\n" + a.title_ko + "\n\n" + a.summary_ko + "\n\n🔗 " + a.url), "_blank", "width=400,height=500");
-  }
+function shareKakao(){
+  if(!currentArticle)return;
+  var a=currentArticle;
+  if(navigator.share){navigator.share({title:a.title_ko,text:a.summary_ko,url:a.url});}
+  else{window.open("https://sharer.kakao.com/talk/friends/picker/link?app_key=DEMO&text="+encodeURIComponent("[피지컬 AI 뉴스]\n"+a.title_ko+"\n\n"+a.summary_ko+"\n\n🔗 "+a.url),"_blank","width=400,height=500");}
   showToast("💬 공유 창이 열렸어요");
 }
-
-function copyLink() {
-  if (!currentArticle) return;
-  navigator.clipboard.writeText("[피지컬 AI 뉴스] " + currentArticle.title_ko + "\n" + currentArticle.url)
-    .then(function(){ showToast("🔗 링크가 복사됐어요"); });
+function copyLink(){
+  if(!currentArticle)return;
+  navigator.clipboard.writeText("[피지컬 AI 뉴스] "+currentArticle.title_ko+"\n"+currentArticle.url)
+    .then(function(){showToast("🔗 링크가 복사됐어요");});
 }
-
-function showToast(msg) {
-  var t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  setTimeout(function(){ t.classList.remove("show"); }, 2500);
+function showToast(msg){
+  var t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  setTimeout(function(){t.classList.remove("show");},2500);
 }
-
-function formatTime(str) {
-  if (!str) return "";
-  try {
-    var diff = Math.floor((new Date() - new Date(str)) / 60000);
-    if (diff < 60)   return diff + "분 전";
-    if (diff < 1440) return Math.floor(diff/60) + "시간 전";
-    return Math.floor(diff/1440) + "일 전";
-  } catch(e) { return str; }
+function formatTime(str){
+  if(!str)return"";
+  try{
+    var diff=Math.floor((new Date()-new Date(str))/60000);
+    if(diff<60)return diff+"분 전";
+    if(diff<1440)return Math.floor(diff/60)+"시간 전";
+    return Math.floor(diff/1440)+"일 전";
+  }catch(e){return str;}
 }
-
-loadReadSet();
-loadNews();
 
 // ── 모달 드래그 닫기 ─────────────────────────────────────
-(function() {
-  var modal    = null;
-  var startY   = 0;
-  var currentY = 0;
-  var isDragging = false;
-
-  function getModal() {
-    return document.querySelector(".modal");
+(function(){
+  var modal=null,startY=0,currentY=0,isDragging=false;
+  function getModal(){return document.querySelector(".modal");}
+  function onStart(e){
+    var handle=document.querySelector(".modal-handle");
+    if(!handle)return;
+    var rect=handle.getBoundingClientRect();
+    var ty=e.touches?e.touches[0].clientY:e.clientY;
+    if(ty>rect.bottom+30)return;
+    modal=getModal();startY=ty;currentY=0;isDragging=true;
+    modal.style.transition="none";
   }
-
-  function onStart(e) {
-    // 핸들 바 또는 모달 상단 40px 영역에서만 작동
-    var handle = document.querySelector(".modal-handle");
-    var rect   = handle.getBoundingClientRect();
-    var touchY = e.touches ? e.touches[0].clientY : e.clientY;
-    if (touchY > rect.bottom + 30) return;
-
-    modal      = getModal();
-    startY     = touchY;
-    currentY   = 0;
-    isDragging = true;
-    modal.style.transition = "none";
-  }
-
-  function onMove(e) {
-    if (!isDragging || !modal) return;
-    var touchY = e.touches ? e.touches[0].clientY : e.clientY;
-    currentY   = Math.max(0, touchY - startY); // 위로는 안 올라감
-    modal.style.transform = "translateY(" + currentY + "px)";
+  function onMove(e){
+    if(!isDragging||!modal)return;
+    var ty=e.touches?e.touches[0].clientY:e.clientY;
+    currentY=Math.max(0,ty-startY);
+    modal.style.transform="translateY("+currentY+"px)";
     e.preventDefault();
   }
-
-  function onEnd() {
-    if (!isDragging || !modal) return;
-    isDragging = false;
-    modal.style.transition = "transform 0.3s ease";
-
-    if (currentY > 120) {
-      // 120px 이상 내리면 닫기
-      modal.style.transform = "translateY(100%)";
-      setTimeout(function() {
+  function onEnd(){
+    if(!isDragging||!modal)return;
+    isDragging=false;modal.style.transition="transform 0.3s ease";
+    if(currentY>120){
+      modal.style.transform="translateY(100%)";
+      setTimeout(function(){
         document.getElementById("modal-bg").classList.remove("open");
-        document.body.style.overflow = "";
-        modal.style.transform = "";
-        modal.style.transition = "";
-      }, 300);
-    } else {
-      // 120px 미만이면 원위치
-      modal.style.transform = "translateY(0)";
-      setTimeout(function() {
-        modal.style.transition = "";
-      }, 300);
+        document.body.style.overflow="";
+        modal.style.transform="";modal.style.transition="";
+      },300);
+    }else{
+      modal.style.transform="translateY(0)";
+      setTimeout(function(){modal.style.transition="";},300);
     }
-    currentY = 0;
+    currentY=0;
   }
-
-  document.addEventListener("touchstart",  onStart, { passive: false });
-  document.addEventListener("touchmove",   onMove,  { passive: false });
-  document.addEventListener("touchend",    onEnd);
-  document.addEventListener("mousedown",   onStart);
-  document.addEventListener("mousemove",   onMove);
-  document.addEventListener("mouseup",     onEnd);
+  document.addEventListener("touchstart",onStart,{passive:false});
+  document.addEventListener("touchmove", onMove, {passive:false});
+  document.addEventListener("touchend",  onEnd);
+  document.addEventListener("mousedown", onStart);
+  document.addEventListener("mousemove", onMove);
+  document.addEventListener("mouseup",   onEnd);
 })();
 
-// ── PWA 서비스워커 등록 ──────────────────────────────────
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function() {
+// ── PWA 서비스워커 ───────────────────────────────────────
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){
     navigator.serviceWorker.register("/physical_ai_news/sw.js")
-      .then(function() { console.log("SW 등록 완료"); })
-      .catch(function(e) { console.log("SW 등록 실패:", e); });
+      .then(function(){console.log("SW 등록 완료");})
+      .catch(function(e){console.log("SW 등록 실패:",e);});
   });
 }
- 
+
+loadStorage();
+loadNews();
 </script>
 </body>
 </html>
