@@ -478,6 +478,72 @@ function formatTime(str) {
 
 loadReadSet();
 loadNews();
+
+// ── 모달 드래그 닫기 ─────────────────────────────────────
+(function() {
+  var modal    = null;
+  var startY   = 0;
+  var currentY = 0;
+  var isDragging = false;
+
+  function getModal() {
+    return document.querySelector(".modal");
+  }
+
+  function onStart(e) {
+    // 핸들 바 또는 모달 상단 40px 영역에서만 작동
+    var handle = document.querySelector(".modal-handle");
+    var rect   = handle.getBoundingClientRect();
+    var touchY = e.touches ? e.touches[0].clientY : e.clientY;
+    if (touchY > rect.bottom + 30) return;
+
+    modal      = getModal();
+    startY     = touchY;
+    currentY   = 0;
+    isDragging = true;
+    modal.style.transition = "none";
+  }
+
+  function onMove(e) {
+    if (!isDragging || !modal) return;
+    var touchY = e.touches ? e.touches[0].clientY : e.clientY;
+    currentY   = Math.max(0, touchY - startY); // 위로는 안 올라감
+    modal.style.transform = "translateY(" + currentY + "px)";
+    e.preventDefault();
+  }
+
+  function onEnd() {
+    if (!isDragging || !modal) return;
+    isDragging = false;
+    modal.style.transition = "transform 0.3s ease";
+
+    if (currentY > 120) {
+      // 120px 이상 내리면 닫기
+      modal.style.transform = "translateY(100%)";
+      setTimeout(function() {
+        document.getElementById("modal-bg").classList.remove("open");
+        document.body.style.overflow = "";
+        modal.style.transform = "";
+        modal.style.transition = "";
+      }, 300);
+    } else {
+      // 120px 미만이면 원위치
+      modal.style.transform = "translateY(0)";
+      setTimeout(function() {
+        modal.style.transition = "";
+      }, 300);
+    }
+    currentY = 0;
+  }
+
+  document.addEventListener("touchstart",  onStart, { passive: false });
+  document.addEventListener("touchmove",   onMove,  { passive: false });
+  document.addEventListener("touchend",    onEnd);
+  document.addEventListener("mousedown",   onStart);
+  document.addEventListener("mousemove",   onMove);
+  document.addEventListener("mouseup",     onEnd);
+})();
+ 
 </script>
 </body>
 </html>
