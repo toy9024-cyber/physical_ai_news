@@ -590,7 +590,21 @@ function syncAdminUI() {
   renderKeywords();
 }
 
+function applySettingsToDOM() {
+  // settings → 체크박스 동기화 먼저
+  document.getElementById("tog-search").checked   = !!settings.features.search;
+  document.getElementById("tog-bookmark").checked = !!settings.features.bookmark;
+  document.getElementById("tog-trend").checked    = !!settings.features.trend;
+  document.getElementById("tog-widget").checked   = !!settings.features.widget;
+  document.getElementById("tog-image").checked    = !!settings.features.image;
+  document.getElementById("tog-read").checked     = !!settings.features.read;
+  document.getElementById("tog-mfr").checked      = !!settings.features.mfr;
+  // 그 다음 DOM에 반영
+  applyFeaturesToDOM();
+}
+
 function applyToggles() {
+  // 체크박스 → settings (관리자 패널에서 토글 변경 시)
   settings.features.search   = document.getElementById("tog-search").checked;
   settings.features.bookmark = document.getElementById("tog-bookmark").checked;
   settings.features.trend    = document.getElementById("tog-trend").checked;
@@ -599,6 +613,10 @@ function applyToggles() {
   settings.features.read     = document.getElementById("tog-read").checked;
   settings.features.mfr      = document.getElementById("tog-mfr").checked;
 
+  applyFeaturesToDOM();
+}
+
+function applyFeaturesToDOM() {
   // 검색창
   document.getElementById("search-wrap") && (document.querySelector(".search-wrap").style.display = settings.features.search?"":"none");
   // 탭 숨김
@@ -1396,7 +1414,8 @@ function initExpoTab() {
 // ── 초기화 ───────────────────────────────────────────────
 loadStorage();
 applyTheme(settings.theme, document.querySelector('[data-t="'+settings.theme+'"]'));
-applyToggles();
+// settings → 체크박스 동기화 후 적용 (applyToggles는 체크박스→settings 방향이라 초기화에 부적합)
+applySettingsToDOM();
 loadNews();
 </script>
 </body>
