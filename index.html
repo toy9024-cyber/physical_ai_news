@@ -175,9 +175,9 @@
   .feed-toggle { flex-shrink:0; }
   .feed-del { background:none; border:none; color:#ccc; font-size:1rem; cursor:pointer; padding:4px; flex-shrink:0; }
   .feed-del:hover { color:#ff6b35; }
-  .feed-add-row { display:flex; gap:6px; margin-top:8px; }
-  .feed-add-input { flex:1; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.78rem; outline:none; }
-  .feed-add-btn { padding:8px 14px; border-radius:8px; border:none; background:var(--accent2); color:#fff; font-size:0.78rem; font-weight:700; cursor:pointer; white-space:nowrap; }
+  .feed-add-row { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .feed-add-input { width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.82rem; outline:none; }
+  .feed-add-btn { width:100%; padding:10px; border-radius:8px; border:none; background:var(--accent2); color:#fff; font-size:0.82rem; font-weight:700; cursor:pointer; }
 
   /* 키워드 */
   .kw-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
@@ -327,9 +327,9 @@
       <div class="admin-section">
         <div class="admin-section-title">📡 RSS 피드 관리</div>
         <div class="feed-list" id="feed-list"></div>
-        <div class="feed-add-row" style="margin-top:10px">
+        <div class="feed-add-row">
           <input class="feed-add-input" id="feed-name-input" placeholder="매체명 (예: 로봇신문)">
-          <input class="feed-add-input" id="feed-url-input" placeholder="RSS URL">
+          <input class="feed-add-input" id="feed-url-input" placeholder="RSS URL (https://...)">
           <button class="feed-add-btn" onclick="addFeed()">+ 추가</button>
         </div>
       </div>
