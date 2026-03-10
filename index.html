@@ -708,21 +708,89 @@ function highlight(text,q){
 }
 
 // ── 데이터 로드 ──────────────────────────────────────────
+var _loadRetryCount = 0;
+var _loadMaxRetry   = 2;       // 최대 재시도 2회
+var _loadTimeout    = 12000;   // 12초 타임아웃
+
 function loadNews() {
-  var cbName="_cb_"+Date.now();
-  window[cbName]=function(data){
-    try{delete window[cbName];}catch(e){}
-    var el=document.getElementById(cbName);if(el)el.remove();
-    if(!data||!data.articles){
-      document.getElementById("news-list").innerHTML='<div class="empty">⚠️ 데이터를 불러오지 못했어요.</div>';return;
+  var listEl = document.getElementById("news-list");
+
+  // 로딩 단계별 안내 메시지
+  var loadingMsgs = [
+    "📡 뉴스 데이터 불러오는 중…",
+    "⏳ 서버 응답 대기 중… (최초 로딩은 10~15초 걸릴 수 있어요)",
+    "🔄 재시도 중… 잠시만요"
+  ];
+  var msgIdx = 0;
+  listEl.innerHTML = '<div class="loading"><div class="spinner"></div><div id="load-msg">' + loadingMsgs[0] + '</div></div>';
+
+  // 3초마다 메시지 교체 (사용자 안심)
+  var msgTimer = setInterval(function() {
+    msgIdx = Math.min(msgIdx + 1, loadingMsgs.length - 1);
+    var m = document.getElementById("load-msg");
+    if (m) m.textContent = loadingMsgs[msgIdx];
+  }, 3000);
+
+  var cbName = "_cb_" + Date.now();
+  var done = false;
+
+  function cleanup() {
+    done = true;
+    clearInterval(msgTimer);
+    try { delete window[cbName]; } catch(e) {}
+    var el = document.getElementById(cbName);
+    if (el) el.remove();
+  }
+
+  // ── 타임아웃 핸들러 ──
+  var timeoutId = setTimeout(function() {
+    if (done) return;
+    cleanup();
+    if (_loadRetryCount < _loadMaxRetry) {
+      _loadRetryCount++;
+      showToast("⏱ 응답이 느려 재시도 중… (" + _loadRetryCount + "/" + _loadMaxRetry + ")");
+      setTimeout(loadNews, 1500);
+    } else {
+      _loadRetryCount = 0;
+      listEl.innerHTML =
+        '<div class="empty">⚠️ 서버 응답이 없어요.<br>'
+        + '<span style="font-size:0.78rem;color:#aaa">Apps Script 콜드스타트 문제일 수 있어요.<br>잠시 후 아래 버튼을 눌러 다시 시도해 주세요.</span><br><br>'
+        + '<button onclick="location.reload()" style="margin-top:4px;padding:10px 22px;border-radius:100px;border:none;background:#302b63;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer">🔄 새로고침</button></div>';
     }
-    allArticles=data.articles.sort(function(a,b){return new Date(b.published_at)-new Date(a.published_at);});
-    document.getElementById("last-update").textContent="업데이트: "+new Date().toLocaleString("ko-KR");
+  }, _loadTimeout);
+
+  // ── 콜백 ──
+  window[cbName] = function(data) {
+    if (done) return;
+    clearTimeout(timeoutId);
+    cleanup();
+    _loadRetryCount = 0;
+    if (!data || !data.articles) {
+      listEl.innerHTML = '<div class="empty">⚠️ 데이터를 불러오지 못했어요.<br><button onclick="loadNews()" style="margin-top:8px;padding:9px 20px;border-radius:100px;border:none;background:#302b63;color:#fff;font-size:0.8rem;font-weight:700;cursor:pointer">🔄 다시 시도</button></div>';
+      return;
+    }
+    allArticles = data.articles.sort(function(a, b) { return new Date(b.published_at) - new Date(a.published_at); });
+    document.getElementById("last-update").textContent = "업데이트: " + new Date().toLocaleString("ko-KR");
     render();
   };
-  var script=document.createElement("script");
-  script.id=cbName; script.src=API_URL+"?callback="+cbName;
-  script.onerror=function(){document.getElementById("news-list").innerHTML='<div class="empty">⚠️ 데이터를 불러오지 못했어요.</div>';};
+
+  // ── 스크립트 삽입 ──
+  var script = document.createElement("script");
+  script.id  = cbName;
+  script.src = API_URL + "?callback=" + cbName + "&t=" + Date.now(); // 캐시 방지
+  script.onerror = function() {
+    if (done) return;
+    clearTimeout(timeoutId);
+    cleanup();
+    if (_loadRetryCount < _loadMaxRetry) {
+      _loadRetryCount++;
+      setTimeout(loadNews, 1500);
+    } else {
+      _loadRetryCount = 0;
+      listEl.innerHTML =
+        '<div class="empty">⚠️ 네트워크 오류가 발생했어요.<br><button onclick="loadNews()" style="margin-top:8px;padding:9px 20px;border-radius:100px;border:none;background:#302b63;color:#fff;font-size:0.8rem;font-weight:700;cursor:pointer">🔄 다시 시도</button></div>';
+    }
+  };
   document.head.appendChild(script);
 }
 
