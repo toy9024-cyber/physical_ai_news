@@ -210,6 +210,64 @@
   .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:#1a1a2e; color:#fff; padding:10px 20px; border-radius:100px; font-size:0.8rem; opacity:0; transition:all 0.3s; pointer-events:none; z-index:999; white-space:nowrap; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
   mark { background:#fff176; color:#1a1a2e; border-radius:2px; padding:0 1px; }
+
+  /* ── 전시회 패널 ── */
+  #expo-panel { display:none; }
+  .expo-panel-inner { padding:10px; }
+  .expo-select-row { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; margin-bottom:12px; }
+  .expo-select-row::-webkit-scrollbar { display:none; }
+  .expo-pill { flex-shrink:0; padding:6px 14px; border-radius:100px; border:1.5px solid var(--border); background:var(--filter-bg); color:var(--sub); font-size:0.74rem; font-weight:600; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:5px; }
+  .expo-pill.active { background:var(--accent2); color:#fff; border-color:var(--accent2); }
+  .expo-pill .new-dot { width:6px; height:6px; background:#ff6b6b; border-radius:50%; }
+  .expo-sub-tabs { display:flex; background:var(--filter-bg); border-bottom:1px solid var(--border); margin-bottom:10px; }
+  .expo-sub-tab { flex:1; padding:9px 4px; text-align:center; font-size:0.7rem; font-weight:700; color:var(--sub); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; }
+  .expo-sub-tab.active { color:var(--accent2); border-bottom-color:var(--accent2); }
+  .expo-overview-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:12px; }
+  .expo-stat { background:var(--card); border-radius:12px; padding:12px 14px; border:1px solid var(--border); }
+  .expo-stat-num { font-family:'Apple SD Gothic Neo',monospace; font-size:1.6rem; font-weight:900; color:var(--accent2); line-height:1; }
+  .expo-stat-label { font-size:0.65rem; color:var(--sub); margin-top:3px; }
+  .expo-summary-box { background:var(--card); border-radius:12px; padding:14px; border:1px solid var(--border); margin-bottom:12px; font-size:0.8rem; color:var(--text); line-height:1.75; }
+  .expo-summary-box strong { color:var(--accent2); }
+  .expo-kw-group { margin-bottom:16px; }
+  .expo-kw-group-title { font-size:0.72rem; font-weight:800; color:var(--sub); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .expo-kw-group-title span { color:var(--accent2); font-size:0.72rem; font-weight:700; }
+  .expo-kw-bar-list { display:flex; flex-direction:column; gap:6px; }
+  .expo-kw-row { display:flex; align-items:center; gap:7px; cursor:pointer; }
+  .expo-kw-row:hover .expo-kw-fill { filter:brightness(1.1); }
+  .expo-kw-name { font-size:0.74rem; color:var(--text); width:110px; flex-shrink:0; text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .expo-kw-wrap { flex:1; background:var(--border); border-radius:100px; height:22px; overflow:hidden; }
+  .expo-kw-fill { height:100%; border-radius:100px; display:flex; align-items:center; justify-content:flex-end; padding-right:7px; min-width:28px; transition:width 0.7s cubic-bezier(.4,0,.2,1); }
+  .expo-kw-count { font-size:0.66rem; font-weight:700; color:#fff; font-family:'Apple SD Gothic Neo',monospace; }
+  .expo-kw-badge { flex-shrink:0; font-size:0.6rem; padding:2px 6px; border-radius:100px; font-weight:700; white-space:nowrap; }
+  .badge-hot     { background:rgba(255,107,107,0.18); color:#ff6b6b; }
+  .badge-rising  { background:rgba(0,229,160,0.15); color:#0ca678; }
+  .badge-new     { background:rgba(48,43,99,0.15); color:var(--accent2); }
+  .badge-core    { background:rgba(230,119,0,0.15); color:#e67700; }
+  .expo-co-card { background:var(--card); border-radius:10px; padding:12px 14px; border:1px solid var(--border); margin-bottom:8px; }
+  .expo-co-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .expo-co-name { font-size:0.88rem; font-weight:700; color:var(--text); }
+  .expo-co-country { font-size:0.65rem; color:var(--sub); }
+  .expo-co-product { font-size:0.78rem; color:var(--sub); line-height:1.6; margin-top:4px; }
+  .expo-co-kws { display:flex; gap:4px; flex-wrap:wrap; margin-top:7px; }
+  .expo-co-kw { font-size:0.62rem; background:rgba(48,43,99,0.1); color:var(--accent2); border-radius:4px; padding:2px 7px; }
+  .expo-upload-area { border:2px dashed var(--border); border-radius:12px; padding:30px 20px; text-align:center; cursor:pointer; transition:all 0.2s; margin-bottom:12px; }
+  .expo-upload-area:hover { border-color:var(--accent2); background:rgba(48,43,99,0.05); }
+  .expo-upload-icon { font-size:2rem; margin-bottom:8px; }
+  .expo-upload-title { font-size:0.86rem; font-weight:700; color:var(--text); margin-bottom:5px; }
+  .expo-upload-desc { font-size:0.72rem; color:var(--sub); line-height:1.7; }
+  .expo-upload-result { background:var(--card); border:1px solid #0ca678; border-radius:10px; padding:12px 14px; margin-bottom:12px; display:none; }
+  .expo-upload-result.show { display:block; }
+  .expo-tt-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); }
+  .expo-tt-overlay.open { display:flex; align-items:flex-end; }
+  .expo-tt-box { background:var(--card); border-radius:20px 20px 0 0; width:100%; padding:20px; max-height:72vh; overflow-y:auto; animation:slideUp 0.25s ease; }
+  .expo-tt-handle { width:32px; height:3px; background:var(--border); border-radius:2px; margin:0 auto 14px; }
+  .expo-tt-kw { font-size:1.05rem; font-weight:900; color:var(--accent2); margin-bottom:3px; }
+  .expo-tt-en { font-size:0.75rem; color:var(--sub); margin-bottom:10px; }
+  .expo-tt-desc { font-size:0.83rem; color:var(--text); line-height:1.75; margin-bottom:10px; }
+  .expo-tt-cos { font-size:0.78rem; color:var(--sub); }
+  .expo-tt-cos strong { color:#0ca678; }
+  .expo-tt-close { float:right; background:none; border:none; color:var(--sub); font-size:1.1rem; cursor:pointer; }
+
 </style>
 </head>
 <body>
@@ -233,6 +291,7 @@
     <div class="mode-tab"        id="tab-mfr"   onclick="switchMode('manufacturer')">🏭 제조사</div>
     <div class="mode-tab"        id="tab-book"  onclick="switchMode('bookmark')">🔖 북마크</div>
     <div class="mode-tab"        id="tab-trend" onclick="switchMode('trend')">📊 트렌드</div>
+    <div class="mode-tab"        id="tab-expo"  onclick="switchMode('expo')">🎪 전시회</div>
   </div>
 </div>
 
@@ -243,6 +302,40 @@
 <div class="news-list" id="news-list">
   <div class="loading"><div class="spinner"></div>뉴스를 불러오는 중...</div>
 </div>
+
+
+<!-- ── 전시회 패널 ── -->
+<div id="expo-panel">
+  <div class="expo-panel-inner">
+    <!-- 전시회 선택 -->
+    <div class="expo-select-row" id="expo-select-row">
+      <div class="expo-pill active" id="expopill-aw2026" onclick="selectExpo('aw2026',this)">⚡ AW 2026 <span class="new-dot"></span></div>
+      <div class="expo-pill"        id="expopill-mat2024" onclick="selectExpo('mat2024',this)">🏭 MAT 2024</div>
+      <div class="expo-pill"        onclick="document.getElementById('expo-file-input').click()">＋ PDF 추가</div>
+    </div>
+    <!-- 서브탭 -->
+    <div class="expo-sub-tabs">
+      <div class="expo-sub-tab active" id="estab-overview" onclick="switchExpoTab('overview',this)">📊 개요</div>
+      <div class="expo-sub-tab"        id="estab-keywords" onclick="switchExpoTab('keywords',this)">🔑 키워드</div>
+      <div class="expo-sub-tab"        id="estab-companies" onclick="switchExpoTab('companies',this)">🏢 업체</div>
+      <div class="expo-sub-tab"        id="estab-upload" onclick="switchExpoTab('upload',this)">📥 PDF</div>
+    </div>
+    <div id="expo-sub-content"></div>
+  </div>
+</div>
+
+<!-- 키워드 상세 팝업 -->
+<div class="expo-tt-overlay" id="expo-tt-overlay" onclick="closeExpoTT(event)">
+  <div class="expo-tt-box">
+    <div class="expo-tt-handle"></div>
+    <button class="expo-tt-close" onclick="document.getElementById('expo-tt-overlay').classList.remove('open')">✕</button>
+    <div class="expo-tt-kw" id="expo-tt-kw"></div>
+    <div class="expo-tt-en" id="expo-tt-en"></div>
+    <div class="expo-tt-desc" id="expo-tt-desc"></div>
+    <div class="expo-tt-cos" id="expo-tt-cos"></div>
+  </div>
+</div>
+<input type="file" id="expo-file-input" accept=".pdf,.txt,.csv" style="display:none" onchange="handleExpoUpload(this)">
 
 <!-- ── 뉴스 모달 ── -->
 <div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
@@ -636,10 +729,14 @@ function loadNews() {
 // ── 모드 전환 ────────────────────────────────────────────
 function switchMode(mode) {
   currentMode=mode;
-  var tabMap={category:"cat",manufacturer:"mfr",bookmark:"book",trend:"trend"};
+  var tabMap={category:"cat",manufacturer:"mfr",bookmark:"book",trend:"trend",expo:"expo"};
   Object.keys(tabMap).forEach(function(k){document.getElementById("tab-"+tabMap[k]).classList.remove("active");});
   document.getElementById("tab-"+tabMap[mode]).classList.add("active");
   document.getElementById("filter-wrap").style.display=(mode==="category"||mode==="manufacturer")?"":"none";
+  var isExpo=(mode==="expo");
+  document.getElementById("expo-panel").style.display=isExpo?"":"none";
+  document.getElementById("news-list").style.display=isExpo?"none":"";
+  if(isExpo){renderExpoSubContent();return;}
   clearSearch(); render();
 }
 
@@ -682,6 +779,7 @@ function render(){
   else if(currentMode==="manufacturer") renderManufacturer();
   else if(currentMode==="bookmark")     renderBookmark();
   else if(currentMode==="trend")        renderTrend();
+  else if(currentMode==="expo")         { updateUnreadBadge(); return; }
   updateUnreadBadge();
 }
 
@@ -874,6 +972,334 @@ if("serviceWorker" in navigator){
   window.addEventListener("load",function(){
     navigator.serviceWorker.register("/physical_ai_news/sw.js").catch(function(){});
   });
+}
+
+
+// ══════════════════════════════════════════════════
+// 전시회 트렌드 분석
+// ══════════════════════════════════════════════════
+var currentExpoId = "aw2026";
+var currentExpoTab = "overview";
+var currentExpoCoFilter = "전체";
+var expoUploadedData = null; // PDF 업로드 시 덮어쓰는 데이터
+
+var EXPO_DATA = {
+  aw2026: {
+    name:"AW 2026", date:"2026.03.04~06", venue:"코엑스 전관", companies:500, booths:2300, visitors:"8만+", countries:24,
+    source:"news", // "news" | "pdf"
+    summary:"<strong>AW 2026</strong>은 아시아 최대 제조 AX 전시회. 2026년 3월 4~6일 코엑스 전관 개최. 핵심 화두는 <strong>피지컬 AI</strong>·<strong>휴머노이드 로봇</strong>·<strong>자율제조(AX)</strong>. aimex·스마트팩토리엑스포·KVS·AI팩토리특별관으로 구성. 중국 휴머노이드 기업(Unitree·Agibot·레주·푸리에) 대거 참가로 글로벌 물류·제조 자동화 시장 격변이 예고됨.",
+    kwGroups:[
+      { cat:"🤖 로봇·자동화", color:"#ff6b6b", kws:[
+        {kw:"AMR",en:"Autonomous Mobile Robot",count:52,badge:"hot",desc:"센서+AI로 스스로 경로를 판단·이동하는 자율이동로봇. AW 2026에서 가장 많이 출품된 품목.",cos:"스탠다드로봇·마로로봇테크·원익로보틱스·Geek+·비전나비"},
+        {kw:"휴머노이드",en:"Humanoid Robot",count:48,badge:"hot",desc:"이번 전시 최대 화두. 중국 Unitree G1·Agibot X2·레주 쿠아보4세대·푸리에 참가, 국내 코라스·티로보틱스·에이딘로보틱스도 발표.",cos:"Unitree·Agibot·레주·푸리에·코라스로보틱스·티로보틱스·KETI"},
+        {kw:"협동로봇",en:"Collaborative Robot",count:41,badge:"hot",desc:"작업자와 동일 공간에서 협업하는 로봇. UR·한화·두산·원익 참가. AMR+코봇 결합 모바일 매니퓰레이터 수요 급증.",cos:"Universal Robots·한화로보틱스·두산로보틱스·원익로보틱스"},
+        {kw:"피지컬 AI",en:"Physical AI",count:38,badge:"hot",desc:"AW 2026 공식 테마. AI가 소프트웨어를 넘어 물리적 로봇·설비와 결합한 개념.",cos:"현대글로비스·현대차로보틱스랩·씨메스"},
+        {kw:"모바일 매니퓰레이터",en:"Mobile Manipulator",count:19,badge:"rising",desc:"AMR+협동로봇팔 결합형 이동식 조작 로봇. 물류·제조·검사 공정 자동화 수요로 급부상.",cos:"마로로봇테크·원익로보틱스·와이투솔루션"},
+        {kw:"팔레타이징",en:"Palletizing Robot",count:17,badge:"rising",desc:"박스를 팔레트에 자동 적재. AI비전 기반 Random Palletizer 트렌드. 씨메스 1SKU·Random Palletizer 주목.",cos:"씨메스·지비드·KETI"},
+      ]},
+      { cat:"👁 머신비전·센서", color:"#4f8cff", kws:[
+        {kw:"머신비전",en:"Machine Vision",count:35,badge:"hot",desc:"카메라+AI로 제품 외관·치수·결함을 자동 검사. KVS(한국머신비전산업전) 별도 구성.",cos:"Cognex·Keyence·노비텍·포스로직·알티엠·플리어시스템"},
+        {kw:"딥러닝 비전 AI",en:"Deep Learning Vision",count:28,badge:"hot",desc:"AI 모델로 불량 자동 검출. 오토 라벨링·데이터 증강 기능으로 도입 장벽 낮춤.",cos:"알티엠·포스로직·플리어시스템코리아"},
+        {kw:"3D 카메라",en:"3D Camera/Scanner",count:22,badge:"rising",desc:"포인트 클라우드로 물체 형상 인식. 빈피킹·디팔레타이징·품질검사에 필수.",cos:"지비드·노비텍·포스로직"},
+        {kw:"빈피킹",en:"Bin Picking",count:16,badge:"rising",desc:"무작위로 담긴 물체를 로봇팔이 인식·파지·이동. 3D비전+AI 조합. 물류센터 자동화 핵심 과제.",cos:"지비드·씨메스·와이투솔루션·KETI"},
+        {kw:"열화상 카메라",en:"Thermal Camera",count:9,badge:"core",desc:"적외선으로 온도 측정하는 산업용 카메라. 플리어 MWIR A858X 출품.",cos:"플리어시스템코리아(FLIR)"},
+      ]},
+      { cat:"📦 물류 자동화", color:"#0ca678", kws:[
+        {kw:"물류 자동화",en:"Logistics Automation",count:44,badge:"hot",desc:"전체 물류 프로세스 자동화. 스마트물류특별관 별도 구성. 입고~보관~피킹~출고 전 과정 자동화 전시.",cos:"현대글로비스·현대무벡스·Geek+·마로로봇테크·원익로보틱스"},
+        {kw:"AGV",en:"Automated Guided Vehicle",count:26,badge:"hot",desc:"레이저·자기테이프로 고정 경로 이동하는 무인반송차. AMR로 점차 대체되는 추세.",cos:"비전나비로보틱스·현대무벡스·Geek+"},
+        {kw:"스마트 창고",en:"Smart Warehouse",count:23,badge:"rising",desc:"WMS·WCS·AMR·컨베이어·소터 통합 지능형 물류센터. 현대글로비스 전 과정 연결 시연.",cos:"현대글로비스·현대무벡스"},
+        {kw:"WMS/WCS 통합",en:"WMS/WCS Integration",count:14,badge:"core",desc:"창고관리·제어시스템 통합 운영. AMR·컨베이어·소터를 단일 인터페이스로 제어.",cos:"스탠다드로봇·현대글로비스"},
+        {kw:"무인 지게차",en:"Autonomous Forklift",count:11,badge:"rising",desc:"5G·AI 기반 무인 산업용 지게차. 비전나비 VNP15(V) 대표적.",cos:"비전나비로보틱스"},
+      ]},
+      { cat:"🏭 스마트팩토리·AI", color:"#e67700", kws:[
+        {kw:"스마트팩토리",en:"Smart Factory",count:49,badge:"hot",desc:"IoT·AI·빅데이터 결합 지능형 공장. AI팩토리특별관에서 자율제조 모델 시연.",cos:"포스코DX·CJ올리브네트웍스·두산디지털이노베이션"},
+        {kw:"자율제조(AX)",en:"Autonomous Manufacturing",count:33,badge:"hot",desc:"AI·로봇이 스스로 판단·운영하는 제조 패러다임. AW 2026 핵심 슬로건.",cos:"포스코DX·CJ올리브네트웍스·현대차로보틱스랩"},
+        {kw:"디지털 트윈",en:"Digital Twin",count:21,badge:"rising",desc:"물리적 공장을 가상 복제해 시뮬레이션. AI팩토리특별관에서 통합 구현 모델 전시.",cos:"포스코DX·두산디지털이노베이션"},
+        {kw:"PLC·모션 제어",en:"PLC / Motion Control",count:18,badge:"core",desc:"알에스오토메이션이 서보드라이브·컨트롤러·엔코더 국내 유일 풀스택 개발.",cos:"알에스오토메이션·파스텍"},
+        {kw:"Pick-and-Place",en:"Pick-and-Place Auto",count:15,badge:"rising",desc:"카메라+로봇팔로 불규칙 물품 인식·파지·이동 자동화. ACR과 함께 물류 자동화 핵심.",cos:"씨메스·지비드·와이투솔루션·KETI"},
+      ]},
+      { cat:"🔧 부품·그리퍼", color:"#9c36b5", kws:[
+        {kw:"로봇 그리퍼",en:"Robot Gripper",count:20,badge:"rising",desc:"코라스로보틱스 툴체인저·그리퍼 라인업. 유엔디 휠너트 그리퍼 자동차 생산라인 적용.",cos:"코라스로보틱스·유엔디·에이딘로보틱스"},
+        {kw:"힘·토크 센서",en:"Force/Torque Sensor",count:13,badge:"new",desc:"에이딘로보틱스 6축 힘토크센서 키트·인간형 로봇핸드 Gen2(16DoF) 발표.",cos:"에이딘로보틱스"},
+        {kw:"촉각 센서",en:"Tactile Sensor",count:10,badge:"new",desc:"로봇핸드 촉각 인식 센서. 에이딘로보틱스 AIDIN Hand Gen2 탑재. 휴머노이드 상용화 핵심.",cos:"에이딘로보틱스"},
+      ]}
+    ],
+    cos:[
+      {name:"씨메스",             tags:["로봇","AI"],     product:"AI비전 팔레타이저 (1SKU·Random)",        kws:["팔레타이징","비전AI"],    country:"🇰🇷"},
+      {name:"마로로봇테크",       tags:["로봇","물류"],   product:"AMR, 모바일 매니퓰레이터",              kws:["AMR","모바일매니퓰레이터"],country:"🇰🇷"},
+      {name:"코라스로보틱스",     tags:["로봇","부품"],   product:"툴체인저·그리퍼, 휴머노이드 프로젝트", kws:["그리퍼","휴머노이드"],     country:"🇰🇷"},
+      {name:"원익로보틱스",       tags:["로봇","물류"],   product:"AMR, 자율이동조작로봇(AMMR)",           kws:["AMR","협동로봇"],         country:"🇰🇷"},
+      {name:"알에스오토메이션",   tags:["제어"],          product:"모션 제어 풀스택",                      kws:["PLC","모션제어"],         country:"🇰🇷"},
+      {name:"에이딘로보틱스",     tags:["로봇","부품"],   product:"로봇핸드 Gen2, 6축 힘토크센서",         kws:["힘토크센서","촉각센서"],   country:"🇰🇷"},
+      {name:"유엔디",             tags:["로봇"],          product:"휠너트 그리퍼, 협동로봇 교육 플랫폼",   kws:["그리퍼","협동로봇"],      country:"🇰🇷"},
+      {name:"지비드 (Zivid)",     tags:["비전"],          product:"Zivid 3 산업용 3D 카메라",              kws:["3D카메라","빈피킹"],       country:"🇳🇴"},
+      {name:"노비텍",             tags:["비전"],          product:"Swing3D 고정밀 3D 스캐너",              kws:["3D스캐너","머신비전"],     country:"🇰🇷"},
+      {name:"알티엠 (RTM)",       tags:["비전","AI"],     product:"딥러닝 비전 AI 'Hubble'",              kws:["딥러닝비전","AI"],         country:"🇰🇷"},
+      {name:"포스로직",           tags:["비전","AI"],     product:"2D·3D·AI 통합 'FLImaging'",            kws:["머신비전","AI"],           country:"🇰🇷"},
+      {name:"플리어시스템코리아", tags:["비전"],          product:"FLIR A858X MWIR 열화상 카메라",         kws:["열화상카메라"],            country:"🇺🇸"},
+      {name:"스탠다드 로봇",      tags:["로봇","물류","글로벌"],product:"레이저 SLAM AMR 오아시스 시리즈",kws:["AMR","SLAM"],             country:"🇨🇳"},
+      {name:"비전나비 로보틱스",  tags:["물류","글로벌"], product:"5G·AI 기반 무인 지게차 VNP15(V)",       kws:["무인지게차","AGV"],        country:"🇨🇳"},
+      {name:"Geek+ (긱플러스)",   tags:["물류","글로벌"], product:"AMR 기반 물류 자동화 시스템",           kws:["AMR","물류자동화"],        country:"🇨🇳"},
+      {name:"FANUC",              tags:["로봇","글로벌"], product:"산업용 로봇, FA 시스템",               kws:["산업용로봇"],              country:"🇯🇵"},
+      {name:"Universal Robots",   tags:["로봇","글로벌"], product:"협동로봇 전 라인업",                   kws:["협동로봇"],                country:"🇩🇰"},
+      {name:"Unitree",            tags:["로봇","글로벌"], product:"G1 휴머노이드",                        kws:["휴머노이드","피지컬AI"],   country:"🇨🇳"},
+      {name:"Agibot",             tags:["로봇","글로벌"], product:"X2·G2 휴머노이드",                    kws:["휴머노이드","피지컬AI"],   country:"🇨🇳"},
+      {name:"현대글로비스",       tags:["물류","AI"],     product:"피지컬AI 기반 입고~출고 물류 자동화",   kws:["물류자동화","피지컬AI"],   country:"🇰🇷"},
+      {name:"현대차 로보틱스랩",  tags:["로봇","AI"],     product:"모베드(MobED) — CES 2026 최고혁신상",  kws:["피지컬AI","모바일로봇"],   country:"🇰🇷"},
+      {name:"티로보틱스",         tags:["로봇"],          product:"산업용 휴머노이드 (국내 최초 공개)",   kws:["휴머노이드"],              country:"🇰🇷"},
+      {name:"포스코DX",           tags:["AI","스마트"],   product:"제조 AI — AI팩토리특별관",             kws:["스마트팩토리","디지털트윈"],country:"🇰🇷"},
+      {name:"두산디지털이노베이션",tags:["AI","스마트"],  product:"제조 AI — AI팩토리특별관",             kws:["스마트팩토리","AX"],        country:"🇰🇷"},
+      {name:"파스텍",             tags:["제어"],          product:"ExServo+ 클로즈드 루프 스테핑 모터",   kws:["모션제어"],                country:"🇰🇷"},
+      {name:"KETI",               tags:["로봇","AI"],     product:"휴머노이드 양팔, 비정형 피킹 기술",    kws:["휴머노이드","피킹"],        country:"🇰🇷"},
+    ]
+  },
+  mat2024: {
+    name:"MAT 2024", date:"2024", venue:"코엑스", companies:350, booths:1500, visitors:"4만+", countries:18,
+    source:"news",
+    summary:"<strong>MAT (Material Handling Automation Technologies)</strong> 물류·자동화 전시회. PDF를 업로드하면 실제 데이터로 업데이트됩니다.",
+    kwGroups:[], cos:[]
+  }
+};
+
+function selectExpo(id, el) {
+  currentExpoId = id;
+  expoUploadedData = null;
+  document.querySelectorAll(".expo-pill").forEach(function(p){ p.classList.remove("active"); });
+  el.classList.add("active");
+  currentExpoTab = "overview";
+  document.querySelectorAll(".expo-sub-tab").forEach(function(t){ t.classList.remove("active"); });
+  document.getElementById("estab-overview").classList.add("active");
+  renderExpoSubContent();
+}
+
+function switchExpoTab(tab, el) {
+  currentExpoTab = tab;
+  document.querySelectorAll(".expo-sub-tab").forEach(function(t){ t.classList.remove("active"); });
+  el.classList.add("active");
+  renderExpoSubContent();
+}
+
+function renderExpoSubContent() {
+  var d = getExpoData();
+  var el = document.getElementById("expo-sub-content");
+  if (currentExpoTab === "overview")   el.innerHTML = buildExpoOverview(d);
+  else if (currentExpoTab === "keywords") el.innerHTML = buildExpoKeywords(d);
+  else if (currentExpoTab === "companies") el.innerHTML = buildExpoCompanies(d);
+  else if (currentExpoTab === "upload")  el.innerHTML = buildExpoUpload();
+  // animate bars
+  setTimeout(function() {
+    document.querySelectorAll(".expo-kw-fill").forEach(function(bar) {
+      var w = bar.dataset.w; bar.style.width="0%";
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ bar.style.width=w+"%"; }); });
+    });
+  }, 50);
+}
+
+function getExpoData() {
+  if (expoUploadedData) return expoUploadedData;
+  return EXPO_DATA[currentExpoId] || EXPO_DATA.aw2026;
+}
+
+function buildExpoOverview(d) {
+  var totalKws = 0;
+  d.kwGroups.forEach(function(g){ totalKws += g.kws.length; });
+  // top 8 keywords for mini chart
+  var all = []; d.kwGroups.forEach(function(g){ g.kws.forEach(function(k){ all.push({k:k,c:g.color}); }); });
+  all.sort(function(a,b){ return b.k.count - a.k.count; }); var top=all.slice(0,8);
+  var max = top[0] ? top[0].k.count : 1;
+  var sourceTag = d.source==="pdf"
+    ? '<span style="font-size:0.65rem;background:rgba(12,133,153,0.15);color:#0c8599;padding:2px 7px;border-radius:4px;margin-left:6px">📄 PDF 기반</span>'
+    : '<span style="font-size:0.65rem;background:rgba(48,43,99,0.1);color:var(--sub);padding:2px 7px;border-radius:4px;margin-left:6px">📰 뉴스·홈페이지 기반</span>';
+  var topBars = top.map(function(item) {
+    var pct = Math.round(item.k.count/max*100);
+    return '<div class="expo-kw-row" onclick="openExpoTT(''+encodeKwData(item.k)+'')">'
+      +'<div class="expo-kw-name">'+item.k.kw+'</div>'
+      +'<div class="expo-kw-wrap"><div class="expo-kw-fill" style="background:'+item.c+';width:0%" data-w="'+pct+'">'
+      +'<span class="expo-kw-count">'+item.k.count+'</span></div></div>'
+      +'<span class="expo-kw-badge badge-'+item.k.badge+'">'+badgeLabel(item.k.badge)+'</span>'
+      +'</div>';
+  }).join("");
+  return '<div style="margin-bottom:10px">'
+    +'<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:10px">'
+    +'<span style="font-size:0.85rem;font-weight:800;color:var(--text)">'+d.name+'</span>'+sourceTag+'</div>'
+    +'<div class="expo-overview-grid">'
+    +'<div class="expo-stat"><div class="expo-stat-num">'+d.companies.toLocaleString()+'</div><div class="expo-stat-label">참가기업</div></div>'
+    +'<div class="expo-stat"><div class="expo-stat-num">'+d.booths.toLocaleString()+'</div><div class="expo-stat-label">부스 수</div></div>'
+    +'<div class="expo-stat"><div class="expo-stat-num">'+d.visitors+'</div><div class="expo-stat-label">참관객</div></div>'
+    +'<div class="expo-stat"><div class="expo-stat-num">'+totalKws+'</div><div class="expo-stat-label">감지 키워드</div></div>'
+    +'</div>'
+    +'<div class="expo-summary-box">'+d.summary+'</div>'
+    +'</div>'
+    +(top.length ? '<div style="font-size:0.72rem;font-weight:800;color:var(--sub);letter-spacing:0.05em;margin-bottom:8px">🔥 TOP 키워드 (클릭 시 상세)</div>'
+      +'<div class="expo-kw-bar-list">'+topBars+'</div>'
+      +'<div style="font-size:0.67rem;color:var(--sub);text-align:center;margin-top:8px">* 수치는 언론 보도 및 공식 자료 기반 추정치</div>'
+      : '<div style="text-align:center;color:var(--sub);padding:30px;font-size:0.82rem">📥 PDF 탭에서 파일을 업로드하면<br>실제 키워드 데이터가 표시됩니다</div>');
+}
+
+function buildExpoKeywords(d) {
+  if (!d.kwGroups.length) return '<div style="text-align:center;color:var(--sub);padding:40px;font-size:0.82rem">📥 PDF 탭에서 참가업체 파일을 업로드하세요</div>';
+  return d.kwGroups.map(function(g) {
+    var gmax = Math.max.apply(null, g.kws.map(function(k){ return k.count; }));
+    var total = g.kws.reduce(function(s,k){ return s+k.count; },0);
+    return '<div class="expo-kw-group">'
+      +'<div class="expo-kw-group-title">'+g.cat+' <span>'+total+'건</span></div>'
+      +'<div class="expo-kw-bar-list">'
+      +g.kws.map(function(k) {
+        var pct = Math.round(k.count/gmax*100);
+        return '<div class="expo-kw-row" onclick="openExpoTT(''+encodeKwData(k)+'')">'
+          +'<div class="expo-kw-name">'+k.kw+'</div>'
+          +'<div class="expo-kw-wrap"><div class="expo-kw-fill" style="background:'+g.color+';width:0%" data-w="'+pct+'">'
+          +'<span class="expo-kw-count">'+k.count+'</span></div></div>'
+          +'<span class="expo-kw-badge badge-'+k.badge+'">'+badgeLabel(k.badge)+'</span></div>';
+      }).join("")
+      +'</div></div>';
+  }).join("")
+  +'<div style="font-size:0.67rem;color:var(--sub);text-align:center;margin-top:4px">* 수치 = 언론 보도 언급 횟수 + 참가업체 제품 태그 기반</div>';
+}
+
+function buildExpoCompanies(d) {
+  var cats = ["전체","로봇","물류","비전","AI","제어","글로벌","스마트"];
+  var filtered = currentExpoCoFilter==="전체" ? d.cos : d.cos.filter(function(c){ return c.tags.indexOf(currentExpoCoFilter)!==-1; });
+  if (!d.cos.length) return '<div style="text-align:center;color:var(--sub);padding:40px;font-size:0.82rem">📥 PDF 탭에서 참가업체 파일을 업로드하세요</div>';
+  var filters = cats.map(function(c) {
+    return '<button class="expo-pill'+(c===currentExpoCoFilter?" active":"")+'" style="margin-bottom:8px" onclick="setExpoCoFilter(''+c+'',this)">'+c+'</button>';
+  }).join("");
+  var cards = filtered.map(function(c) {
+    return '<div class="expo-co-card">'
+      +'<div class="expo-co-top"><div class="expo-co-name">'+c.country+' '+c.name+'</div></div>'
+      +'<div class="expo-co-product">'+c.product+'</div>'
+      +'<div class="expo-co-kws">'+c.kws.map(function(k){ return '<span class="expo-co-kw">'+k+'</span>'; }).join("")+'</div>'
+      +'</div>';
+  }).join("");
+  return '<div class="expo-select-row" style="flex-wrap:wrap;margin-bottom:8px">'+filters+'</div>'
+    +'<div style="font-size:0.72rem;color:var(--sub);margin-bottom:10px">'+filtered.length+'개사 표시</div>'
+    +cards;
+}
+
+function setExpoCoFilter(f, el) {
+  currentExpoCoFilter = f;
+  document.getElementById("expo-sub-content").innerHTML = buildExpoCompanies(getExpoData());
+}
+
+function buildExpoUpload() {
+  return '<div class="expo-upload-area" onclick="document.getElementById('expo-file-input').click()">'
+    +'<div class="expo-upload-icon">📂</div>'
+    +'<div class="expo-upload-title">참가업체 리스트 업로드</div>'
+    +'<div class="expo-upload-desc">'
+    +'AW·MAT 공식 사이트에서 받은 PDF 또는<br>업체명을 텍스트/CSV로 변환해 업로드하세요.<br><br>'
+    +'업로드 시 키워드 카운트가 실제 데이터로 업데이트됩니다.<br>'
+    +'📥 AW 공식사이트 → VISITOR → 참가기업 리스트 PDF</div>'
+    +'</div>'
+    +'<div class="expo-upload-result" id="expo-upload-result"></div>'
+    +'<div style="font-size:0.76rem;color:var(--sub);line-height:1.9">'
+    +'1️⃣ automationworld.co.kr → VISITOR → 참가기업 리스트 PDF 다운로드<br>'
+    +'2️⃣ PDF 내용을 TXT로 복사하거나 CSV로 저장 후 업로드<br>'
+    +'3️⃣ 키워드 탭에서 실제 집계 수치 확인<br>'
+    +'<span style="color:var(--border)">※ 텍스트 파일: 업체명을 한 줄에 하나씩 또는 쉼표 구분</span></div>';
+}
+
+function handleExpoUpload(input) {
+  var file = input.files[0]; if (!file) return;
+  if (file.name.endsWith(".pdf")) {
+    showToast("📄 PDF는 텍스트로 복사 후 TXT 파일로 업로드하세요");
+    document.getElementById("expo-upload-result").style.display = "block";
+    document.getElementById("expo-upload-result").innerHTML = '<div style="font-size:0.78rem;color:var(--sub);line-height:1.8">PDF 직접 파싱은 지원되지 않아요.<br>PDF를 열고 텍스트를 복사해 .txt 파일로 저장 후 재업로드하세요.</div>';
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) { parseExpoUpload(e.target.result, file.name); };
+  reader.readAsText(file, "UTF-8");
+}
+
+function parseExpoUpload(text, filename) {
+  var lines = text.split(/[
+,]/).map(function(l){ return l.trim(); }).filter(function(l){ return l.length>1; });
+  // 용어집 기반 키워드 매핑
+  var kwMap = [
+    {kw:"AMR",color:"#ff6b6b",badge:"hot",patterns:["AMR","자율이동","오아시스","SLAM","autonomous mobile"]},
+    {kw:"AGV",color:"#ff6b6b",badge:"hot",patterns:["AGV","무인반송","automated guided"]},
+    {kw:"협동로봇",color:"#ff6b6b",badge:"hot",patterns:["협동로봇","cobot","universal robots","UR","한화로보틱스","두산로보틱스"]},
+    {kw:"휴머노이드",color:"#ff6b6b",badge:"hot",patterns:["휴머노이드","humanoid","unitree","agibot","레주","푸리에"]},
+    {kw:"AS/RS",color:"#ff6b6b",badge:"core",patterns:["AS/RS","자동창고","ASRS","stacker crane"]},
+    {kw:"팔레타이징",color:"#ff6b6b",badge:"rising",patterns:["팔레타이","palletiz","씨메스"]},
+    {kw:"모바일 매니퓰레이터",color:"#ff6b6b",badge:"rising",patterns:["매니퓰레이터","manipulator","AMMR"]},
+    {kw:"머신비전",color:"#4f8cff",badge:"hot",patterns:["비전","vision","카메라","camera","cognex","keyence"]},
+    {kw:"딥러닝 검사",color:"#4f8cff",badge:"hot",patterns:["딥러닝","deep learning","AI검사","알티엠","포스로직"]},
+    {kw:"3D 카메라",color:"#4f8cff",badge:"rising",patterns:["3D카메라","3D 카메라","zivid","노비텍","포인트클라우드"]},
+    {kw:"빈피킹",color:"#4f8cff",badge:"rising",patterns:["빈피킹","bin picking","bin-picking"]},
+    {kw:"열화상",color:"#4f8cff",badge:"core",patterns:["열화상","thermal","FLIR","플리어"]},
+    {kw:"물류 자동화",color:"#0ca678",badge:"hot",patterns:["물류자동화","물류 자동화","logistics","창고자동화","스마트물류"]},
+    {kw:"스마트 창고",color:"#0ca678",badge:"rising",patterns:["스마트창고","smart warehouse","WMS","WCS"]},
+    {kw:"무인 지게차",color:"#0ca678",badge:"rising",patterns:["무인지게차","지게차","forklift","비전나비"]},
+    {kw:"스마트팩토리",color:"#e67700",badge:"hot",patterns:["스마트팩토리","smart factory","스마트제조"]},
+    {kw:"자율제조(AX)",color:"#e67700",badge:"hot",patterns:["자율제조","AX","autonomous manufacturing"]},
+    {kw:"디지털 트윈",color:"#e67700",badge:"rising",patterns:["디지털트윈","digital twin"]},
+    {kw:"PLC·모션제어",color:"#e67700",badge:"core",patterns:["PLC","모션제어","motion control","서보","servo"]},
+    {kw:"피지컬 AI",color:"#e67700",badge:"hot",patterns:["피지컬AI","physical AI","피지컬 AI"]},
+    {kw:"로봇 그리퍼",color:"#9c36b5",badge:"rising",patterns:["그리퍼","gripper","툴체인저","end-effector"]},
+    {kw:"힘·토크 센서",color:"#9c36b5",badge:"new",patterns:["힘토크","force torque","에이딘","FT센서"]},
+    {kw:"컨베이어",color:"#9c36b5",badge:"core",patterns:["컨베이어","conveyor","소터","sorter"]},
+    {kw:"RFID·IoT",color:"#9c36b5",badge:"core",patterns:["RFID","IoT","사물인터넷"]},
+  ];
+  // count
+  kwMap.forEach(function(item){ item.count=0; });
+  lines.forEach(function(line) {
+    var l = line.toLowerCase();
+    kwMap.forEach(function(item) {
+      item.patterns.forEach(function(p) { if (l.indexOf(p.toLowerCase())!==-1) item.count++; });
+    });
+  });
+  var detected = kwMap.filter(function(k){ return k.count>0; }).sort(function(a,b){ return b.count-a.count; });
+  // Build uploaded data object
+  var fakeGroup = {cat:"📊 업로드 분석 결과", color:"#302b63", kws: detected.map(function(k){ return {kw:k.kw,en:"",count:k.count,badge:k.badge,desc:"",cos:""}; })};
+  expoUploadedData = {
+    name: EXPO_DATA[currentExpoId].name+" (PDF)",
+    date: EXPO_DATA[currentExpoId].date,
+    venue: EXPO_DATA[currentExpoId].venue,
+    companies: lines.length, booths: 0, visitors:"—", countries:0,
+    source: "pdf",
+    summary: "📄 <strong>"+filename+"</strong> 업로드 완료. <strong>"+lines.length+"개</strong> 항목에서 <strong>"+detected.length+"개</strong> 키워드 감지.",
+    kwGroups: detected.length ? [fakeGroup] : [],
+    cos: lines.slice(0,100).map(function(name,i){ return {name:name,tags:["업로드"],product:"",kws:[],country:""}; })
+  };
+  showToast("✅ "+lines.length+"개 업체 분석 완료!");
+  // Show result summary
+  var resultEl = document.getElementById("expo-upload-result");
+  if (resultEl) {
+    resultEl.style.display="block";
+    resultEl.innerHTML = '<div style="font-size:0.8rem;font-weight:700;color:#0ca678;margin-bottom:8px">✅ 분석 완료 — '+filename+'</div>'
+      +'<div style="font-size:0.75rem;color:var(--sub)">'+lines.length+'개 항목 감지 · 키워드 '+detected.length+'개 추출</div>';
+  }
+  // Switch to keywords view to show results
+  setTimeout(function(){
+    currentExpoTab="keywords";
+    document.querySelectorAll(".expo-sub-tab").forEach(function(t){ t.classList.remove("active"); });
+    document.getElementById("estab-keywords").classList.add("active");
+    renderExpoSubContent();
+  }, 600);
+}
+
+function encodeKwData(k) {
+  return encodeURIComponent(JSON.stringify({kw:k.kw,en:k.en,count:k.count,desc:k.desc,cos:k.cos}));
+}
+function openExpoTT(enc) {
+  var k = JSON.parse(decodeURIComponent(enc));
+  document.getElementById("expo-tt-kw").textContent  = k.kw + "  ×"+k.count;
+  document.getElementById("expo-tt-en").textContent  = k.en || "";
+  document.getElementById("expo-tt-desc").textContent= k.desc || "";
+  document.getElementById("expo-tt-cos").innerHTML   = k.cos ? "<strong>🏢 관련 참가업체:</strong> "+k.cos : "";
+  document.getElementById("expo-tt-overlay").classList.add("open");
+}
+function closeExpoTT(e) {
+  if(e.target===document.getElementById("expo-tt-overlay")) document.getElementById("expo-tt-overlay").classList.remove("open");
+}
+function badgeLabel(b){ return {hot:"🔥HOT",rising:"📈급상승",new:"🆕신규",core:"⚙️핵심"}[b]||b; }
+
+// 전시회 탭 진입 시 초기 렌더
+function initExpoTab() {
+  document.getElementById("expo-panel").style.display = "";
+  document.getElementById("news-list").style.display = "none";
+  renderExpoSubContent();
 }
 
 // ── 초기화 ───────────────────────────────────────────────
