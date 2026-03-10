@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>⚡ 피지컬 AI 뉴스</title>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AI뉴스">
+<meta name="theme-color" content="#302b63">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { width:100%; min-height:100vh; font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background:#f4f6f9; color:#1a1a2e; }
@@ -543,6 +549,15 @@ loadNews();
   document.addEventListener("mousemove",   onMove);
   document.addEventListener("mouseup",     onEnd);
 })();
+
+// ── PWA 서비스워커 등록 ──────────────────────────────────
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("/physical_ai_news/sw.js")
+      .then(function() { console.log("SW 등록 완료"); })
+      .catch(function(e) { console.log("SW 등록 실패:", e); });
+  });
+}
  
 </script>
 </body>
