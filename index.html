@@ -824,8 +824,8 @@ function switchMode(mode) {
   document.getElementById("tab-"+tabMap[mode]).classList.add("active");
   document.getElementById("filter-wrap").style.display=(mode==="category"||mode==="manufacturer")?"":"none";
   var isExpo=(mode==="expo");
-  document.getElementById("expo-panel").style.display=isExpo?"":"none";
-  document.getElementById("news-list").style.display=isExpo?"none":"";
+  document.getElementById("expo-panel").style.display=isExpo?"block":"none";
+  document.getElementById("news-list").style.display=isExpo?"none":"block";
   if(isExpo){renderExpoSubContent();return;}
   clearSearch(); render();
 }
@@ -1464,7 +1464,7 @@ function badgeLabel(b){ return {hot:"🔥HOT",rising:"📈급상승",new:"🆕�
 
 // 전시회 탭 진입 시 초기 렌더
 function initExpoTab() {
-  document.getElementById("expo-panel").style.display = "";
+  document.getElementById("expo-panel").style.display = "block";
   document.getElementById("news-list").style.display = "none";
   renderExpoSubContent();
 }
