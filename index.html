@@ -310,8 +310,13 @@
   <div class="expo-panel-inner">
     <!-- 전시회 선택 -->
     <div class="expo-select-row" id="expo-select-row">
-      <div class="expo-pill active" id="expopill-aw2026"  onclick="selectExpo('aw2026',this)">⚡ AW 2026 <span class="new-dot"></span></div>
-      <div class="expo-pill"        id="expopill-mat2025" onclick="selectExpo('mat2025',this)">🏭 MAT 2025</div>
+      <div class="expo-pill active" id="expopill-aw2026"       onclick="selectExpo('aw2026',this)">⚡ AW 2026 <span class="new-dot"></span></div>
+      <div class="expo-pill"        id="expopill-mat2025"      onclick="selectExpo('mat2025',this)">🏭 MAT 2025</div>
+      <div class="expo-pill"        id="expopill-modex2026"    onclick="selectExpo('modex2026',this)">🇺🇸 MODEX 2026</div>
+      <div class="expo-pill"        id="expopill-promat2025"   onclick="selectExpo('promat2025',this)">🇺🇸 ProMat 2025</div>
+      <div class="expo-pill"        id="expopill-logimat2025"  onclick="selectExpo('logimat2025',this)">🇩🇪 LogiMAT 2025</div>
+      <div class="expo-pill"        id="expopill-logistech2024" onclick="selectExpo('logistech2024',this)">🇯🇵 Logis-Tech 2024</div>
+      <div class="expo-pill"        id="expopill-cematasia2024" onclick="selectExpo('cematasia2024',this)">🇨🇳 CeMAT Asia 2024</div>
       <div class="expo-pill"        onclick="document.getElementById('expo-file-input').click()">＋ PDF 추가</div>
     </div>
     <!-- 서브탭 -->
@@ -1214,6 +1219,199 @@ var EXPO_DATA = {
       {name:"Geek+(긱플러스)",      tags:["물류","글로벌"],       product:"AMR 기반 풀필먼트 자동화",                   kws:["AGV·지게차","AMR"],   country:"🇨🇳", booth:"(확인필요)"},
     ]
   }
+
+  ,
+
+  // ─────────────────────────────────────────────────────────
+  // 🇺🇸 MODEX 2026 — 북미 최대 물류·공급망 전시회
+  // ─────────────────────────────────────────────────────────
+  modex2026: {
+    name:"MODEX 2026", date:"2026.04.13~16", venue:"Georgia World Congress Center, Atlanta GA",
+    companies:1200, booths:0, visitors:"50,000+", countries:30,
+    source:"news",
+    summary:"<strong>MODEX 2026</strong> — 북미 최대 물류·공급망 전시회. 2026.04.13~16, 애틀랜타 GWCC. MHI 주최. 1,200개사·50,000+ 참관. Hall A(공급망IT)·B·C(자동화·로봇). 핵심 테마: <strong>AMR 스케일업, AI-WMS, 창고 휴머노이드, AS/RS 고밀도화</strong>.",
+    kwGroups:[
+      {cat:"🤖 로봇·자율이동", color:"#ff6b6b", kws:[
+        {kw:"AMR·AGV",           en:"AMR / AGV",                   count:180, badge:"hot",    desc:"MODEX 최다 출품 카테고리. KUKA·Locus·6 River Systems·Fetch·Geek+·HAI Robotics·Syrius Robotics. 함대관리(Fleet Mgmt) 소프트웨어 통합 트렌드.",  cos:"KUKA·Locus Robotics·6 River Systems·HAI Robotics·Syrius Robotics"},
+        {kw:"AS/RS·고밀도 보관", en:"AS/RS / High-Density Storage", count:90,  badge:"hot",    desc:"AutoStore·Exotec Skypod·Swisslog·Kardex·ISD. Goods-to-Person ROI 검증 단계. 수직 창고 설계 급부상.",                                             cos:"AutoStore·Exotec·Swisslog·Kardex·ISD·Mecalux"},
+        {kw:"창고 휴머노이드",   en:"Humanoid Robot",               count:40,  badge:"hot",    desc:"Boston Dynamics·Apptronik·RightHand Robotics·Pickle Robot. AI 무작위 피킹 실증.",                                                                cos:"Boston Dynamics·Apptronik·RightHand Robotics·Pickle Robot"},
+        {kw:"무인 지게차·AGF",   en:"Autonomous Forklift / AGF",    count:30,  badge:"rising", desc:"Tompkins Robotics 자율 팔레트잭. 대형 물류센터 중심 수요 급증.",                                                                                  cos:"Tompkins Robotics·KUKA·Hyster-Yale"},
+      ]},
+      {cat:"📦 물류 IT·WMS", color:"#0ca678", kws:[
+        {kw:"AI-WMS",            en:"AI-powered WMS",               count:120, badge:"hot",    desc:"AI 수요예측·슬로팅·동선 최적화 내장 WMS 급증. Made4net·Alpine Supply Chain 등 AI 기능 내재화.",                                                  cos:"Made4net·Alpine Supply Chain·Körber·Infor·Blue Yonder"},
+        {kw:"공급망 가시화",     en:"Supply Chain Visibility",       count:70,  badge:"rising", desc:"RFID·IoT·RTLS 기반 실시간 재고 추적. 연속 가시화가 新 운영 기준 부상.",                                                                          cos:"Zebra Technologies·Cognex·Honeywell"},
+        {kw:"디지털 트윈",       en:"Digital Twin (Warehouse)",      count:40,  badge:"rising", desc:"가상 창고 시뮬레이션으로 ROI·레이아웃 사전 검증. 대형 프로젝트 필수 도구화.",                                                                    cos:"Rockwell Automation·Siemens·Dematic"},
+      ]},
+      {cat:"⚙️ 설비·소터·포장", color:"#9c36b5", kws:[
+        {kw:"컨베이어·소터",     en:"Conveyor / Sortation",          count:80,  badge:"core",   desc:"Tompkins Robotics tSort(로봇 소터)·Intralox·Hytrol. 로봇 소터가 전통 크로스벨트 대체 가속.",                                                     cos:"Tompkins Robotics·Intralox·Hytrol·Lewco"},
+        {kw:"포장 자동화",       en:"Packaging Automation",          count:45,  badge:"rising", desc:"AI 박스 사이징(cartonization)으로 포장재 감소·물량 최적화. 지속가능성 이슈 결합.",                                                               cos:"Ranpak·Sealed Air·Sparck Technologies"},
+      ]}
+    ],
+    cos:[
+      {name:"KUKA Robotics",      tags:["로봇","글로벌"],  product:"KMP AMR 시리즈 250P~3000P",                  kws:["AMR·AGV"],             country:"🇩🇪", booth:"B15132"},
+      {name:"Exotec",             tags:["물류","글로벌"],  product:"Skypod AS/RS 큐브 로봇 시스템",              kws:["AS/RS·고밀도 보관"],   country:"🇫🇷", booth:"B14302"},
+      {name:"AutoStore",          tags:["물류","글로벌"],  product:"CarouselAI — AutoStore + AI 피킹팔",         kws:["AS/RS·고밀도 보관"],   country:"🇳🇴", booth:"B8000"},
+      {name:"HAI Robotics",       tags:["로봇","글로벌"],  product:"HAIPICK ACR 케이스 피킹 로봇",               kws:["AMR·AGV"],             country:"🇨🇳", booth:"(확인필요)"},
+      {name:"Kardex",             tags:["물류","글로벌"],  product:"Intuitive Picking Assistant (AI 핸드트래킹)", kws:["AS/RS·고밀도 보관"],   country:"🇨🇭", booth:"(확인필요)"},
+      {name:"Made4net",           tags:["AI","글로벌"],    product:"AI 기반 WMS 창고운영 최적화",                kws:["AI-WMS"],              country:"🇺🇸", booth:"B15158"},
+      {name:"Swisslog",           tags:["물류","글로벌"],  product:"CycloneCarrier 셔틀·ItemPiQ 피킹·AMR",       kws:["AS/RS·고밀도 보관"],   country:"🇨🇭", booth:"(확인필요)"},
+      {name:"Dematic",            tags:["물류","글로벌"],  product:"AMR·멀티셔틀·디지털트윈 VR 체험관",          kws:["AMR·AGV","디지털 트윈"], country:"🇩🇪", booth:"(확인필요)"},
+      {name:"RightHand Robotics", tags:["로봇","글로벌"],  product:"AI 피킹 로봇 (무작위 물품 파지)",             kws:["창고 휴머노이드"],      country:"🇺🇸", booth:"(확인필요)"},
+      {name:"Tompkins Robotics",  tags:["물류","글로벌"],  product:"tSort 로봇 소터·자율 팔레트잭",              kws:["컨베이어·소터","무인 지게차·AGF"], country:"🇺🇸", booth:"(확인필요)"},
+      {name:"ISD",                tags:["물류","글로벌"],  product:"URBX AS/RS·컨베이어·AMR 통합",               kws:["AS/RS·고밀도 보관"],   country:"🇺🇸", booth:"B8032"},
+      {name:"Zebra Technologies", tags:["AI","글로벌"],    product:"RFID·RTLS 공급망 가시화 플랫폼",             kws:["공급망 가시화"],        country:"🇺🇸", booth:"(확인필요)"},
+    ]
+  },
+
+  // ─────────────────────────────────────────────────────────
+  // 🇺🇸 ProMat 2025 — 북미 최대 공급망·제조 전시회
+  // ─────────────────────────────────────────────────────────
+  promat2025: {
+    name:"ProMat 2025", date:"2025.03.17~20", venue:"McCormick Place, Chicago IL",
+    companies:1160, booths:0, visitors:"52,223", countries:35,
+    source:"news",
+    summary:"<strong>ProMat 2025</strong> — 역대 최대 규모. 2025.03.17~20, 시카고 McCormick Place(3개 홀+Lakeside Hall 신설). 1,160개사·52,223명. MHI 주최. 핵심: <strong>AMR·AGV 생산 배치 전환, 창고 휴머노이드, Vertical WH, AI-WMS</strong>. MHI 보고서: 83% 공급망 리더 5년 내 로봇 도입 계획.",
+    kwGroups:[
+      {cat:"🤖 로봇·자율이동", color:"#ff6b6b", kws:[
+        {kw:"AMR",               en:"AMR",                          count:200, badge:"hot",    desc:"ProMat 2025 최다 출품. Locus LocusONE·6 River·Fetch·Geek+·HAI·Piaggio Fast Forward·Syrius. AMR 함대 오케스트레이션 주류화.",                        cos:"Locus Robotics·6 River Systems·Geek+·HAI Robotics·Piaggio FF·Syrius"},
+        {kw:"창고 휴머노이드",   en:"Humanoid Robot (Warehouse)",    count:25,  badge:"hot",    desc:"창고 전용 휴머노이드 급증. Boston Dynamics·Apptronik 출품. 피킹·운반 실증.",                                                                       cos:"Boston Dynamics·Apptronik"},
+        {kw:"AS/RS",             en:"AS/RS",                        count:90,  badge:"hot",    desc:"AutoStore CarouselAI·Swisslog·Dematic 멀티셔틀·Conveyco. Goods-to-Person ROI 실증 집중.",                                                           cos:"AutoStore·Swisslog·Dematic·Conveyco·Kardex"},
+        {kw:"AGV·무인지게차",    en:"AGV / Autonomous Forklift",    count:60,  badge:"hot",    desc:"Jungheinrich·Rocrich·Mitsubishi Logisnext·MasterMover TOW300 AGV.",                                                                                  cos:"Jungheinrich·Rocrich·Mitsubishi Logisnext·MasterMover"},
+        {kw:"모바일 매니퓰레이터",en:"Mobile Manipulation",          count:30,  badge:"rising", desc:"AMR+팔 결합. Berkshire Grey·Conveyco 전략 파트너십 강화.",                                                                                          cos:"Berkshire Grey·Conveyco·HAI Robotics"},
+      ]},
+      {cat:"📦 WMS·공급망 IT", color:"#0ca678", kws:[
+        {kw:"AI-WMS",            en:"AI-powered WMS",               count:100, badge:"hot",    desc:"AI 수요예측·슬로팅·자동 보충. MHI: 83% 리더 5년 내 도입 계획.",                                                                                   cos:"Körber·Infor·Blue Yonder·Manhattan Associates"},
+        {kw:"수직 창고 설계",    en:"Vertical Warehouse",            count:40,  badge:"rising", desc:"ProMat 2025 예상치 못한 Top 트렌드. 공간 극대화 위한 수직 AS/RS·다층 컨베이어.",                                                                  cos:"AutoStore·Exotec·Dematic"},
+        {kw:"공급망 가시화",     en:"Supply Chain Visibility",       count:60,  badge:"rising", desc:"RFID·IoT·AI 기반 실시간 재고 가시화. 연속 추적 표준화 가속.",                                                                                     cos:"Zebra Technologies·Honeywell·Cognex"},
+      ]},
+      {cat:"🚀 스타트업·이노베이션", color:"#9c36b5", kws:[
+        {kw:"스타트업 로봇",     en:"Startup Robotics / AI Logistics",count:14, badge:"new",    desc:"StartUp Pavilion 14개사 입선. AI 물류 소프트웨어·차세대 자동화 기술 집결.",                                                                        cos:"Pickle Robot·Piaggio Fast Forward"},
+      ]}
+    ],
+    cos:[
+      {name:"AutoStore",           tags:["물류","글로벌"],  product:"CarouselAI — 큐브 AS/RS + AI 피킹팔",      kws:["AS/RS"],                country:"🇳🇴", booth:"(McCormick Place)"},
+      {name:"Swisslog",            tags:["물류","글로벌"],  product:"CycloneCarrier·ItemPiQ·멀티온도 AS/RS",    kws:["AS/RS"],                country:"🇨🇭", booth:"(McCormick Place)"},
+      {name:"Dematic",             tags:["물류","글로벌"],  product:"AMR·멀티셔틀·VR 창고 체험",                kws:["AMR","AS/RS"],          country:"🇩🇪", booth:"(McCormick Place)"},
+      {name:"Jungheinrich",        tags:["물류","글로벌"],  product:"무인 지게차·포크리프트 자동화",             kws:["AGV·무인지게차"],       country:"🇩🇪", booth:"(McCormick Place)"},
+      {name:"Locus Robotics",      tags:["로봇","글로벌"],  product:"LocusONE AMR 함대 관리 플랫폼",            kws:["AMR"],                  country:"🇺🇸", booth:"(McCormick Place)"},
+      {name:"HAI Robotics",        tags:["로봇","글로벌"],  product:"HAIPICK ACR 자율 케이스 피킹",             kws:["AMR","모바일 매니퓰레이터"], country:"🇨🇳", booth:"(McCormick Place)"},
+      {name:"Berkshire Grey",      tags:["로봇","글로벌"],  product:"AI 피킹·소팅 로봇 시스템",                 kws:["모바일 매니퓰레이터"],  country:"🇺🇸", booth:"(McCormick Place)"},
+      {name:"Piaggio Fast Forward",tags:["로봇","글로벌"],  product:"kilo 협업 이동 로봇 (300lb)",              kws:["AMR"],                  country:"🇺🇸", booth:"(McCormick Place)"},
+      {name:"MasterMover",         tags:["물류","글로벌"],  product:"TOW300 AGV — 44,000lb 중하중 견인",        kws:["AGV·무인지게차"],       country:"🇬🇧", booth:"(McCormick Place)"},
+      {name:"Pickle Robot",        tags:["로봇","글로벌"],  product:"AI 디팔레타이징 피킹 로봇",                kws:["창고 휴머노이드"],       country:"🇺🇸", booth:"(StartUp Pavilion)"},
+    ]
+  },
+
+  // ─────────────────────────────────────────────────────────
+  // 🇩🇪 LogiMAT 2025 — 유럽 최대 인트라물류 전시회
+  // ─────────────────────────────────────────────────────────
+  logimat2025: {
+    name:"LogiMAT 2025", date:"2025.03.11~13", venue:"Messe Stuttgart, 독일",
+    companies:1625, booths:0, visitors:"65,719", countries:40,
+    source:"official",
+    summary:"<strong>LogiMAT 2025</strong> — 세계 최대 인트라물류 전시회. 2025.03.11~13, 슈투트가르트 메세. 40개국 1,625개사(신규 300개사 포함)·65,719명. 125,000m² 10개 홀 전관 매진. Best Product 수상: <strong>KNAPP AeroBot 3D AMR, KATHREIN RFID 추적, PSI AI 공정관리</strong>. 22%가 현장 계약 체결. 공식 Final Report 기반.",
+    kwGroups:[
+      {cat:"🤖 인트라물류 로봇", color:"#ff6b6b", kws:[
+        {kw:"AMR·3D 이동로봇",  en:"AMR / 3D Autonomous Robot",    count:280, badge:"hot",    desc:"KNAPP AeroBot(3D 공중 이동 AMR) Best Product 수상. Roboception·Sereact 등 AI 로봇 주목. 유럽 물류센터 AMR 표준화 가속.",                          cos:"KNAPP·Roboception·Sereact·SSI Schaefer·Daifuku"},
+        {kw:"협동로봇·코봇",    en:"Cobot",                         count:120, badge:"hot",    desc:"UR·KUKA·FANUC 유럽 코봇. 소형 물류센터·3PL 중심 채택 확산.",                                                                                      cos:"Universal Robots·KUKA·FANUC"},
+        {kw:"무인 운반차",      en:"AGV / Autonomous Transport",    count:150, badge:"hot",    desc:"Wittenstein cyber motor(무선 구동)·Brabender Group 파트너십 계약 체결.",                                                                             cos:"Wittenstein·Brabender Group·SSI Schaefer"},
+      ]},
+      {cat:"💻 물류 소프트웨어·AI", color:"#0ca678", kws:[
+        {kw:"AI 공정관리·WMS",  en:"AI Process Management / WMS",  count:200, badge:"hot",    desc:"PSI Software AI — Best Product 수상. Ecovium·TUP 현장 계약 체결 주도.",                                                                             cos:"PSI Software·Ecovium·TUP·Fraunhofer IML"},
+        {kw:"RFID 실시간 추적", en:"RFID Real-time Tracking",       count:90,  badge:"hot",    desc:"KATHREIN Solutions RFID 리더 — Best Product 수상. 실시간 재고 위치 추적 유럽 물류 표준화.",                                                          cos:"KATHREIN Solutions·Siemens"},
+        {kw:"디지털 트윈·시뮬", en:"Digital Twin / Simulation",     count:80,  badge:"rising", desc:"창고 레이아웃·프로세스 가상 시뮬레이션. Fraunhofer IML 협력 전시.",                                                                                cos:"Fraunhofer IML·PSI Software·Siemens"},
+        {kw:"지속가능 물류",    en:"Sustainable Intralogistics",    count:70,  badge:"rising", desc:"Wiferion 무선 배터리 충전·에너지 절감. ESG 연계 물류 자동화.",                                                                                     cos:"Wiferion·Hiwin·Fizyr"},
+      ]},
+      {cat:"🔧 설비·AS/RS·컨베이어", color:"#9c36b5", kws:[
+        {kw:"AS/RS·창고 설비",  en:"AS/RS / Warehouse Equipment",  count:180, badge:"core",   desc:"SSI Schaefer·Daifuku·KNAPP·Tixit. 유럽 최대 AS/RS 집결. 냉동창고 AS/RS 수요 급증.",                                                                cos:"SSI Schaefer·Daifuku·KNAPP·Tixit·Hiwin"},
+        {kw:"컨베이어·소터",    en:"Conveyor / Sortation",          count:130, badge:"core",   desc:"10개 홀 전체 컨베이어·소터 전문사 산재. 유럽 물류센터 표준 설비.",                                                                                 cos:"SSI Schaefer·Daifuku"},
+        {kw:"인체공학·웨어러블",en:"Ergonomics / Wearable Exo",    count:60,  badge:"rising", desc:"LogiMAT 2025 테마 '지속가능·AI·인체공학'. 작업자 부담 경감 웨어러블.",                                                                              cos:"Ottobock·Fizyr"},
+      ]}
+    ],
+    cos:[
+      {name:"KNAPP",              tags:["로봇","물류","글로벌"],product:"AeroBot 3D AMR — Best Product 수상",          kws:["AMR·3D 이동로봇","AS/RS·창고 설비"],country:"🇦🇹", booth:"(Messe Stuttgart)"},
+      {name:"KATHREIN Solutions", tags:["AI","글로벌"],         product:"RFID 리더 실시간 추적 — Best Product 수상",   kws:["RFID 실시간 추적"],                  country:"🇩🇪", booth:"(Messe Stuttgart)"},
+      {name:"PSI Software",       tags:["AI","글로벌"],         product:"AI 공정관리 최적화 — Best Product 수상",       kws:["AI 공정관리·WMS"],                   country:"🇩🇪", booth:"(Messe Stuttgart)"},
+      {name:"SSI Schaefer",       tags:["물류","글로벌"],        product:"AS/RS·컨베이어·AMR 통합 인트라물류",          kws:["AS/RS·창고 설비","컨베이어·소터"],   country:"🇩🇪", booth:"(Messe Stuttgart)"},
+      {name:"Daifuku",            tags:["물류","글로벌"],        product:"자동창고·컨베이어·소터 통합",                 kws:["AS/RS·창고 설비","컨베이어·소터"],   country:"🇯🇵", booth:"(Messe Stuttgart)"},
+      {name:"Wittenstein",        tags:["제어","글로벌"],        product:"cyber motor 무선 구동 시스템",                kws:["무인 운반차"],                       country:"🇩🇪", booth:"(Messe Stuttgart)"},
+      {name:"Sereact",            tags:["로봇","AI","글로벌"],   product:"AI 로보틱스 피킹 솔루션",                    kws:["AMR·3D 이동로봇"],                   country:"🇩🇪", booth:"(Messe Stuttgart)"},
+      {name:"Wiferion",           tags:["글로벌"],               product:"무선 배터리 충전 에너지 솔루션",              kws:["지속가능 물류"],                     country:"🇩🇪", booth:"(Messe Stuttgart)"},
+      {name:"Fraunhofer IML",     tags:["AI","글로벌"],          product:"물류 AI 연구·디지털트윈 공동 전시",           kws:["디지털 트윈·시뮬","AI 공정관리·WMS"],country:"🇩🇪", booth:"(Messe Stuttgart)"},
+    ]
+  },
+
+  // ─────────────────────────────────────────────────────────
+  // 🇯🇵 Logis-Tech Tokyo 2024 — 아시아 최대 물류 전시회
+  // ─────────────────────────────────────────────────────────
+  logistech2024: {
+    name:"Logis-Tech Tokyo 2024", date:"2024.09.10~13", venue:"Tokyo Big Sight East 1~8홀",
+    companies:580, booths:3241, visitors:"70,000+", countries:15,
+    source:"official",
+    summary:"<strong>Logis-Tech Tokyo 2024</strong> — 역대 최대 규모. 2024.09.10~13, 도쿄 빅사이트. 580개사·3,241부스. 일본 물류 '2024년 문제'(트럭 운전사 잔업 규제) 대응 자동화 수요 폭발. 핵심: <strong>공장간 물류 자동화, AMR 실외 주행, AI 비전 피킹, 수직 AS/RS</strong>. 2년 1회 개최.",
+    kwGroups:[
+      {cat:"🤖 물류 자동화", color:"#ff6b6b", kws:[
+        {kw:"AMR·공장내 이송",  en:"AMR / In-factory Transport",   count:80,  badge:"hot",    desc:"Mujin(혼재 피킹)·YAMAZEN(경사 주행 AMR)·도쿄기계제작소 V2000 AGV(2톤 실외). 공장간 이송 자동화 솔루션 폭증.",                                     cos:"Mujin·YAMAZEN·도쿄기계제작소·Daifuku"},
+        {kw:"AS/RS·수직 적층",  en:"AS/RS / Vertical Storage",     count:70,  badge:"hot",    desc:"Daifuku(근미래 물류 시연)·THK 컨테이너형 자동창고(리니어모션 3축). 일본 좁은 부지 대응 수직 AS/RS 수요.",                                          cos:"Daifuku·THK·Okura Yusoki"},
+        {kw:"AI 비전 피킹",     en:"AI Vision Picking",            count:50,  badge:"hot",    desc:"Mujin 혼재 피킹 비전 시스템. 불규칙 적재 자동 인식·파지. 일본 물류 AI 핵심 과제.",                                                                  cos:"Mujin·THK"},
+        {kw:"무인 지게차",      en:"Autonomous Forklift",          count:40,  badge:"rising", desc:"V2000 AGV — 2톤 적재·비·경사면 실외 주행. 일본 2024문제 대응 무인 중하중 이송.",                                                                    cos:"도쿄기계제작소·Daifuku"},
+      ]},
+      {cat:"🚛 SCM·물류 IT", color:"#0ca678", kws:[
+        {kw:"트럭·라스트마일",  en:"Truck / Last-Mile Logistics",  count:60,  badge:"hot",    desc:"일본 2024년 문제(잔업 제한) 대응 솔루션. 자율 배송·중간 거점 최적화.",                                                                             cos:"(일본 물류기업)"},
+        {kw:"RFID·물류 DX",    en:"RFID / Logistics DX",          count:55,  badge:"rising", desc:"IC태그·바코드·EDI·WMS 연동 재고관리. 일본 물류 디지털 전환 전용 솔루션.",                                                                          cos:"(일본 SI기업)"},
+      ]},
+      {cat:"📦 보관·하역 설비", color:"#9c36b5", kws:[
+        {kw:"랙·고밀도 보관",   en:"Rack / High-Density Storage",  count:50,  badge:"core",   desc:"팔레트랙·이동랙·회전랙. 일본 한정 부지 고밀도 보관 솔루션.",                                                                                       cos:"(일본 랙 전문사)"},
+        {kw:"컨베이어·팔레타이저",en:"Conveyor / Palletizer",       count:45,  badge:"core",   desc:"팔레타이저·디팔레타이저·테이블리프터. 일본 물류센터 핵심 설비.",                                                                                   cos:"Daifuku·Okura Yusoki"},
+      ]}
+    ],
+    cos:[
+      {name:"Daifuku",              tags:["물류","글로벌"],  product:"AS/RS·컨베이어 일체형 — 근미래 물류 3D 시연", kws:["AS/RS·수직 적층","컨베이어·팔레타이저"],country:"🇯🇵", booth:"(Tokyo Big Sight)"},
+      {name:"Mujin",                tags:["로봇","AI"],      product:"혼재 피킹 자동화 — AI 비전 3D 파지",          kws:["AI 비전 피킹","AMR·공장내 이송"],       country:"🇯🇵", booth:"(Tokyo Big Sight)"},
+      {name:"THK",                  tags:["부품","물류"],    product:"컨테이너형 자동창고 — 3축 리니어모션",         kws:["AS/RS·수직 적층"],                      country:"🇯🇵", booth:"(Tokyo Big Sight)"},
+      {name:"YAMAZEN",              tags:["로봇","물류"],    product:"실외 경사 주행 AMR (Suzuki 기반)",             kws:["AMR·공장내 이송"],                      country:"🇯🇵", booth:"(Tokyo Big Sight)"},
+      {name:"도쿄기계제작소(TKS)",  tags:["물류"],           product:"V2000 AGV — 2톤 실외 비·경사 주행",            kws:["무인 지게차","AMR·공장내 이송"],         country:"🇯🇵", booth:"(Tokyo Big Sight)"},
+    ]
+  },
+
+  // ─────────────────────────────────────────────────────────
+  // 🇨🇳 CeMAT Asia 2024 — 아시아 최대 인트라물류 전시회
+  // ─────────────────────────────────────────────────────────
+  cematasia2024: {
+    name:"CeMAT Asia 2024", date:"2024.11.05~08", venue:"Shanghai New International Expo Centre",
+    companies:800, booths:0, visitors:"150,000+", countries:30,
+    source:"official",
+    summary:"<strong>CeMAT Asia 2024</strong> — 아시아 최대 인트라물류 전시. 2024.11.05~08, 상하이 SNIEC. 800개사+·80,000m²·15만+ 참관. Hannover Milano Fairs 주최. AGV·AMR·AI물류·포크리프트 4대 섹션. 중국 물류 자동화 기업 글로벌 진출 창구. 공식 브로셔 기반.",
+    kwGroups:[
+      {cat:"🤖 AGV·AMR·물류로봇", color:"#ff6b6b", kws:[
+        {kw:"AGV",              en:"AGV",                          count:150, badge:"hot",    desc:"HIKROBOT·Geek+·Quicktron·HAI Robotics·Multiway. 중국 AGV 글로벌 최다 집결. 무인 지게차·팔레트 AMR 압도적 물량.",                                   cos:"HIKROBOT·Geek+·Quicktron·HAI Robotics·Multiway Robotics"},
+        {kw:"AMR",              en:"AMR",                          count:100, badge:"hot",    desc:"Geek+·HAI Robotics·Syrius·SEER Robotics·Standard Robots. 중국 AMR 기업 폭발적 성장 확인.",                                                          cos:"Geek+·HAI Robotics·SEER Robotics·Standard Robots·Syrius"},
+        {kw:"포크리프트 자동화",en:"Automated Forklift",           count:80,  badge:"hot",    desc:"중국 로컬 및 글로벌 포크리프트 자동화 전문사. 이커머스·3PL 냉동창고 수요.",                                                                         cos:"Daifuku China·(중국 전문사)"},
+        {kw:"AI 물류 로봇",     en:"AI Logistics Robot",          count:60,  badge:"rising", desc:"AI 비전 피킹·빈피킹. 중국 이커머스 풀필먼트 자동화 핵심.",                                                                                          cos:"Sereact 파트너·Mujin China"},
+      ]},
+      {cat:"📦 보관·소팅·컨베이어", color:"#0ca678", kws:[
+        {kw:"소팅·분류 시스템",en:"Sorting / Sortation System",    count:90,  badge:"hot",    desc:"중국 이커머스(타오바오·징둥) 풀필먼트 소터 전문사 집결. 크로스벨트·틸트트레이·슈트 소터.",                                                        cos:"Daifuku China·(중국 소팅 전문사)"},
+        {kw:"AS/RS·랙 시스템",  en:"AS/RS / Rack",                count:80,  badge:"core",   desc:"중국 대형 창고 AS/RS 현지 생산 급증. 셔틀·스태커크레인·큐브 스토리지.",                                                                             cos:"SSI Schaefer·Daifuku China"},
+        {kw:"컨베이어·팔레타이저",en:"Conveyor / Palletizer",      count:70,  badge:"core",   desc:"중국 로컬 컨베이어 제조사 대거 참가. 저비용 고효율 팔레타이저.",                                                                                    cos:"Daifuku China·(중국 전문사)"},
+      ]},
+      {cat:"🏭 스마트 물류·IT", color:"#e67700", kws:[
+        {kw:"AI 물류 IT·WMS",   en:"AI Logistics IT / WMS",       count:70,  badge:"rising", desc:"중국 스마트물류 플랫폼. 이커머스 D2C 물류 최적화 AI 솔루션.",                                                                                       cos:"(중국 물류 IT 기업)"},
+        {kw:"콜드체인 자동화",  en:"Cold Chain Automation",        count:50,  badge:"rising", desc:"냉동창고 AGV·셔틀 AS/RS. 중국 신선식품 이커머스 성장 동반.",                                                                                        cos:"Daifuku China·(냉동 전문사)"},
+      ]}
+    ],
+    cos:[
+      {name:"HIKROBOT",           tags:["로봇","물류","글로벌"],product:"AGV·AMR·3D비전 통합 물류 솔루션",              kws:["AGV","AMR"],               country:"🇨🇳", booth:"(SNIEC)"},
+      {name:"Geek+ (긱플러스)",   tags:["물류","글로벌"],        product:"AMR 풀필먼트 자동화 시스템",                  kws:["AMR","소팅·분류 시스템"],  country:"🇨🇳", booth:"(SNIEC)"},
+      {name:"HAI Robotics",       tags:["로봇","물류","글로벌"],product:"HAIPICK ACR — 케이스 피킹 로봇",               kws:["AMR","AGV"],               country:"🇨🇳", booth:"(SNIEC)"},
+      {name:"Quicktron Robotics", tags:["로봇","글로벌"],        product:"AMR·셔틀 통합 물류 솔루션",                   kws:["AGV","AMR"],               country:"🇨🇳", booth:"(SNIEC)"},
+      {name:"Multiway Robotics",  tags:["로봇","글로벌"],        product:"4방향 셔틀 AS/RS",                            kws:["AS/RS·랙 시스템"],         country:"🇨🇳", booth:"(SNIEC)"},
+      {name:"Standard Robots",    tags:["로봇","물류","글로벌"],product:"레이저 SLAM AMR 오아시스 시리즈",               kws:["AMR"],                     country:"🇨🇳", booth:"(SNIEC)"},
+      {name:"Daifuku China",      tags:["물류","글로벌"],        product:"AS/RS·컨베이어·소팅 중국 생산 솔루션",         kws:["AS/RS·랙 시스템","컨베이어·팔레타이저"],country:"🇯🇵", booth:"W2C3"},
+      {name:"SSI Schaefer",       tags:["물류","글로벌"],        product:"AS/RS·컨베이어·소팅 통합 솔루션",              kws:["AS/RS·랙 시스템"],         country:"🇩🇪", booth:"(SNIEC)"},
+      {name:"SEER Robotics",      tags:["로봇","글로벌"],        product:"레이저 내비게이션 AMR",                        kws:["AMR"],                     country:"🇨🇳", booth:"(SNIEC)"},
+    ]
+  }
+
 };
 
 
