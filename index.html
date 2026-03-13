@@ -491,13 +491,35 @@ var settings = {
     {name:"机器人网",   url:"https://www.robot-china.com/rss.xml",             flag:"🇨🇳", on:true},
     {name:"工控网",     url:"https://www.gongkong.com/rss/news.aspx",          flag:"🇨🇳", on:true},
     {name:"IFR",        url:"https://www.ifr.org/rss/news.xml",                flag:"🌐", on:true},
-    {name:"Unite.AI",   url:"https://unite.ai/category/robotics/feed/",        flag:"🌐", on:true},
+    {name:"Unite.AI",    url:"https://unite.ai/category/robotics/feed/",         flag:"🌐", on:true},
+
+    // ── 제조사 공식/Google News RSS ─────────────────────────────────
+    // 공식 RSS 보유사
+    {name:"Mitsubishi Electric", url:"https://www.mitsubishielectric.com/news/feed/news.xml",                                    flag:"🇯🇵", on:false},
+    {name:"Siemens",             url:"https://press.siemens.com/global/en/rss/pressreleases",                                    flag:"🇩🇪", on:false},
+    {name:"Moxa",                url:"https://www.moxa.com/en/rss/news",                                                         flag:"🇹🇼", on:false},
+    {name:"Panasonic",           url:"https://news.panasonic.com/global/rss.html",                                               flag:"🇯🇵", on:false},
+    {name:"Schunk",              url:"https://schunk.com/rss/news.xml",                                                          flag:"🇩🇪", on:false},
+    {name:"Daifuku",             url:"https://www.daifuku.com/rss/news.xml",                                                     flag:"🇯🇵", on:false},
+    // Google News RSS (공식 피드 미제공 업체)
+    {name:"HMS Networks",        url:"https://news.google.com/rss/search?q=HMS+Networks+industrial&hl=en&gl=SE&ceid=SE:en",      flag:"🇸🇪", on:false},
+    {name:"SEW-Eurodrive",       url:"https://news.google.com/rss/search?q=SEW-Eurodrive+automation&hl=en&gl=DE&ceid=DE:en",    flag:"🇩🇪", on:false},
+    {name:"Vahle",               url:"https://news.google.com/rss/search?q=Vahle+conductor+rail&hl=en&gl=DE&ceid=DE:en",        flag:"🇩🇪", on:false},
+    {name:"Conductix-Wampfler",  url:"https://news.google.com/rss/search?q=Conductix+Wampfler+crane&hl=en&gl=DE&ceid=DE:en",    flag:"🇩🇪", on:false},
+    {name:"Hetronic",            url:"https://news.google.com/rss/search?q=Hetronic+remote+control&hl=en&gl=US&ceid=US:en",     flag:"🇩🇪", on:false},
+    {name:"AUTEC",               url:"https://news.google.com/rss/search?q=AUTEC+radio+control+crane&hl=en&gl=IT&ceid=IT:en",   flag:"🇮🇹", on:false},
+    {name:"HBC-radiomatic",      url:"https://news.google.com/rss/search?q=HBC+radiomatic+crane+control&hl=en&gl=DE&ceid=DE:en",flag:"🇩🇪", on:false},
+    {name:"Stemmann-Technik",    url:"https://news.google.com/rss/search?q=Stemmann+Technik+electrification&hl=en&gl=DE&ceid=DE:en",flag:"🇩🇪", on:false},
+    {name:"Morgan Advanced",     url:"https://news.google.com/rss/search?q=Morgan+Advanced+Materials&hl=en&gl=US&ceid=US:en",   flag:"🇬🇧", on:false},
+    {name:"Mobilis",             url:"https://news.google.com/rss/search?q=Mobilis+crane+festoon&hl=en&gl=FR&ceid=FR:en",       flag:"🇫🇷", on:false},
+    {name:"Galaxis",             url:"https://news.google.com/rss/search?q=Galaxis+automation&hl=en&gl=US&ceid=US:en",          flag:"🌐", on:false},
   ],
+  mfrKeywords: null,  // null이면 MFR_LIST_DEFAULT 사용
   urgentKeywords: ["AGV 도입","AGV 구축","물류자동화 투자","인수","합병","acquisition","merger","galaxis","asetech"],
   normalKeywords: ["물류센터 자동화","스마트 창고","warehouse automation","스마트팩토리 구축","스마트팜","hospital automation","2차전지 자동화","냉동창고","스마트항만","피킹 로봇","중국 로봇","unitree","humanoid china"]
 };
 
-const MFR_LIST = [
+const MFR_LIST_DEFAULT = [
   "ABB","FANUC","KUKA","Universal Robots","Yaskawa",
   "Doosan Robotics","Boston Dynamics","Figure AI",
   "현대로보틱스","한화로보틱스","레인보우로보틱스","로보스타",
@@ -508,6 +530,42 @@ const MFR_LIST = [
   "Omron","MiR","Geek+",
   "Galaxis","Asetech","Unitree","SIASUN","Estun","UBTECH","Agibot"
 ];
+
+// ── 제조사 리스트 헬퍼 ──────────────────────────────────
+function getMfrList() {
+  return (settings.mfrKeywords && settings.mfrKeywords.length)
+    ? settings.mfrKeywords
+    : MFR_LIST_DEFAULT.slice();
+}
+
+function renderMfrTags() {
+  var list = getMfrList();
+  document.getElementById("kw-mfr-tags").innerHTML = list.map(function(m, i) {
+    return '<span class="kw-tag" style="background:rgba(79,140,255,0.12);color:#4f8cff">'
+      + m + '<button class="kw-tag-del" onclick="delMfr('+i+')" title="삭제">×</button></span>';
+  }).join("");
+}
+
+function addMfr() {
+  var v = document.getElementById("kw-mfr-input").value.trim();
+  if (!v) return;
+  var list = getMfrList();
+  if (list.indexOf(v) !== -1) { showToast("이미 등록된 키워드예요"); return; }
+  if (!settings.mfrKeywords) settings.mfrKeywords = getMfrList();
+  settings.mfrKeywords.push(v);
+  document.getElementById("kw-mfr-input").value = "";
+  renderMfrTags();
+  saveSettings();
+  showToast("✅ " + v + " 추가됨");
+}
+
+function delMfr(i) {
+  if (!settings.mfrKeywords) settings.mfrKeywords = getMfrList();
+  var removed = settings.mfrKeywords.splice(i, 1)[0];
+  renderMfrTags();
+  saveSettings();
+  showToast("🗑️ " + removed + " 삭제됨");
+}
 
 const CAT_COLORS = {
   "로봇공학":"#ff6b35","자율주행":"#3b5bdb","드론":"#0ca678",
@@ -532,16 +590,20 @@ function loadStorage() {
       settings.feeds     = saved.feeds || settings.feeds;
       settings.urgentKeywords = saved.urgentKeywords || settings.urgentKeywords;
       settings.normalKeywords = saved.normalKeywords || settings.normalKeywords;
+      settings.mfrKeywords = saved.mfrKeywords || null;
     }
   } catch(e) {}
 }
+function saveSettings() { saveStorage(); } // alias
+
 function saveStorage() {
   try {
     localStorage.setItem(STORAGE_KEY,  JSON.stringify(Array.from(readSet)));
     localStorage.setItem(BOOKMARK_KEY, JSON.stringify(Array.from(bookmarkSet)));
     localStorage.setItem(SETTINGS_KEY, JSON.stringify({
       features:settings.features, theme:settings.theme,
-      feeds:settings.feeds, urgentKeywords:settings.urgentKeywords, normalKeywords:settings.normalKeywords
+      feeds:settings.feeds, urgentKeywords:settings.urgentKeywords, normalKeywords:settings.normalKeywords,
+      mfrKeywords:settings.mfrKeywords
     }));
   } catch(e) {}
 }
@@ -590,7 +652,7 @@ function syncAdminUI() {
   });
 
   // RSS 피드
-  renderFeedList();
+  renderFeedList(); renderKeywordTags(); renderMfrTags();
 
   // 키워드
   renderKeywords();
@@ -656,10 +718,10 @@ function renderFeedList() {
       +'</div>';
   }).join("");
 }
-function toggleFeed(i, on) { settings.feeds[i].on = on; }
+function toggleFeed(i, on) { settings.feeds[i].on = on; saveSettings(); }
 function deleteFeed(i) {
   if (confirm(settings.feeds[i].name+" 피드를 삭제할까요?")) {
-    settings.feeds.splice(i,1); renderFeedList();
+    settings.feeds.splice(i,1); renderFeedList(); saveStorage();
   }
 }
 function addFeed() {
@@ -667,7 +729,7 @@ function addFeed() {
   var url =document.getElementById("feed-url-input").value.trim();
   if (!name||!url) { showToast("매체명과 URL을 모두 입력해주세요"); return; }
   if (!url.startsWith("http")) { showToast("올바른 URL을 입력해주세요"); return; }
-  settings.feeds.push({name:name, url:url, flag:"🌐", on:true});
+  settings.feeds.push({name:name, url:url, flag:"🌐", on:true}); saveStorage(); saveSettings();
   document.getElementById("feed-name-input").value="";
   document.getElementById("feed-url-input").value="";
   renderFeedList();
@@ -905,29 +967,89 @@ function buildTodayWidget(){
     +'</div>';
 }
 
-function renderTrend(){
+var trendFilter = null; // {type:'cat'|'src', val:string} | null
+
+function renderTrend(filter){
+  if (filter !== undefined) trendFilter = filter;
+  var f = trendFilter;
+
+  // ── 클릭 필터 모드 ──────────────────────────────
+  if (f) {
+    var filtered = allArticles.filter(function(a){
+      if((new Date()-new Date(a.published_at))/86400000>7) return false;
+      if(f.type==='cat') return (a.category||'기타')===f.val;
+      if(f.type==='src') return (a.source||'기타')===f.val;
+      return true;
+    });
+    var backBtn = '<div style="margin-bottom:12px">'
+      +'<button onclick="renderTrend(null)" style="font-size:0.75rem;padding:6px 14px;border-radius:100px;'
+      +'border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;font-weight:700">'
+      +'← 트렌드로 돌아가기</button>'
+      +'<span style="font-size:0.75rem;color:var(--sub);margin-left:10px">'
+      +(f.type==='cat'?'📂 '+f.val:'📰 '+f.val)+' · '+filtered.length+'건</span></div>';
+    document.getElementById("news-list").innerHTML = backBtn
+      + (filtered.length
+          ? filtered.map(function(a,i){
+              var idx = allArticles.indexOf(a);
+              return makeCard(a, 'openModal('+idx+')');
+            }).join("")
+          : '<div class="empty">해당 조건의 기사가 없어요.</div>');
+    return;
+  }
+
+  // ── 차트 모드 ──────────────────────────────────
   var catCount={},srcCount={};
   allArticles.forEach(function(a){
     if((new Date()-new Date(a.published_at))/86400000>7)return;
-    var c=a.category||"기타";catCount[c]=(catCount[c]||0)+1;
-    var s=a.source||"기타";srcCount[s]=(srcCount[s]||0)+1;
+    var cat=a.category||"기타"; catCount[cat]=(catCount[cat]||0)+1;
+    var src=a.source||"기타";   srcCount[src]=(srcCount[src]||0)+1;
   });
   var maxC=Math.max.apply(null,Object.values(catCount).concat([1]));
   var maxS=Math.max.apply(null,Object.values(srcCount).concat([1]));
   var total=Object.values(catCount).reduce(function(s,v){return s+v;},0);
-  var catRows=Object.keys(catCount).sort(function(x,y){return catCount[y]-catCount[x];}).map(function(cat){
-    var pct=Math.round(catCount[cat]/maxC*100);var color=CAT_COLORS[cat]||"#aaa";
-    return'<div class="chart-row"><div class="chart-label">'+cat+'</div>'
-      +'<div class="chart-bar-wrap"><div class="chart-bar" style="width:'+pct+'%;background:'+color+'"><span class="chart-bar-val">'+catCount[cat]+'</span></div></div></div>';
+
+  window._trendCatMap = {}; window._trendSrcMap = {};
+  var catRows=Object.keys(catCount).sort(function(x,y){return catCount[y]-catCount[x];}).map(function(cat,i){
+    var pct=Math.round(catCount[cat]/maxC*100); var color=CAT_COLORS[cat]||"#aaa";
+    var tid="tc"+i; window._trendCatMap[tid]=cat;
+    return '<div class="chart-row trend-clickable" data-tid="'+tid+'" data-type="cat" style="cursor:pointer">'
+      +'<div class="chart-label">'+cat+'</div>'
+      +'<div class="chart-bar-wrap"><div class="chart-bar" style="width:'+pct+'%;background:'+color
+      +'"><span class="chart-bar-val">'+catCount[cat]+'</span></div></div>'
+      +'<div style="font-size:0.6rem;color:var(--sub);padding-left:4px">▶</div></div>';
   }).join("");
-  var srcRows=Object.keys(srcCount).sort(function(x,y){return srcCount[y]-srcCount[x];}).slice(0,10).map(function(src){
+
+  var srcRows=Object.keys(srcCount).sort(function(x,y){return srcCount[y]-srcCount[x];}).slice(0,10).map(function(src,i){
     var pct=Math.round(srcCount[src]/maxS*100);
-    return'<div class="chart-row"><div class="chart-label" style="font-size:0.62rem">'+src+'</div>'
-      +'<div class="chart-bar-wrap"><div class="chart-bar" style="width:'+pct+'%;background:var(--accent2)"><span class="chart-bar-val">'+srcCount[src]+'</span></div></div></div>';
+    var sid="ts"+i; window._trendSrcMap[sid]=src;
+    return '<div class="chart-row trend-clickable" data-tid="'+sid+'" data-type="src" style="cursor:pointer">'
+      +'<div class="chart-label" style="font-size:0.62rem">'+src+'</div>'
+      +'<div class="chart-bar-wrap"><div class="chart-bar" style="width:'+pct+'%;background:var(--accent2)">'
+      +'<span class="chart-bar-val">'+srcCount[src]+'</span></div></div>'
+      +'<div style="font-size:0.6rem;color:var(--sub);padding-left:4px">▶</div></div>';
   }).join("");
+
   document.getElementById("news-list").innerHTML=
-    '<div class="chart-wrap"><div class="chart-title">📊 최근 7일 분야별 트렌드 · 총 '+total+'건</div><div class="chart-bars">'+catRows+'</div></div>'
-   +'<div class="chart-wrap" style="margin-top:0"><div class="chart-title">📰 매체별 수집 현황</div><div class="chart-bars">'+srcRows+'</div></div>';
+    '<div class="chart-wrap">'
+    +'<div class="chart-title">📊 최근 7일 분야별 트렌드 · 총 '+total+'건'
+    +'<span style="font-size:0.65rem;color:var(--sub);font-weight:400;margin-left:8px">바를 클릭하면 해당 기사만 봅니다</span></div>'
+    +'<div class="chart-bars">'+catRows+'</div></div>'
+    +'<div class="chart-wrap" style="margin-top:0">'
+    +'<div class="chart-title">📰 매체별 수집 현황</div>'
+    +'<div class="chart-bars">'+srcRows+'</div></div>';
+
+  // 이벤트 위임으로 trend-clickable 클릭 처리
+  setTimeout(function(){
+    document.getElementById("news-list").addEventListener("click", function handler(e) {
+      var row = e.target.closest(".trend-clickable");
+      if (!row) return;
+      document.getElementById("news-list").removeEventListener("click", handler);
+      var tid = row.dataset.tid;
+      var type = row.dataset.type;
+      var val = type==="cat" ? window._trendCatMap[tid] : window._trendSrcMap[tid];
+      if (val) renderTrend({type:type, val:val});
+    });
+  }, 0);
 }
 
 function renderBookmark(){
@@ -941,14 +1063,14 @@ function renderBookmark(){
 function renderManufacturer(){
   var foundMfrs=new Set();
   allArticles.forEach(function(a){if(a.manufacturers)a.manufacturers.split(",").forEach(function(m){var t=m.trim();if(t)foundMfrs.add(t);});});
-  var mfrList=["전체"].concat(MFR_LIST.filter(function(m){return foundMfrs.has(m);}));
+  var mfrList=["전체"].concat(getMfrList().filter(function(m){return foundMfrs.has(m);}));
   document.getElementById("filter-list").innerHTML=mfrList.map(function(m){
     return'<button class="filter-btn mfr'+(m===currentMfr?' active':'')+'" onclick="filterMfr(this,\''+m+'\')">'+m+'</button>';
   }).join("");
   if(currentMfr==="전체"){
     var groups={};
     allArticles.forEach(function(a){if(!a.manufacturers)return;a.manufacturers.split(",").forEach(function(m){var t=m.trim();if(!t)return;if(!groups[t])groups[t]=[];groups[t].push(a);});});
-    var mfrsWithNews=MFR_LIST.filter(function(m){return groups[m]&&groups[m].length>0;});
+    var mfrsWithNews=getMfrList().filter(function(m){return groups[m]&&groups[m].length>0;});
     if(!mfrsWithNews.length){document.getElementById("news-list").innerHTML='<div class="empty">🏭 제조사 관련 뉴스가 없어요.</div>';return;}
     var html="";
     mfrsWithNews.forEach(function(mfr){
