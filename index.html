@@ -737,6 +737,8 @@ function addFeed() {
 }
 
 // ── 키워드 관리 ──────────────────────────────────────────
+function renderKeywordTags() { renderKeywords(); }  // alias
+
 function renderKeywords() {
   document.getElementById("kw-urgent-tags").innerHTML = settings.urgentKeywords.map(function(kw,i){
     return '<span class="kw-tag kw-urgent">'+kw+'<button class="kw-del" onclick="delKeyword(\'urgent\','+i+')">×</button></span>';
