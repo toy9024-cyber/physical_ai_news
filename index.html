@@ -450,6 +450,17 @@
         </div>
       </div>
 
+      <!-- 5. 제조사 키워드 관리 -->
+      <div class="admin-section">
+        <div class="admin-section-title">🏭 제조사 키워드 관리</div>
+        <div style="font-size:0.72rem;color:var(--sub);margin-bottom:10px">등록된 키워드로 기사에서 제조사를 자동 감지합니다. 추가/삭제 후 즉시 저장됩니다.</div>
+        <div class="kw-tags" id="kw-mfr-tags" style="max-height:180px;overflow-y:auto"></div>
+        <div class="kw-add-row" style="margin-top:10px">
+          <input class="kw-add-input" id="kw-mfr-input" placeholder="새 제조사 (예: FANUC, 현대로보틱스)" onkeydown="if(event.key==='Enter')addMfr()">
+          <button class="kw-add-btn" style="background:var(--accent2)" onclick="addMfr()">+ 추가</button>
+        </div>
+      </div>
+
       <!-- 저장 -->
       <button class="save-btn" onclick="saveAdmin()">💾 설정 저장</button>
 
@@ -539,8 +550,10 @@ function getMfrList() {
 }
 
 function renderMfrTags() {
+  var el = document.getElementById("kw-mfr-tags");
+  if (!el) return;
   var list = getMfrList();
-  document.getElementById("kw-mfr-tags").innerHTML = list.map(function(m, i) {
+  el.innerHTML = list.map(function(m, i) {
     return '<span class="kw-tag" style="background:rgba(79,140,255,0.12);color:#4f8cff">'
       + m + '<button class="kw-tag-del" onclick="delMfr('+i+')" title="삭제">×</button></span>';
   }).join("");
